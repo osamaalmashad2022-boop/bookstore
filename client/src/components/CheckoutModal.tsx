@@ -107,7 +107,6 @@ export const CheckoutModal: React.FC = () => {
 
       clearCart();
 
-      // Open WhatsApp link immediately in new tab
       if (data.whatsappUrl) {
         window.open(data.whatsappUrl, '_blank');
       }
@@ -119,22 +118,22 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/60 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in text-right">
       <div
-        className="bg-white w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-stone-200"
+        className="bg-[#120f17] text-[#ede6d6] w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-amber-900/60 candle-glow"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-5 py-4 border-b border-stone-100 flex items-center justify-between">
+        <div className="px-5 py-4 border-b border-amber-900/30 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <h3 className="text-sm sm:text-base font-bold text-stone-900">
-              {orderSuccess ? 'تم تسجيل طلبك بنجاح!' : 'إتمام الطلب - الدفع عند الاستلام (COD)'}
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <h3 className="text-sm sm:text-base font-bold font-amiri text-amber-100">
+              {orderSuccess ? 'تم تسجيل طلبك في مقبرة الكتب!' : 'إتمام الطلب - الدفع عند الاستلام (COD)'}
             </h3>
           </div>
           <button
             onClick={() => setIsCheckoutOpen(false)}
-            className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500 transition-colors"
+            className="w-8 h-8 rounded-full bg-stone-900 text-stone-400 hover:text-white flex items-center justify-center transition-colors border border-stone-800"
           >
             <X className="w-4 h-4" />
           </button>
@@ -144,49 +143,49 @@ export const CheckoutModal: React.FC = () => {
         <div className="overflow-y-auto p-5">
           {orderSuccess ? (
             <div className="text-center py-6 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-md">
+              <div className="w-16 h-16 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-400 flex items-center justify-center mx-auto shadow-lg candle-glow">
                 <Check className="w-8 h-8" />
               </div>
               <div>
-                <h4 className="text-lg font-black text-stone-900">تم تسجيل طلبك بنجاح!</h4>
-                <p className="text-xs text-stone-500 mt-1">
-                  رقم مرجع الطلب: <strong className="text-brand-700 text-sm">{orderSuccess.orderRef}</strong>
+                <h4 className="text-base sm:text-lg font-black font-amiri text-amber-100">تم تسجيل طلبك بنجاح!</h4>
+                <p className="text-xs text-stone-400 mt-1">
+                  رقم مرجع الفاتورة: <strong className="text-amber-400 text-sm font-readex">{orderSuccess.orderRef}</strong>
                 </p>
               </div>
 
-              <div className="bg-stone-50 rounded-2xl p-4 border border-stone-200 text-right space-y-2 text-xs">
+              <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/30 text-right space-y-2 text-xs font-amiri">
                 <div className="flex justify-between">
-                  <span className="text-stone-500">طريقة الدفع:</span>
-                  <span className="font-bold text-stone-800">نقداً عند الاستلام (COD)</span>
+                  <span className="text-stone-400">طريقة الدفع:</span>
+                  <span className="font-bold text-amber-200">الدفع نقداً عند الاستلام (COD)</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-stone-500">مصاريف الشحن:</span>
-                  <span className="font-bold text-stone-800">{orderSuccess.shippingFee} ج.م</span>
+                  <span className="text-stone-400">مصاريف الشحن:</span>
+                  <span className="font-bold text-amber-200 font-readex">{orderSuccess.shippingFee} ج.م</span>
                 </div>
-                <div className="flex justify-between text-sm font-black border-t border-stone-200 pt-2 text-stone-900">
+                <div className="flex justify-between text-sm font-black border-t border-amber-900/30 pt-2 text-amber-100">
                   <span>المبلغ المطلوب عند الاستلام:</span>
-                  <span className="text-brand-700">{orderSuccess.finalTotal} ج.م</span>
+                  <span className="text-amber-400 font-readex">{orderSuccess.finalTotal} ج.م</span>
                 </div>
               </div>
 
-              <p className="text-xs text-stone-600 leading-relaxed max-w-sm mx-auto">
-                لقد فتحنا محادثة الواتساب مع إدارة المتجر لإرسال الفاتورة تلقائياً. إذا لم تفتح نافذة الواتساب، اضغط على الزر الأخضر أدناه:
+              <p className="text-xs text-stone-300 leading-relaxed max-w-sm mx-auto font-amiri">
+                تم تجهيز رسالة الفاتورة المنسقة وفتح تطبيق واتساب المتجر. إذا لم تفتح نافذة المحادثة، اضغط على الزر الأخضر أدناه:
               </p>
 
               <a
                 href={orderSuccess.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/25 transition-all"
+                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-lg transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
-                <span>تأكيد الفاتورة على واتساب المتجر 💬</span>
+                <span>تأكيد الفاتورة على واتساب المقبرة 💬</span>
               </a>
             </div>
           ) : (
             <form onSubmit={handleSubmitOrder} className="space-y-4">
               {error && (
-                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
+                <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -194,7 +193,7 @@ export const CheckoutModal: React.FC = () => {
 
               {/* Full Name */}
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1">
+                <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
                   الاسم بالكامل *
                 </label>
                 <input
@@ -203,14 +202,14 @@ export const CheckoutModal: React.FC = () => {
                   placeholder="مثال: أحمد محمد محمود"
                   value={customerName}
                   onChange={e => setCustomerName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/40 bg-[#181420] text-amber-100 text-xs sm:text-sm focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               {/* Phone & WhatsApp */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-stone-800 block mb-1">
+                  <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
                     رقم الهاتف للتواصل *
                   </label>
                   <input
@@ -219,19 +218,19 @@ export const CheckoutModal: React.FC = () => {
                     placeholder="010XXXXXXXX"
                     value={customerPhone}
                     onChange={e => setCustomerPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/40 bg-[#181420] text-amber-100 text-xs sm:text-sm focus:outline-none focus:border-amber-500"
                   />
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-stone-800">
+                    <label className="text-xs font-bold text-amber-200 font-amiri">
                       رقم الواتساب
                     </label>
                     <button
                       type="button"
                       onClick={() => setSameAsPhone(!sameAsPhone)}
-                      className="text-[10px] text-brand-600 font-semibold"
+                      className="text-[10px] text-amber-400 font-semibold"
                     >
                       {sameAsPhone ? 'رقم مختلف؟' : 'نفس رقم الهاتف'}
                     </button>
@@ -242,7 +241,7 @@ export const CheckoutModal: React.FC = () => {
                     value={sameAsPhone ? customerPhone : customerWhatsapp}
                     onChange={e => setCustomerWhatsapp(e.target.value)}
                     placeholder="010XXXXXXXX"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm disabled:bg-stone-50 disabled:text-stone-400 focus:outline-none focus:border-brand-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/40 bg-[#181420] text-amber-100 text-xs sm:text-sm disabled:opacity-50 focus:outline-none focus:border-amber-500"
                   />
                 </div>
               </div>
@@ -250,20 +249,20 @@ export const CheckoutModal: React.FC = () => {
               {/* Governorate Dropdown */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-bold text-stone-800">
+                  <label className="text-xs font-bold text-amber-200 font-amiri">
                     المحافظة (لحساب الشحن تلقائياً) *
                   </label>
-                  <span className="text-[11px] text-stone-500 font-medium">
+                  <span className="text-[10px] text-stone-400">
                     مدة التوصيل: {currentGov.delivery_days}
                   </span>
                 </div>
                 <select
                   value={selectedGovId}
                   onChange={e => setSelectedGovId(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm bg-white focus:outline-none focus:border-brand-500 font-semibold"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/40 bg-[#181420] text-amber-100 text-xs sm:text-sm focus:outline-none focus:border-amber-500 font-semibold"
                 >
                   {governorates.map(gov => (
-                    <option key={gov.id} value={gov.id}>
+                    <option key={gov.id} value={gov.id} className="bg-[#120f17] text-white">
                       {gov.name} — مصاريف الشحن: {gov.fee} ج.م ({gov.delivery_days})
                     </option>
                   ))}
@@ -272,7 +271,7 @@ export const CheckoutModal: React.FC = () => {
 
               {/* Street Address */}
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1">
+                <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
                   العنوان بالتفصيل *
                 </label>
                 <textarea
@@ -281,52 +280,52 @@ export const CheckoutModal: React.FC = () => {
                   placeholder="اسم الحي/الشارع، رقم العمارة، الطابق، بجوار علامة مميزة..."
                   value={streetAddress}
                   onChange={e => setStreetAddress(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-stone-200 text-xs sm:text-sm focus:outline-none focus:border-brand-500 resize-none"
+                  className="w-full p-3 rounded-xl border border-amber-900/40 bg-[#181420] text-amber-100 text-xs sm:text-sm focus:outline-none focus:border-amber-500 resize-none"
                 />
               </div>
 
               {/* Delivery Notes */}
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1">
+                <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
                   ملاحظات التوصيل (اختياري)
                 </label>
                 <input
                   type="text"
-                  placeholder="مثال: الاتصال قبل الوصول بنصف ساعة، الاستلام بعد الساعة 3 ظهراً..."
+                  placeholder="مثال: الاتصال قبل الوصول بنصف ساعة..."
                   value={notes}
                   onChange={e => setNotes(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-brand-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-amber-900/40 bg-[#181420] text-amber-100 text-xs focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               {/* Invoice Breakdown Summary */}
-              <div className="bg-stone-50 rounded-2xl p-4 border border-stone-200 space-y-1.5 text-xs">
-                <div className="flex justify-between text-stone-600">
-                  <span>سعر الكتب المطلوبة:</span>
-                  <span>{subtotal} ج.م</span>
+              <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/30 space-y-1.5 text-xs font-amiri">
+                <div className="flex justify-between text-stone-300">
+                  <span>سعر الكتب بالصندوق:</span>
+                  <span className="font-readex">{subtotal} ج.م</span>
                 </div>
                 {isBundleApplied && discountAmount > 0 && (
-                  <div className="flex justify-between text-emerald-700 font-bold">
+                  <div className="flex justify-between text-amber-400 font-bold">
                     <span>خصم باقة مسار القراءة (10%):</span>
-                    <span>-{discountAmount} ج.م</span>
+                    <span className="font-readex">-{discountAmount} ج.م</span>
                   </div>
                 )}
-                <div className="flex justify-between text-stone-600">
+                <div className="flex justify-between text-stone-300">
                   <span className="flex items-center gap-1">
-                    <Truck className="w-3.5 h-3.5 text-brand-600" />
+                    <Truck className="w-3.5 h-3.5 text-amber-400" />
                     مصاريف الشحن ({currentGov.name}):
                   </span>
-                  <span>
+                  <span className="font-readex">
                     {isFreeShipping ? (
-                      <span className="text-emerald-600 font-bold">مجاني (تجاوز 600 ج.م)</span>
+                      <span className="text-amber-400 font-bold">مجاني (تجاوز 600 ج.م)</span>
                     ) : (
                       `${shippingFee} ج.م`
                     )}
                   </span>
                 </div>
-                <div className="flex justify-between text-sm font-black text-stone-900 pt-2 border-t border-stone-200">
+                <div className="flex justify-between text-sm font-black text-amber-100 pt-2 border-t border-amber-900/30">
                   <span>المطلوب نقداً عند الاستلام:</span>
-                  <span className="text-brand-700 text-base">{finalTotal} ج.م</span>
+                  <span className="text-amber-400 text-base font-readex">{finalTotal} ج.م</span>
                 </div>
               </div>
 
@@ -334,16 +333,16 @@ export const CheckoutModal: React.FC = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:bg-stone-300 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25 active:scale-98 transition-all"
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl candle-glow active:scale-98 transition-all"
               >
                 {submitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>جاري حفظ الطلب...</span>
+                    <span>جاري تسجيل الطلب...</span>
                   </>
                 ) : (
                   <>
-                    <MessageCircle className="w-5 h-5 text-emerald-300" />
+                    <MessageCircle className="w-4 h-4" />
                     <span>تأكيد الطلب عبر واتساب ({finalTotal} ج.م)</span>
                   </>
                 )}

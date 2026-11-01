@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { RecommendationResponse, Book } from '../types';
-import { Sparkles, ArrowRight, ArrowLeft, Check, Layers, ShoppingBag, Loader2 } from 'lucide-react';
+import { Sparkles, ArrowRight, ArrowLeft, Check, Layers, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 interface SmartAdvisorProps {
@@ -27,12 +27,12 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
   const [error, setError] = useState<string | null>(null);
   const [bundleAdded, setBundleAdded] = useState(false);
 
-  // Field Options
+  // Field Options tailored to Sanctuary
   const categories = [
-    { id: 'cat_psychology', name: 'علم النفس والصحة النفسية', icon: '🧠', topics: ['فهم الذات والقلق', 'تحليل السلوك والشخصيات', 'علم نفس العلاقات', 'التعافي النفسي'] },
-    { id: 'cat_self_help', name: 'تطوير الذات وبناء العادات', icon: '✨', topics: ['بناء العادات اليومية', 'الإنتاجية وإدارة الوقت', 'المرونة والذكاء العاطفي'] },
-    { id: 'cat_philosophy', name: 'الفلسفة والتفكير النقدي', icon: '🧭', topics: ['فلسفة الحياة اليومية', 'تاريخ الفلسفة والأسئلة الوجودية', 'التفكير المنطقي'] },
-    { id: 'cat_literature', name: 'الروايات والأدب الرفيع', icon: '📖', topics: ['روايات تاريخية وإنسانية', 'الأدب العربي الكلاسيكي', 'أدب الرحلات'] },
+    { id: 'cat_psychology', name: 'علم النفس والتعافي الداخلي', icon: '🧠', topics: ['فهم الذات والقلق', 'تحليل السلوك والشخصيات', 'علم نفس العلاقات', 'التعافي النفسي'] },
+    { id: 'cat_literature', name: 'روايات الغموض ومقبرة الكتب', icon: '🏰', topics: ['أسرار مقبرة الكتب المنسية', 'روايات تاريخية وإنسانية', 'أدب الغموض والذاكرة'] },
+    { id: 'cat_philosophy', name: 'الفلسفة وعزاءات الفكر', icon: '🧭', topics: ['فلسفة الحياة اليومية', 'تاريخ الفلسفة والأسئلة الوجودية', 'التفكير المنطقي'] },
+    { id: 'cat_self_help', name: 'بناء العادات وتطوير الذات', icon: '✨', topics: ['بناء العادات اليومية', 'الإنتاجية وإدارة الوقت', 'المرونة والذكاء العاطفي'] },
   ];
 
   const currentCategoryData = categories.find(c => c.id === selectedCategory) || categories[0];
@@ -101,43 +101,43 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-4 sm:py-8 space-y-6">
-      {/* Advisor Header Banner */}
-      <div className="bg-gradient-to-br from-brand-900 via-brand-800 to-amber-950 text-white rounded-3xl p-5 sm:p-8 shadow-xl relative overflow-hidden">
-        <div className="absolute -top-10 -left-10 w-44 h-44 bg-brand-500/20 rounded-full blur-2xl"></div>
+    <div className="max-w-3xl mx-auto px-4 py-4 sm:py-8 space-y-6 text-right">
+      {/* Advisor Header Banner - Gothic Sanctuary Style */}
+      <div className="bg-gradient-to-br from-[#1c1424] via-[#120f17] to-[#0d0b0f] text-[#ede6d6] rounded-3xl p-5 sm:p-8 shadow-2xl border-2 border-amber-900/50 candle-glow relative overflow-hidden">
+        <div className="absolute -top-10 -left-10 w-44 h-44 bg-amber-500/10 rounded-full blur-3xl"></div>
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 text-xs font-bold mb-3 border border-white/10">
-            <Sparkles className="w-3.5 h-3.5" />
-            مستشار الكتب الذكي (Smart Book Advisor)
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold mb-3">
+            <span>🗝️</span>
+            مستشار حارس مقبرة الكتب المنسية
           </div>
-          <h2 className="text-xl sm:text-3xl font-black mb-2 leading-tight">
-            لا تضيع وقتك في حيرة الاختيار.. سنصمم لك مسار قراءتك
+          <h2 className="text-lg sm:text-2xl font-black font-amiri text-amber-100 mb-2 leading-tight">
+            «لا تضع وقتك في حيرة الاختيار.. أخبر الحارس ليصمم مسار قراءتك»
           </h2>
-          <p className="text-stone-300 text-xs sm:text-sm max-w-xl leading-relaxed">
-            محرك ترشيح ذكي دائم يطابق اهتمامك ومستواك القرائي مع مخزون كتبنا الورقية فوراً، مع مسار قراءة متدرج من 2 إلى 3 كتب وخصم باقة خاص.
+          <p className="text-stone-300 text-xs sm:text-sm max-w-xl leading-relaxed font-amiri">
+            محرك ترشيح هجين دائم يطابق شغفك ومستواك القرائي مع المخطوطات والكتب الورقية المحفوظة في المقبرة، مع مسار قراءة متدرج من كتابين أو ثلاثة بخصم باقة خاص 10%.
           </p>
 
           {/* Mode Switcher */}
-          <div className="mt-5 inline-flex p-1 bg-black/30 rounded-2xl border border-white/10 backdrop-blur-md">
+          <div className="mt-5 inline-flex p-1 bg-black/40 rounded-2xl border border-amber-900/40">
             <button
               onClick={() => { setMode('quiz'); setResult(null); }}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 mode === 'quiz'
-                  ? 'bg-brand-600 text-white shadow-md'
+                  ? 'bg-amber-500 text-stone-950 font-black shadow-md'
                   : 'text-stone-300 hover:text-white'
               }`}
             >
-              🎯 اختبار الـ 3 خطوات (الأكثر دقة)
+              🗝️ استشارة الـ 3 خطوات (الأكثر دقة)
             </button>
             <button
               onClick={() => { setMode('natural'); setResult(null); }}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 mode === 'natural'
-                  ? 'bg-brand-600 text-white shadow-md'
+                  ? 'bg-amber-500 text-stone-950 font-black shadow-md'
                   : 'text-stone-300 hover:text-white'
               }`}
             >
-              💬 وصف حر باللغة العربية
+              📜 وصف حر كما تحدث حارس المقبرة
             </button>
           </div>
         </div>
@@ -145,20 +145,20 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
 
       {/* Mode A: 3-Step Interactive Quiz */}
       {mode === 'quiz' && !result && (
-        <div className="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200/80 shadow-sm space-y-6 animate-fade-in">
+        <div className="bg-[#15121b] rounded-3xl p-5 sm:p-7 border border-amber-900/40 shadow-xl space-y-6 animate-fade-in">
           {/* Progress Indicators */}
-          <div className="flex items-center justify-between pb-4 border-b border-stone-100">
+          <div className="flex items-center justify-between pb-4 border-b border-amber-900/30">
             <div className="flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-black flex items-center justify-center">
+              <span className="w-7 h-7 rounded-full bg-amber-500 text-stone-950 text-xs font-black flex items-center justify-center">
                 {step}
               </span>
-              <span className="text-xs sm:text-sm font-bold text-stone-900">
-                {step === 1 && 'الخطوة 1: اختر المجال الذي يثير فضولك'}
-                {step === 2 && 'الخطوة 2: ما هو مستواك الحالي في هذا المجال؟'}
-                {step === 3 && 'الخطوة 3: حدد هدفك ونوع الكتاب المفضل'}
+              <span className="text-xs sm:text-sm font-bold text-amber-100 font-amiri">
+                {step === 1 && 'الخطوة 1: اختر أروقة المعرفة التي تود استكشافها'}
+                {step === 2 && 'الخطوة 2: ما هو مستوى قراءتك الحالي في هذا الميدان؟'}
+                {step === 3 && 'الخطوة 3: حدد الموضوع الفرعي وحجم الكتاب'}
               </span>
             </div>
-            <span className="text-xs text-stone-400 font-medium">خطوة {step} من 3</span>
+            <span className="text-xs text-amber-500/80 font-readex">خطوة {step} من 3</span>
           </div>
 
           {/* Step 1: Category Selection */}
@@ -174,14 +174,14 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                     }}
                     className={`p-4 rounded-2xl border text-right transition-all flex items-center gap-3.5 ${
                       selectedCategory === cat.id
-                        ? 'border-brand-600 bg-brand-50/50 ring-2 ring-brand-500/20'
-                        : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50/50'
+                        ? 'border-amber-500 bg-amber-950/40 ring-1 ring-amber-500/30'
+                        : 'border-stone-800 bg-[#181420] hover:border-amber-900'
                     }`}
                   >
-                    <span className="text-2xl p-2 rounded-xl bg-white shadow-xs">{cat.icon}</span>
+                    <span className="text-2xl p-2 rounded-xl bg-black/40 border border-stone-800">{cat.icon}</span>
                     <div>
-                      <h4 className="text-sm font-bold text-stone-900">{cat.name}</h4>
-                      <p className="text-[11px] text-stone-500 line-clamp-1">{cat.topics.join(' • ')}</p>
+                      <h4 className="text-xs sm:text-sm font-bold text-amber-100 font-amiri">{cat.name}</h4>
+                      <p className="text-[10px] text-stone-400 line-clamp-1">{cat.topics.join(' • ')}</p>
                     </div>
                   </button>
                 ))}
@@ -190,7 +190,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
               <div className="pt-4 flex justify-end">
                 <button
                   onClick={() => setStep(2)}
-                  className="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-md shadow-brand-500/20 transition-all"
+                  className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs sm:text-sm font-black flex items-center gap-2 shadow-md transition-all"
                 >
                   <span>التالي: تحديد المستوى</span>
                   <ArrowLeft className="w-4 h-4" />
@@ -207,53 +207,53 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                   onClick={() => setSelectedLevel('beginner')}
                   className={`p-4 rounded-2xl border text-right transition-all ${
                     selectedLevel === 'beginner'
-                      ? 'border-brand-600 bg-brand-50/50 ring-2 ring-brand-500/20'
-                      : 'border-stone-200 hover:border-stone-300'
+                      ? 'border-amber-500 bg-amber-950/40 ring-1 ring-amber-500/30'
+                      : 'border-stone-800 bg-[#181420] hover:border-amber-900'
                   }`}
                 >
                   <span className="text-lg block mb-1">🌱 مبتدئ</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-stone-900 mb-1">مدخل تأسيسي مبسط</h4>
-                  <p className="text-[11px] text-stone-500">لغة سلسة وسهلة، خالية من المصطلحات المعقدة، تطبيقية وسريعة الفهم.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-amiri">مدخل تأسيسي مبسط</h4>
+                  <p className="text-[10px] text-stone-400">لغة سلسة خالية من التعقيد، سريعة الفهم وتطبيقية فوراً.</p>
                 </button>
 
                 <button
                   onClick={() => setSelectedLevel('intermediate')}
                   className={`p-4 rounded-2xl border text-right transition-all ${
                     selectedLevel === 'intermediate'
-                      ? 'border-brand-600 bg-brand-50/50 ring-2 ring-brand-500/20'
-                      : 'border-stone-200 hover:border-stone-300'
+                      ? 'border-amber-500 bg-amber-950/40 ring-1 ring-amber-500/30'
+                      : 'border-stone-800 bg-[#181420] hover:border-amber-900'
                   }`}
                 >
                   <span className="text-lg block mb-1">🌿 قارئ متوسط</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-stone-900 mb-1">فهم أعمق وتطبيقات</h4>
-                  <p className="text-[11px] text-stone-500">قرأت بعض الكتب وتريد تشريحاً علمياً وعملياً للشخصيات والنظريات.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-amiri">فهم أعمق وتطبيقات</h4>
+                  <p className="text-[10px] text-stone-400">قرأت بعض العناوين وتريد تشريحاً عملياً وعلمياً معمقاً.</p>
                 </button>
 
                 <button
                   onClick={() => setSelectedLevel('advanced')}
                   className={`p-4 rounded-2xl border text-right transition-all ${
                     selectedLevel === 'advanced'
-                      ? 'border-brand-600 bg-brand-50/50 ring-2 ring-brand-500/20'
-                      : 'border-stone-200 hover:border-stone-300'
+                      ? 'border-amber-500 bg-amber-950/40 ring-1 ring-amber-500/30'
+                      : 'border-stone-800 bg-[#181420] hover:border-amber-900'
                   }`}
                 >
                   <span className="text-lg block mb-1">🌳 متعمق وباحث</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-stone-900 mb-1">أمهات الكتب وأصولها</h4>
-                  <p className="text-[11px] text-stone-500">أطروحات عميقة وأعمال تأسيسية لكبار المفكرين بدون تبسيط مخل.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-amiri">أمهات الكتب وأصولها</h4>
+                  <p className="text-[10px] text-stone-400">أطروحات عميقة وأعمال تأسيسية أصيلة بدون تبسيط مخل.</p>
                 </button>
               </div>
 
               <div className="pt-4 flex justify-between">
                 <button
                   onClick={() => setStep(1)}
-                  className="px-4 py-2.5 rounded-xl border border-stone-200 text-stone-600 text-xs sm:text-sm font-semibold flex items-center gap-1.5"
+                  className="px-4 py-2.5 rounded-xl border border-stone-800 text-stone-400 text-xs sm:text-sm font-semibold flex items-center gap-1.5"
                 >
                   <ArrowRight className="w-4 h-4" />
                   السابق
                 </button>
                 <button
                   onClick={() => setStep(3)}
-                  className="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-md shadow-brand-500/20 transition-all"
+                  className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs sm:text-sm font-black flex items-center gap-2 shadow-md transition-all"
                 >
                   <span>التالي: تحديد الهدف</span>
                   <ArrowLeft className="w-4 h-4" />
@@ -266,8 +266,8 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
           {step === 3 && (
             <div className="space-y-5">
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-2">
-                  الموضوع الفرعي أو المشكلة التي تريد حلها:
+                <label className="text-xs font-bold text-amber-200 block mb-2 font-amiri">
+                  الموضوع الفرعي الذي ترغب بالتركيز عليه:
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {currentCategoryData.topics.map(topic => (
@@ -276,8 +276,8 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                       onClick={() => setSelectedTopic(topic)}
                       className={`p-3 rounded-xl text-xs font-bold text-right border transition-all ${
                         selectedTopic === topic
-                          ? 'border-brand-600 bg-brand-600 text-white shadow-sm'
-                          : 'border-stone-200 text-stone-700 hover:bg-stone-50'
+                          ? 'border-amber-500 bg-amber-500 text-stone-950 font-black shadow-sm'
+                          : 'border-stone-800 bg-[#181420] text-stone-300 hover:border-amber-900'
                       }`}
                     >
                       {topic}
@@ -287,7 +287,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-2">
+                <label className="text-xs font-bold text-amber-200 block mb-2 font-amiri">
                   حجم الكتاب المفضل:
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -295,28 +295,28 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                     onClick={() => setSelectedLength('short')}
                     className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all ${
                       selectedLength === 'short'
-                        ? 'border-brand-600 bg-brand-50 text-brand-700 ring-1 ring-brand-500'
-                        : 'border-stone-200 text-stone-600'
+                        ? 'border-amber-500 bg-amber-950/50 text-amber-300'
+                        : 'border-stone-800 bg-[#181420] text-stone-400'
                     }`}
                   >
-                    سريع وخفيف (&lt;250 صفحة)
+                    خفيف (&lt;250 ص)
                   </button>
                   <button
                     onClick={() => setSelectedLength('medium')}
                     className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all ${
                       selectedLength === 'medium'
-                        ? 'border-brand-600 bg-brand-50 text-brand-700 ring-1 ring-brand-500'
-                        : 'border-stone-200 text-stone-600'
+                        ? 'border-amber-500 bg-amber-950/50 text-amber-300'
+                        : 'border-stone-800 bg-[#181420] text-stone-400'
                     }`}
                   >
-                    متوسط (250-400 صفحة)
+                    متوسط (250-400 ص)
                   </button>
                   <button
                     onClick={() => setSelectedLength('any')}
                     className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all ${
                       selectedLength === 'any'
-                        ? 'border-brand-600 bg-brand-50 text-brand-700 ring-1 ring-brand-500'
-                        : 'border-stone-200 text-stone-600'
+                        ? 'border-amber-500 bg-amber-950/50 text-amber-300'
+                        : 'border-stone-800 bg-[#181420] text-stone-400'
                     }`}
                   >
                     أي حجم متوفر
@@ -327,7 +327,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
               <div className="pt-4 flex justify-between items-center">
                 <button
                   onClick={() => setStep(2)}
-                  className="px-4 py-2.5 rounded-xl border border-stone-200 text-stone-600 text-xs sm:text-sm font-semibold flex items-center gap-1.5"
+                  className="px-4 py-2.5 rounded-xl border border-stone-800 text-stone-400 text-xs sm:text-sm font-semibold flex items-center gap-1.5"
                 >
                   <ArrowRight className="w-4 h-4" />
                   السابق
@@ -335,17 +335,16 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                 <button
                   onClick={() => handleRunAdvisor('quiz')}
                   disabled={loading}
-                  className="px-6 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-lg shadow-brand-500/25 transition-all"
+                  className="px-6 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs sm:text-sm font-black flex items-center gap-2 shadow-xl candle-glow transition-all"
                 >
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>جاري مطابقة الكتب...</span>
+                      <span>الحارس يفتش في سجلات المقبرة...</span>
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-4 h-4 text-amber-300" />
-                      <span>عرض مسار القراءة المخصص</span>
+                      <span>🗝️ كشف مسار القراءة المخصص</span>
                     </>
                   )}
                 </button>
@@ -357,9 +356,9 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
 
       {/* Mode B: Natural Language Arabic Search */}
       {mode === 'natural' && !result && (
-        <div className="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200/80 shadow-sm space-y-4 animate-fade-in">
-          <label className="text-xs sm:text-sm font-bold text-stone-900 block">
-            اكتب استفسارك بحرية كما لو كنت تتحدث مع بائع الكتب في المتجر:
+        <div className="bg-[#15121b] rounded-3xl p-5 sm:p-7 border border-amber-900/40 shadow-xl space-y-4 animate-fade-in">
+          <label className="text-xs sm:text-sm font-bold text-amber-100 block font-amiri">
+            صف لحارس المقبرة ما تبحث عنه أو المشكلة التي تريد حلاً لها:
           </label>
           <div className="relative">
             <textarea
@@ -367,23 +366,23 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
               value={naturalQuery}
               onChange={e => setNaturalQuery(e.target.value)}
               placeholder="مثال: رشح لي كتاب في علم النفس للمبتدئين يفهمني السلوك البشري وعلاقاتي بدون تعقيد أكاديمي..."
-              className="w-full p-4 rounded-2xl border border-stone-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 resize-none"
+              className="w-full p-4 rounded-2xl border border-amber-900/40 bg-[#181420] text-amber-100 text-sm focus:outline-none focus:border-amber-500 resize-none placeholder:text-stone-500"
             />
           </div>
 
           {/* Quick suggestions chips */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[11px] text-stone-400 font-medium">نماذج سريعة:</span>
+            <span className="text-[10px] text-stone-400 font-medium">مخطوطات شائعة:</span>
             {[
-              'كتب علم نفس للمبتدئين',
+              'أسرار مقبرة الكتب المنسية وظل الريح',
+              'علم نفس للمبتدئين لفهم الذات',
+              'عزاءات الفلسفة والتفكير الهادئ',
               'بناء العادات والتخلص من التسويف',
-              'مدخل مبسط للفلسفة وعزاءاتها',
-              'رواية إنسانية عن الذاكرة والهوية',
             ].map(prompt => (
               <button
                 key={prompt}
                 onClick={() => setNaturalQuery(prompt)}
-                className="text-[11px] px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors"
+                className="text-[10px] px-2.5 py-1 rounded-lg bg-black/40 hover:bg-amber-950/50 text-amber-300 border border-stone-800 transition-colors"
               >
                 {prompt}
               </button>
@@ -394,17 +393,16 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
             <button
               onClick={() => handleRunAdvisor('natural')}
               disabled={loading || !naturalQuery.trim()}
-              className="px-6 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 disabled:bg-stone-200 disabled:text-stone-400 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-lg shadow-brand-500/20 transition-all"
+              className="px-6 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:bg-stone-800 disabled:text-stone-500 text-stone-950 text-xs sm:text-sm font-black flex items-center gap-2 shadow-lg candle-glow transition-all"
             >
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>جاري التحليل...</span>
+                  <span>جاري البحث...</span>
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span>البحث الذكي وتوليد المسار</span>
+                  <span>🗝️ استخراج مسار القراءة</span>
                 </>
               )}
             </button>
@@ -414,36 +412,36 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
 
       {/* Error Alert */}
       {error && (
-        <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm">
+        <div className="p-4 rounded-2xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs sm:text-sm">
           ⚠️ {error}
         </div>
       )}
 
-      {/* Results View */}
+      {/* Results View - Gothic Sanctuary Reading Path */}
       {result && (
         <div className="space-y-6 animate-fade-in">
           {/* Reset / New Search Action */}
-          <div className="flex items-center justify-between bg-stone-100 p-3 rounded-2xl text-xs">
-            <span className="text-stone-600 font-medium">
+          <div className="flex items-center justify-between bg-[#16131d] p-3 rounded-2xl border border-amber-900/30 text-xs">
+            <span className="text-amber-200/90 font-amiri">
               💡 {result.intent_summary}
             </span>
             <button
               onClick={() => setResult(null)}
-              className="px-3 py-1.5 rounded-xl bg-white text-brand-700 font-bold hover:bg-stone-50 border border-stone-200 shadow-xs"
+              className="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 font-bold hover:bg-amber-500 hover:text-stone-950 border border-amber-500/40"
             >
-              بحث جديد ↺
+              استشارة جديدة ↺
             </button>
           </div>
 
           {/* Primary Recommendation Card */}
-          <div className="bg-white rounded-3xl p-5 sm:p-7 border-2 border-brand-500 shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 left-0 bg-brand-600 text-white text-[11px] font-black px-4 py-1 rounded-br-2xl flex items-center gap-1 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              الترشيح الأول الأنسب لك ({Math.round(result.primary_recommendation.match_score * 100)}% تطابق)
+          <div className="bg-[#15121b] rounded-3xl p-5 sm:p-7 border-2 border-amber-500 shadow-2xl relative overflow-hidden candle-glow">
+            <div className="absolute top-0 left-0 bg-amber-500 text-stone-950 text-[10px] font-black px-4 py-1 rounded-br-2xl flex items-center gap-1 shadow-md">
+              <Sparkles className="w-3.5 h-3.5" />
+              الترشيح الأول من حارس المقبرة ({Math.round(result.primary_recommendation.match_score * 100)}% تطابق)
             </div>
 
             <div className="flex flex-col sm:flex-row gap-5 pt-4">
-              <div className="w-32 aspect-[3/4] rounded-2xl overflow-hidden bg-stone-100 shadow-md shrink-0 mx-auto sm:mx-0">
+              <div className="w-32 aspect-[3/4] rounded-2xl overflow-hidden bg-stone-900 shadow-xl shrink-0 mx-auto sm:mx-0 border border-amber-900/40">
                 <img
                   src={result.primary_recommendation.cover_image}
                   alt={result.primary_recommendation.title}
@@ -453,33 +451,33 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
 
               <div className="flex-1 space-y-3 text-right">
                 <div>
-                  <h3 className="text-lg sm:text-xl font-black text-stone-900">
+                  <h3 className="text-base sm:text-xl font-black font-amiri text-amber-100">
                     {result.primary_recommendation.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-stone-500 font-medium">
+                  <p className="text-xs text-amber-400 font-medium">
                     تأليف: {result.primary_recommendation.author}
                   </p>
                 </div>
 
                 {/* Why Recommended Callout */}
-                <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5">
-                  <span className="text-[11px] font-black text-amber-800 block mb-1">
-                    🎯 لماذا نرشح لك هذا الكتاب بالتحديد؟
+                <div className="bg-amber-950/40 border border-amber-500/30 rounded-2xl p-3.5">
+                  <span className="text-[11px] font-black text-amber-300 block mb-1">
+                    🎯 لماذا اختار لك حارس المقبرة هذا الكتاب؟
                   </span>
-                  <p className="text-xs sm:text-sm text-amber-950/90 leading-relaxed">
+                  <p className="text-xs text-stone-200 leading-relaxed font-amiri">
                     {result.primary_recommendation.why_recommended}
                   </p>
                 </div>
 
                 {/* Key Takeaways */}
                 <div>
-                  <span className="text-[11px] font-bold text-stone-500 block mb-1.5">
-                    ✨ أبرز ما ستخرج به من هذا الكتاب:
+                  <span className="text-[10px] font-bold text-amber-400/80 block mb-1.5 font-amiri">
+                    ✦ أبرز ما ستخرج به من هذه المخطوطة:
                   </span>
                   <ul className="space-y-1">
                     {result.primary_recommendation.key_takeaways.map((point, i) => (
-                      <li key={i} className="text-xs text-stone-700 flex items-center gap-1.5 font-medium">
-                        <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <li key={i} className="text-xs text-stone-300 flex items-center gap-1.5 font-amiri">
+                        <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                         <span>{point}</span>
                       </li>
                     ))}
@@ -487,8 +485,8 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                 </div>
 
                 {/* Direct Action for Book 1 */}
-                <div className="pt-2 flex items-center justify-between border-t border-stone-100">
-                  <span className="text-lg font-bold text-stone-900">
+                <div className="pt-2 flex items-center justify-between border-t border-amber-900/30">
+                  <span className="text-base font-bold text-amber-400">
                     {result.primary_recommendation.price} ج.م
                   </span>
                   <button
@@ -511,10 +509,9 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                         is_featured: 0,
                       });
                     }}
-                    className="px-4 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold flex items-center gap-1.5 transition-colors"
+                    className="px-3.5 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-200 text-xs font-bold border border-amber-900/40 transition-colors"
                   >
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                    أضف هذا الكتاب منفرداً
+                    تبنّ هذا الكتاب منفرداً
                   </button>
                 </div>
               </div>
@@ -523,21 +520,21 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
 
           {/* Progressive Reading Path Section */}
           {result.reading_path_steps && result.reading_path_steps.length > 1 && (
-            <div className="bg-stone-50 rounded-3xl p-5 sm:p-7 border border-stone-200 space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-stone-200/80">
+            <div className="bg-[#15121b] rounded-3xl p-5 sm:p-7 border border-amber-900/40 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-amber-900/30">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Layers className="w-5 h-5 text-brand-600" />
-                    <h3 className="text-base sm:text-lg font-bold text-stone-900">
+                    <Layers className="w-5 h-5 text-amber-400" />
+                    <h3 className="text-base font-bold font-amiri text-amber-100">
                       {result.reading_path_title}
                     </h3>
                   </div>
-                  <p className="text-xs text-stone-500 mt-0.5">
-                    تدرج معرفي منظم ومدروس من {result.reading_path_steps.length} كتب لضمان الاستيعاب الكامل
+                  <p className="text-[11px] text-stone-400 mt-0.5 font-amiri">
+                    مسار قراءة متدرج من {result.reading_path_steps.length} كتب مصممة لتنقلك خطوة بخطوة
                   </p>
                 </div>
 
-                <span className="self-start sm:self-auto px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                <span className="self-start sm:self-auto px-3 py-1 rounded-full text-xs font-black bg-amber-500/20 text-amber-300 border border-amber-500/40">
                   خصم الباقة: {result.bundle_discount_percent}% عند طلب المسار كاملاً
                 </span>
               </div>
@@ -547,9 +544,9 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                 {result.reading_path_steps.map((stepItem) => (
                   <div
                     key={stepItem.book_id}
-                    className="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-xs flex items-center gap-3 relative"
+                    className="bg-[#181420] rounded-2xl p-3 border border-amber-900/40 flex items-center gap-3"
                   >
-                    <div className="w-14 aspect-[3/4] rounded-lg overflow-hidden bg-stone-100 shrink-0">
+                    <div className="w-14 aspect-[3/4] rounded-lg overflow-hidden bg-stone-900 shrink-0 border border-amber-900/40">
                       <img
                         src={stepItem.cover_image}
                         alt={stepItem.title}
@@ -557,16 +554,16 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold text-brand-600 block mb-0.5">
+                      <span className="text-[9px] font-bold text-amber-400 block mb-0.5">
                         {stepItem.step_label}
                       </span>
-                      <h4 className="text-xs sm:text-sm font-bold text-stone-900 truncate">
+                      <h4 className="text-xs font-bold text-amber-100 truncate font-amiri">
                         {stepItem.title}
                       </h4>
-                      <p className="text-[11px] text-stone-500 truncate mb-1">
+                      <p className="text-[10px] text-stone-400 truncate mb-1">
                         {stepItem.author}
                       </p>
-                      <span className="text-xs font-bold text-stone-800">
+                      <span className="text-xs font-bold text-amber-400">
                         {stepItem.price} ج.م
                       </span>
                     </div>
@@ -578,23 +575,20 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
               <div className="pt-3">
                 <button
                   onClick={handleAddBundle}
-                  className={`w-full py-4 px-6 rounded-2xl font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-xl transition-all ${
+                  className={`w-full py-4 px-6 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl candle-glow transition-all ${
                     bundleAdded
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-500/25 active:scale-98'
+                      ? 'bg-amber-400 text-stone-950'
+                      : 'bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 text-stone-950 active:scale-98'
                   }`}
                 >
                   {bundleAdded ? (
                     <>
                       <Check className="w-5 h-5" />
-                      <span>تمت إضافة مسار القراءة كاملاً بخصم الباقة (10%)!</span>
+                      <span>تمت إضافة مسار القراءة كاملاً لصندوقك بخصم {result.bundle_discount_percent}%!</span>
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-5 h-5 text-amber-300" />
-                      <span>
-                        أضف المسار الكامل للسلة بخصم الباقة ({result.bundle_discount_percent}%)
-                      </span>
+                      <span>🗝️ أضف المسار الكامل لصندوقك بخصم الباقة ({result.bundle_discount_percent}%)</span>
                     </>
                   )}
                 </button>

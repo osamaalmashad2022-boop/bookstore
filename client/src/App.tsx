@@ -7,7 +7,7 @@ import { SmartAdvisor } from './components/SmartAdvisor';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
-import { Sparkles, Search, BookOpen, Truck, ShieldCheck, Flame } from 'lucide-react';
+import { Search, Truck, ShieldCheck, Flame } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'catalog' | 'advisor' | 'admin'>('catalog');
@@ -58,7 +58,7 @@ export const App: React.FC = () => {
   }, [selectedCategory, selectedLevel, onlyInStock, searchQuery, currentTab]);
 
   return (
-    <div className="min-h-screen pb-20 sm:pb-10 flex flex-col justify-between">
+    <div className="min-h-screen pb-20 sm:pb-10 flex flex-col justify-between bg-[#0d0b0f] text-[#ede6d6]">
       {/* Top Header & Mobile Bottom Bar Navigation */}
       <Navigation
         currentTab={currentTab}
@@ -80,82 +80,82 @@ export const App: React.FC = () => {
         )}
 
         {currentTab === 'catalog' && (
-          <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6 space-y-6">
-            {/* Hero Banner with Smart Advisor Callout */}
-            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-stone-900 via-stone-850 to-brand-950 text-white p-6 sm:p-10 shadow-lg">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-brand-500/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6 space-y-6 text-right">
+            {/* Atmospheric Gothic Hero Banner */}
+            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#1c1424] via-[#120f17] to-[#0d0b0f] text-white p-6 sm:p-10 shadow-2xl border-2 border-amber-900/40 candle-glow">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
               <div className="relative z-10 max-w-xl space-y-3">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-[11px] font-bold border border-brand-500/30">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  مستشار القراءة الذكي متوفر الآن
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 text-[11px] font-bold border border-amber-500/30">
+                  <span>✦</span>
+                  سر برشلونا القديم منذ 1945
                 </div>
 
-                <h2 className="text-2xl sm:text-4xl font-black leading-tight">
-                  الكتب الورقية التي تغير طريقة تفكيرك.. تصلك حتى باب بيتك
+                <h2 className="text-xl sm:text-3xl font-black font-amiri text-amber-100 leading-tight">
+                  «كل كتاب تراه هنا قد نجا من النسيان.. كل كتاب كان له صديق، وله روح.»
                 </h2>
 
-                <p className="text-stone-300 text-xs sm:text-sm leading-relaxed">
-                  نسخ ورقية أصلية مجلدة مختارة بعناية في علم النفس والفلسفة وتطوير الذات، مع خدمة الدفع عند الاستلام والشحن لكافة محافظات مصر.
+                <p className="text-stone-300 text-xs sm:text-sm leading-relaxed font-amiri">
+                  اختر كتاباً تتبناه لإنقاذه من النسيان، نسخ ورقية أصلية مجلدة محفوظة بعناية، مع شحن سريع لكافة محافظات مصر والدفع نقداً عند الاستلام COD.
                 </p>
 
                 {/* Primary CTA Buttons */}
                 <div className="pt-2 flex flex-wrap gap-2.5">
                   <button
                     onClick={() => setCurrentTab('advisor')}
-                    className="px-5 py-3 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-lg shadow-brand-600/30 active:scale-98 transition-all"
+                    className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 text-stone-950 text-xs sm:text-sm font-black flex items-center gap-2 shadow-lg shadow-amber-950/50 active:scale-98 transition-all"
                   >
-                    <Sparkles className="w-4 h-4 text-amber-300" />
-                    <span>جرّب مستشار الكتب الذكي 🧠</span>
+                    <span>🗝️</span>
+                    <span>استشر حارس المقبرة لاختيار كتابك</span>
                   </button>
 
-                  <div className="flex items-center gap-3 text-stone-300 text-[11px] px-2 py-1 font-medium">
-                    <span className="flex items-center gap-1">
-                      <Truck className="w-3.5 h-3.5 text-brand-400" />
+                  <div className="flex items-center gap-3 text-stone-400 text-[11px] px-2 py-1 font-amiri">
+                    <span className="flex items-center gap-1 text-amber-400/90">
+                      <Truck className="w-3.5 h-3.5" />
                       دفع عند الاستلام COD
                     </span>
-                    <span className="flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-brand-400" />
-                      نسخ ورقية 100%
+                    <span className="flex items-center gap-1 text-amber-400/90">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      نسخ ورقية أصلية 100%
                     </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Sticky/Smooth Search and Filter Controls */}
+            {/* Search and Filter Controls */}
             <div className="space-y-3">
               {/* Search Bar */}
               <div className="relative">
                 <Search className="w-4 h-4 absolute right-3.5 top-3.5 text-stone-400" />
                 <input
                   type="text"
-                  placeholder="ابحث بالعنوان، اسم المؤلف، أو الموضوع (مثال: جلسات نفسية، العادات...)"
+                  placeholder="ابحث بين رفوف المقبرة بالعنوان، اسم المؤلف، أو الموضوع (مثال: ظل الريح، جلسات نفسية...)"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full pr-10 pl-4 py-2.5 rounded-2xl border border-stone-200/90 text-xs sm:text-sm bg-white shadow-xs focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition-all"
+                  className="w-full pr-10 pl-4 py-2.5 rounded-2xl border border-amber-900/40 bg-[#15121b] text-xs sm:text-sm text-amber-100 shadow-inner focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-stone-500"
                 />
               </div>
 
               {/* Category Pills (Horizontal Scrolling on Mobile) */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
                 <button
                   onClick={() => setSelectedCategory('all')}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                  className={`px-4 py-2 rounded-xl font-bold whitespace-nowrap transition-all ${
                     selectedCategory === 'all'
-                      ? 'bg-brand-600 text-white shadow-sm'
-                      : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
+                      ? 'bg-amber-500 text-stone-950 shadow-md font-black'
+                      : 'bg-[#15121b] text-stone-300 border border-amber-900/40 hover:border-amber-700'
                   }`}
                 >
-                  جميع الكتب
+                  جميع الكنوز بالمقبرة
                 </button>
                 {categories.map(cat => (
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                    className={`px-4 py-2 rounded-xl font-bold whitespace-nowrap transition-all ${
                       selectedCategory === cat.id
-                        ? 'bg-brand-600 text-white shadow-sm'
-                        : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
+                        ? 'bg-amber-500 text-stone-950 shadow-md font-black'
+                        : 'bg-[#15121b] text-stone-300 border border-amber-900/40 hover:border-amber-700'
                     }`}
                   >
                     {cat.name}
@@ -167,7 +167,7 @@ export const App: React.FC = () => {
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                 {/* Level selector */}
                 <div className="flex items-center gap-1.5">
-                  <span className="text-stone-400 font-medium">المستوى:</span>
+                  <span className="text-stone-400 font-medium">مستوى القارئ:</span>
                   {[
                     { key: 'all', label: 'الكل' },
                     { key: 'beginner', label: 'مبتدئ' },
@@ -179,8 +179,8 @@ export const App: React.FC = () => {
                       onClick={() => setSelectedLevel(lvl.key)}
                       className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
                         selectedLevel === lvl.key
-                          ? 'bg-stone-800 text-white'
-                          : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                          ? 'bg-amber-950/80 text-amber-300 border border-amber-500/50'
+                          : 'bg-[#181420] text-stone-400 hover:text-stone-200 border border-stone-800'
                       }`}
                     >
                       {lvl.label}
@@ -189,42 +189,42 @@ export const App: React.FC = () => {
                 </div>
 
                 {/* Stock Toggle */}
-                <label className="flex items-center gap-1.5 text-stone-600 font-medium cursor-pointer select-none">
+                <label className="flex items-center gap-1.5 text-stone-300 font-medium cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={onlyInStock}
                     onChange={e => setOnlyInStock(e.target.checked)}
-                    className="rounded text-brand-600 focus:ring-brand-500"
+                    className="rounded text-amber-500 focus:ring-amber-400 bg-stone-900 border-stone-700"
                   />
-                  <span>المتوفر بالمخزن فقط</span>
+                  <span>المتوفر بالمقبرة فقط</span>
                 </label>
               </div>
             </div>
 
             {/* Catalog Grid Header */}
-            <div className="flex items-center justify-between text-xs text-stone-500 pt-2 border-t border-stone-100">
-              <span>عرض <strong>{books.length}</strong> كتاب متوفر</span>
-              <span className="flex items-center gap-1 text-brand-700 font-semibold">
-                <Flame className="w-3.5 h-3.5 text-amber-500" />
+            <div className="flex items-center justify-between text-xs text-stone-400 pt-2 border-t border-amber-900/30 font-amiri">
+              <span>عرض <strong>{books.length}</strong> كتاب محفوظ بالمقبرة</span>
+              <span className="flex items-center gap-1 text-amber-400 font-semibold">
+                <Flame className="w-3.5 h-3.5" />
                 شحن لجميع المحافظات خلال 48-72 ساعة
               </span>
             </div>
 
-            {/* Books Grid (2 cols mobile, 3-4 desktop) */}
+            {/* Books Grid */}
             {loading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 py-8">
                 {[1, 2, 3, 4, 5, 6].map(i => (
-                  <div key={i} className="aspect-[3/5] bg-stone-100 rounded-2xl animate-pulse" />
+                  <div key={i} className="aspect-[3/5] bg-[#15121b] border border-amber-900/20 rounded-2xl animate-pulse" />
                 ))}
               </div>
             ) : books.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-3xl border border-stone-200 p-8 space-y-3">
-                <div className="w-12 h-12 rounded-full bg-stone-100 text-stone-400 flex items-center justify-center mx-auto">
-                  <BookOpen className="w-6 h-6" />
+              <div className="text-center py-16 bg-[#15121b] rounded-3xl border border-amber-900/40 p-8 space-y-3">
+                <div className="w-12 h-12 rounded-full bg-stone-900 text-amber-400 flex items-center justify-center mx-auto border border-amber-900/40 text-xl">
+                  🕯️
                 </div>
-                <h4 className="text-sm font-bold text-stone-800">لا توجد كتب تطابق هذا البحث</h4>
-                <p className="text-xs text-stone-500 max-w-sm mx-auto">
-                  جرّب تغيير التصنيف أو كلمات البحث، أو استخدم مستشار الكتب لمساعدتك في العثور على بديل.
+                <h4 className="text-sm font-bold font-amiri text-amber-200">لم يُعثر على هذا العنوان في رفوف المقبرة</h4>
+                <p className="text-xs text-stone-400 max-w-sm mx-auto font-amiri">
+                  جرّب تغيير كلمات البحث، أو استشر حارس المقبرة لترشيح كتاب بديل يلائم شغفك.
                 </p>
                 <button
                   onClick={() => {
@@ -232,7 +232,7 @@ export const App: React.FC = () => {
                     setSelectedLevel('all');
                     setSearchQuery('');
                   }}
-                  className="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold"
+                  className="px-4 py-2 rounded-xl bg-amber-500 text-stone-950 text-xs font-black"
                 >
                   إعادة ضبط البحث
                 </button>
@@ -263,10 +263,10 @@ export const App: React.FC = () => {
       <CheckoutModal />
 
       {/* Footer info */}
-      <footer className="mt-12 border-t border-stone-200 bg-white py-6 text-center text-xs text-stone-500 hidden sm:block">
-        <p className="font-semibold text-stone-700 mb-1">مقبرة الكتب المنسية للكتب الورقية © 2026</p>
-        <p className="text-[11px] text-stone-400">
-          معمارية سحابية دائمة ومجانية بنسبة 100% للأبد • الدفع نقداً عند الاستلام COD • مستشار الكتب الذكي
+      <footer className="mt-12 border-t border-amber-900/30 bg-[#120f17] py-6 text-center text-xs text-stone-400 hidden sm:block">
+        <p className="font-bold font-amiri text-amber-200 mb-1">مقبرة الكتب المنسية للكتب الورقية © 2026</p>
+        <p className="text-[11px] text-stone-500">
+          معمارية سحابية دائمة ومجانية بنسبة 100% للأبد • الدفع نقداً عند الاستلام COD • مستشار حارس المقبرة
         </p>
       </footer>
     </div>

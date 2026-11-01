@@ -43,30 +43,30 @@ export const ShippingManager: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6 space-y-4">
-      <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+    <div className="bg-[#15121b] rounded-2xl border border-amber-900/40 p-4 sm:p-6 space-y-4 text-right">
+      <div className="flex items-center justify-between pb-3 border-b border-amber-900/30">
         <div>
-          <h3 className="text-sm sm:text-base font-bold text-stone-900 flex items-center gap-2">
-            <Truck className="w-5 h-5 text-brand-600" />
-            إدارة أسعار الشحن للمحافظات المصرية
+          <h3 className="text-sm sm:text-base font-bold font-amiri text-amber-100 flex items-center gap-2">
+            <Truck className="w-5 h-5 text-amber-400" />
+            إدارة أسعار الشحن لمحافظات مصر
           </h3>
-          <p className="text-xs text-stone-500 mt-0.5">
+          <p className="text-xs text-stone-400 mt-0.5">
             تحديث تكلفة التوصيل ومدة الشحن التي تظهر للعميل في شاشة الدفع
           </p>
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-stone-400 text-xs">جاري تحميل الأسعار...</div>
+        <div className="text-center py-8 text-stone-500 text-xs">جاري تحميل الأسعار...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {governorates.map(gov => (
             <div
               key={gov.id}
-              className="p-3.5 rounded-xl border border-stone-200/80 bg-stone-50/50 flex items-center justify-between gap-3 text-right"
+              className="p-3.5 rounded-xl border border-amber-900/30 bg-[#181420] flex items-center justify-between gap-3 text-right"
             >
               <div className="flex-1 min-w-0">
-                <span className="text-xs font-bold text-stone-900 block truncate">{gov.name}</span>
+                <span className="text-xs font-bold text-amber-100 block truncate font-amiri">{gov.name}</span>
                 <input
                   type="text"
                   value={gov.delivery_days}
@@ -74,7 +74,7 @@ export const ShippingManager: React.FC = () => {
                     const val = e.target.value;
                     setGovernorates(prev => prev.map(g => g.id === gov.id ? { ...g, delivery_days: val } : g));
                   }}
-                  className="text-[11px] text-stone-500 bg-transparent border-b border-stone-200 focus:outline-none focus:border-brand-500 mt-1 w-full"
+                  className="text-[11px] text-stone-400 bg-transparent border-b border-stone-800 focus:outline-none focus:border-amber-500 mt-1 w-full"
                 />
               </div>
 
@@ -87,17 +87,17 @@ export const ShippingManager: React.FC = () => {
                       const val = parseFloat(e.target.value) || 0;
                       setGovernorates(prev => prev.map(g => g.id === gov.id ? { ...g, fee: val } : g));
                     }}
-                    className="w-16 px-2 py-1 text-xs font-bold border border-stone-200 rounded-lg text-center bg-white"
+                    className="w-16 px-2 py-1 text-xs font-bold border border-amber-900/40 rounded-lg text-center bg-[#120f17] text-amber-300 font-readex"
                   />
-                  <span className="text-xs text-stone-500">ج.م</span>
+                  <span className="text-xs text-stone-400">ج.م</span>
                 </div>
 
                 <button
                   onClick={() => handleUpdate(gov)}
                   className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     savingId === gov.id
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-stone-900 hover:bg-stone-800 text-white shadow-xs'
+                      ? 'bg-amber-400 text-stone-950 font-black'
+                      : 'bg-amber-500/20 hover:bg-amber-500 hover:text-stone-950 text-amber-300 border border-amber-500/40'
                   }`}
                 >
                   {savingId === gov.id ? <Check className="w-3.5 h-3.5" /> : 'حفظ'}
@@ -110,4 +110,3 @@ export const ShippingManager: React.FC = () => {
     </div>
   );
 };
-

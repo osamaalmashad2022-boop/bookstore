@@ -4,9 +4,18 @@
 
 @layer base {
   body {
-    @apply bg-[#fbfaf8] text-stone-900;
+    @apply bg-[#0d0b0f] text-[#ede6d6];
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+}
+
+/* Custom Candle & Sanctuary Glows */
+.candle-glow {
+  box-shadow: 0 0 45px -10px rgba(212, 175, 55, 0.22);
+}
+
+.candle-glow-sm {
+  box-shadow: 0 0 25px -5px rgba(212, 175, 55, 0.2);
 }
 
 /* Custom smooth transitions & animations */
@@ -36,4 +45,3 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
