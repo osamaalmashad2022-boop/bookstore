@@ -74,6 +74,13 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
             </span>
           </div>
         )}
+
+        {/* Subtle Candle Flame on Hover */}
+        <div className="absolute bottom-2.5 left-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+          <div className="w-6 h-6 rounded-full bg-amber-950/90 border border-amber-500/50 flex items-center justify-center text-xs shadow-[0_0_12px_#f59e0b] candle-flame-anim">
+            🕯️
+          </div>
+        </div>
       </div>
 
       {/* Content Area */}

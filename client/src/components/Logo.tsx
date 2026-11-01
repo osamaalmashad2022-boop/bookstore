@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Maximize2 } from 'lucide-react';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -6,6 +7,7 @@ interface LogoProps {
   source?: 'image' | 'vector';
   className?: string;
   showSubtitle?: boolean;
+  onEmblemClick?: () => void;
 }
 
 export const Logo: React.FC<LogoProps> = ({
@@ -14,6 +16,7 @@ export const Logo: React.FC<LogoProps> = ({
   source = 'image',
   className = '',
   showSubtitle = true,
+  onEmblemClick,
 }) => {
   const [imgError, setImgError] = useState(false);
 
@@ -35,7 +38,16 @@ export const Logo: React.FC<LogoProps> = ({
 
   const Emblem = (
     <div
-      className={`relative group rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center border-2 border-amber-500/50 bg-[#120e17] shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:border-amber-400 ${sizeMap[size]}`}
+      onClick={(e) => {
+        if (onEmblemClick) {
+          e.stopPropagation();
+          onEmblemClick();
+        }
+      }}
+      title={onEmblemClick ? 'انقر لتكبير الشعار الملكي واستعراض تفاصيله' : undefined}
+      className={`relative group rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center border-2 border-amber-500/50 bg-[#120e17] shadow-xl transition-all duration-300 ${
+        onEmblemClick ? 'cursor-pointer hover:scale-105 hover:border-amber-400 active:scale-95' : ''
+      } ${sizeMap[size]}`}
       style={{
         boxShadow: '0 0 16px rgba(212, 175, 55, 0.3), inset 0 0 10px rgba(0, 0, 0, 0.8)',
       }}
@@ -59,8 +71,15 @@ export const Logo: React.FC<LogoProps> = ({
         />
       )}
 
+      {/* Hover Zoom Indicator Overlay */}
+      {onEmblemClick && (
+        <div className="absolute inset-0 bg-amber-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity z-20">
+          <Maximize2 className="w-3.5 h-3.5 text-amber-200 drop-shadow" />
+        </div>
+      )}
+
       {/* Subtle Golden Ring Highlight */}
-      <div className="absolute inset-0 rounded-full border border-amber-300/30 pointer-events-none z-20" />
+      <div className="absolute inset-0 rounded-full border border-amber-300/30 pointer-events-none z-30" />
     </div>
   );
 

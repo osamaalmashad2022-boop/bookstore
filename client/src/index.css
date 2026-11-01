@@ -46,3 +46,71 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ==================================================== */
+/* ARTISANAL GOTHIC CANDLELIGHT & EMBER ENGINE          */
+/* ==================================================== */
+
+@keyframes flameFlicker {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 10px #FFB800) drop-shadow(0 0 20px rgba(230, 57, 0, 0.6));
+  }
+  20% {
+    transform: scale(1.08, 0.92) rotate(-2.5deg);
+    opacity: 0.92;
+    filter: drop-shadow(0 0 14px #FF9400) drop-shadow(0 0 25px rgba(230, 57, 0, 0.7));
+  }
+  40% {
+    transform: scale(0.94, 1.06) rotate(1.8deg);
+    opacity: 0.98;
+    filter: drop-shadow(0 0 8px #FFD700) drop-shadow(0 0 16px rgba(230, 57, 0, 0.5));
+  }
+  60% {
+    transform: scale(1.04, 0.96) rotate(-1.2deg);
+    opacity: 0.89;
+    filter: drop-shadow(0 0 12px #FFAE00) drop-shadow(0 0 22px rgba(230, 57, 0, 0.65));
+  }
+  80% {
+    transform: scale(0.97, 1.03) rotate(2deg);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 11px #FFC107) drop-shadow(0 0 18px rgba(230, 57, 0, 0.55));
+  }
+}
+
+.candle-flame-anim {
+  transform-origin: center bottom;
+  animation: flameFlicker 1.9s infinite ease-in-out;
+}
+
+@keyframes candlePulseGlow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.08);
+  }
+}
+
+.candle-pulse-halo {
+  animation: candlePulseGlow 3s infinite ease-in-out;
+}
+
+@keyframes emberRise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-40px) scale(0.2);
+    opacity: 0;
+  }
+}
+
+.ember-particle {
+  animation: emberRise 2s infinite ease-out;
+}
+

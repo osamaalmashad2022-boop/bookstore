@@ -69,11 +69,18 @@ export const CartDrawer: React.FC = () => {
                 {freeShippingProgress}%
               </span>
             </div>
-            <div className="w-full h-1.5 bg-stone-900 rounded-full overflow-hidden border border-stone-800">
+            <div className="relative w-full h-2 bg-stone-900 rounded-full border border-stone-800">
               <div
-                className="h-full bg-amber-500 rounded-full transition-all duration-300 candle-glow-sm"
+                className="h-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-300 rounded-full transition-all duration-300 relative shadow-[0_0_10px_#f59e0b]"
                 style={{ width: `${freeShippingProgress}%` }}
-              />
+              >
+                {/* Flame indicator on the leading edge */}
+                {freeShippingProgress > 0 && (
+                  <div className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 text-xs candle-flame-anim pointer-events-none">
+                    🔥
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -81,14 +88,16 @@ export const CartDrawer: React.FC = () => {
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {items.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 text-stone-500">
-                <div className="w-16 h-16 rounded-full bg-stone-900 border border-stone-800 flex items-center justify-center mb-3 text-2xl">
-                  📜
+                <div className="relative w-16 h-20 flex items-end justify-center mb-3">
+                  <div className="w-6 h-12 rounded-t-sm bg-stone-800 border border-stone-700/60 shadow-inner" />
+                  <div className="absolute top-4 w-0.5 h-3 bg-stone-600 rounded-full" />
+                  <div className="absolute top-1 w-2 h-2 rounded-full bg-stone-600/40 animate-ping" />
                 </div>
-                <p className="text-sm font-bold text-amber-200/80 mb-1 font-readex">صندوقك خالٍ من الكتب حالياً</p>
-                <p className="text-xs text-stone-400 mb-4 font-readex">اختر كتاباً لتتبناه وتنقذه من النسيان</p>
+                <p className="text-sm font-bold text-amber-200/80 mb-1 font-readex">شمعة صندوقك لم تُشعل بعد...</p>
+                <p className="text-xs text-stone-400 mb-4 font-readex">أضف كتابك الأول لتشعل نور المقبرة وتنال خصم الباقة</p>
                 <button
                   onClick={() => setIsCartOpen(false)}
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 text-stone-950 text-xs font-black"
+                  className="px-5 py-2.5 rounded-xl bg-amber-500 text-stone-950 text-xs font-black shadow-md hover:bg-amber-400 transition-colors"
                 >
                   استكشف المقبرة
                 </button>

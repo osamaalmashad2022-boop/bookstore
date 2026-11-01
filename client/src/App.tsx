@@ -7,6 +7,7 @@ import { SmartAdvisor } from './components/SmartAdvisor';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
+import { CandleTorch } from './components/CandleTorch';
 import { Search, Truck, ShieldCheck, Flame, Lock } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -291,6 +292,9 @@ export const App: React.FC = () => {
       <CartDrawer />
 
       <CheckoutModal />
+
+      {/* Atmospheric Sanctuary Torchlight Cursor Engine */}
+      <CandleTorch />
 
       {/* Footer info with discreet secret lock trigger */}
       <footer className="mt-12 border-t border-amber-900/30 bg-[#120f17] py-6 text-center text-xs text-stone-400">

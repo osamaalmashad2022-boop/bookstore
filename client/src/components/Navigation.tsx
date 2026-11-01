@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, QrCode, BookOpen, Compass, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { Logo } from './Logo';
+import { LogoModal } from './LogoModal';
 
 interface NavigationProps {
   currentTab: 'catalog' | 'advisor' | 'admin';
@@ -15,6 +16,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onOpenSearch,
 }) => {
   const { totalItems, setIsCartOpen } = useCart();
+  const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
 
   return (
     <>
@@ -26,7 +28,11 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setCurrentTab('catalog')}
             className="cursor-pointer select-none"
           >
-            <Logo variant="horizontal" size="md" />
+            <Logo
+              variant="horizontal"
+              size="md"
+              onEmblemClick={() => setIsLogoModalOpen(true)}
+            />
           </div>
 
           {/* Quick Header Actions */}
@@ -131,6 +137,12 @@ export const Navigation: React.FC<NavigationProps> = ({
           </button>
         </div>
       </nav>
+
+      {/* Royal Logo Preview Modal */}
+      <LogoModal
+        isOpen={isLogoModalOpen}
+        onClose={() => setIsLogoModalOpen(false)}
+      />
     </>
   );
 };
