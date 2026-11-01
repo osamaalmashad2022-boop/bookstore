@@ -89,7 +89,7 @@ export const OrderManager: React.FC = () => {
       {loading ? (
         <div className="text-center py-12 text-stone-500 text-xs">جاري تحميل الطلبات...</div>
       ) : filteredOrders.length === 0 ? (
-        <div className="bg-[#15121b] p-8 rounded-2xl border border-amber-900/30 text-center text-stone-500 text-xs font-amiri">
+        <div className="bg-[#15121b] p-8 rounded-2xl border border-amber-900/30 text-center text-stone-500 text-xs font-readex">
           لا توجد طلبات تطابق هذا التصنيف في سجلات المقبرة.
         </div>
       ) : (
@@ -123,7 +123,7 @@ export const OrderManager: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div>
                     <span className="text-stone-500 block mb-0.5">العميل والهاتف:</span>
-                    <p className="font-bold text-amber-100 font-amiri">{order.customer_name}</p>
+                    <p className="font-bold text-amber-100 font-readex">{order.customer_name}</p>
                     <p className="text-stone-400 font-readex">{order.customer_phone}</p>
                   </div>
 

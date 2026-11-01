@@ -220,7 +220,7 @@ export const BookManager: React.FC = () => {
               </div>
 
               <div className="flex-1 min-w-0 text-right">
-                <h4 className="text-xs sm:text-sm font-bold font-amiri text-amber-100 truncate">{book.title}</h4>
+                <h4 className="text-xs sm:text-sm font-bold font-readex text-amber-100 truncate">{book.title}</h4>
                 <p className="text-[10px] text-stone-400 truncate mb-1">{book.author}</p>
                 <div className="flex items-center gap-2 text-xs">
                   <span className="font-bold text-amber-400 font-readex">{book.price} ج.م</span>
@@ -263,7 +263,7 @@ export const BookManager: React.FC = () => {
           <div className="bg-[#120f17] text-[#ede6d6] w-full max-w-xl max-h-[92vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-amber-900/60 candle-glow text-right">
             {/* Header */}
             <div className="px-5 py-4 border-b border-amber-900/30 flex items-center justify-between">
-              <h3 className="text-sm sm:text-base font-bold font-amiri text-amber-100">
+              <h3 className="text-sm sm:text-base font-bold font-readex text-amber-100">
                 {editingBook ? `تعديل كتاب: ${editingBook.title}` : 'تسجيل كتاب جديد في مقبرة الكتب'}
               </h3>
               <button
@@ -279,7 +279,7 @@ export const BookManager: React.FC = () => {
               {/* 1-Click Smart Auto-Fill helper */}
               {!editingBook && (
                 <div className="bg-amber-950/40 border border-amber-500/30 rounded-2xl p-3.5 space-y-2">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 font-amiri">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 font-readex">
                     <Sparkles className="w-4 h-4 text-amber-400" />
                     <span>ميزة الملء الذكي التلقائي (Google Books API):</span>
                   </div>
@@ -312,7 +312,7 @@ export const BookManager: React.FC = () => {
                         >
                           <img src={item.coverImage} className="w-8 h-10 object-cover rounded shrink-0" />
                           <div className="flex-1 min-w-0 text-right">
-                            <h5 className="text-xs font-bold text-amber-100 truncate font-amiri">{item.title}</h5>
+                            <h5 className="text-xs font-bold text-amber-100 truncate font-readex">{item.title}</h5>
                             <span className="text-[10px] text-stone-400 truncate block">{item.author}</span>
                           </div>
                           <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold shrink-0">
@@ -328,7 +328,7 @@ export const BookManager: React.FC = () => {
               <form onSubmit={handleSaveBook} className="space-y-3.5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">عنوان الكتاب *</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">عنوان الكتاب *</label>
                     <input
                       type="text"
                       required
@@ -338,7 +338,7 @@ export const BookManager: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">المؤلف *</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">المؤلف *</label>
                     <input
                       type="text"
                       required
@@ -351,7 +351,7 @@ export const BookManager: React.FC = () => {
 
                 <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">السعر (ج.م) *</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">السعر (ج.م) *</label>
                     <input
                       type="number"
                       required
@@ -361,7 +361,7 @@ export const BookManager: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">السعر الأصلي</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">السعر الأصلي</label>
                     <input
                       type="number"
                       value={originalPrice}
@@ -370,7 +370,7 @@ export const BookManager: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">الكمية المتوفرة *</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">الكمية المتوفرة *</label>
                     <input
                       type="number"
                       required
@@ -383,7 +383,7 @@ export const BookManager: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">التصنيف الرئيسي *</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">التصنيف الرئيسي *</label>
                     <select
                       value={categoryId}
                       onChange={e => setCategoryId(e.target.value)}
@@ -395,7 +395,7 @@ export const BookManager: React.FC = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">المستوى القرائي *</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">المستوى القرائي *</label>
                     <select
                       value={readerLevel}
                       onChange={e => setReaderLevel(e.target.value as any)}
@@ -409,7 +409,7 @@ export const BookManager: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
+                  <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">
                     المواضيع الفرعية (مفصولة بفواصل)
                   </label>
                   <input
@@ -422,7 +422,7 @@ export const BookManager: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
+                  <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">
                     "لماذا تقرأ هذا الكتاب؟" (تستخدمها خوارزمية المستشار الذكي) *
                   </label>
                   <textarea
@@ -437,7 +437,7 @@ export const BookManager: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">عدد الصفحات</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">عدد الصفحات</label>
                     <input
                       type="number"
                       value={pageCount}
@@ -446,7 +446,7 @@ export const BookManager: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">رابط صورة الغلاف</label>
+                    <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">رابط صورة الغلاف</label>
                     <input
                       type="url"
                       value={coverImage}
@@ -457,7 +457,7 @@ export const BookManager: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
+                  <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">
                     مقتطف أو فهرس المحتويات (Look Inside)
                   </label>
                   <textarea

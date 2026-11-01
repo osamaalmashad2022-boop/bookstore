@@ -29,7 +29,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               🕯️
             </div>
             <div>
-              <h1 className="text-base sm:text-lg font-black font-amiri text-amber-100 leading-tight">
+              <h1 className="text-base sm:text-lg font-black font-readex text-amber-100 leading-tight">
                 مقبرة الكتب المنسية
               </h1>
               <p className="text-[10px] text-amber-500/80 font-readex">
@@ -93,7 +93,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             }`}
           >
             <span className="text-lg leading-none mb-0.5">🏰</span>
-            <span className="text-[11px] font-amiri">المقبرة</span>
+            <span className="text-[11px] font-readex">المقبرة</span>
           </button>
 
           {/* Tab 2: Smart Book Advisor */}
@@ -109,7 +109,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               <span className="text-lg leading-none mb-0.5">🗝️</span>
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
             </div>
-            <span className="text-[11px] font-amiri">المستشار</span>
+            <span className="text-[11px] font-readex">المستشار</span>
           </button>
 
           {/* Tab 3: Cart */}
@@ -125,7 +125,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 </span>
               )}
             </div>
-            <span className="text-[11px] font-amiri">الصندوق</span>
+            <span className="text-[11px] font-readex">الصندوق</span>
           </button>
 
           {/* Tab 4: Admin */}
@@ -138,7 +138,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             }`}
           >
             <span className="text-lg leading-none mb-0.5">🕯️</span>
-            <span className="text-[11px] font-amiri">السجل</span>
+            <span className="text-[11px] font-readex">السجل</span>
           </button>
         </div>
       </nav>

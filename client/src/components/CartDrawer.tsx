@@ -37,7 +37,7 @@ export const CartDrawer: React.FC = () => {
           <div className="p-4 border-b border-amber-900/30 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-lg">📜</span>
-              <h2 className="text-sm sm:text-base font-bold font-amiri text-amber-100">
+              <h2 className="text-sm sm:text-base font-bold font-readex text-amber-100">
                 صندوق الكتب المتبناة
               </h2>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30">
@@ -54,7 +54,7 @@ export const CartDrawer: React.FC = () => {
 
           {/* Dynamic Free Shipping Progress Bar */}
           <div className="bg-[#181420] p-3.5 border-b border-amber-900/30">
-            <div className="flex items-center justify-between text-xs font-bold mb-1.5 font-amiri">
+            <div className="flex items-center justify-between text-xs font-bold mb-1.5 font-readex">
               <span className="flex items-center gap-1.5 text-stone-300">
                 <Truck className="w-3.5 h-3.5 text-amber-400" />
                 {amountNeededForFreeShipping === 0 ? (
@@ -84,8 +84,8 @@ export const CartDrawer: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-stone-900 border border-stone-800 flex items-center justify-center mb-3 text-2xl">
                   📜
                 </div>
-                <p className="text-sm font-bold text-amber-200/80 mb-1 font-amiri">صندوقك خالٍ من الكتب حالياً</p>
-                <p className="text-xs text-stone-400 mb-4 font-amiri">اختر كتاباً لتتبناه وتنقذه من النسيان</p>
+                <p className="text-sm font-bold text-amber-200/80 mb-1 font-readex">صندوقك خالٍ من الكتب حالياً</p>
+                <p className="text-xs text-stone-400 mb-4 font-readex">اختر كتاباً لتتبناه وتنقذه من النسيان</p>
                 <button
                   onClick={() => setIsCartOpen(false)}
                   className="px-5 py-2.5 rounded-xl bg-amber-500 text-stone-950 text-xs font-black"
@@ -110,7 +110,7 @@ export const CartDrawer: React.FC = () => {
 
                   {/* Details */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-xs sm:text-sm font-bold font-amiri text-amber-100 truncate">
+                    <h4 className="text-xs sm:text-sm font-bold font-readex text-amber-100 truncate">
                       {item.book.title}
                     </h4>
                     <p className="text-[10px] text-stone-400 truncate mb-1">
@@ -158,7 +158,7 @@ export const CartDrawer: React.FC = () => {
           {/* Footer Totals & Checkout Button */}
           {items.length > 0 && (
             <div className="p-4 bg-[#16131d] border-t border-amber-900/30 space-y-3">
-              <div className="space-y-1 text-xs text-stone-400 font-amiri">
+              <div className="space-y-1 text-xs text-stone-400 font-readex">
                 <div className="flex justify-between">
                   <span>مجموع الكتب:</span>
                   <span className="font-semibold text-amber-200 font-readex">{subtotal} ج.م</span>

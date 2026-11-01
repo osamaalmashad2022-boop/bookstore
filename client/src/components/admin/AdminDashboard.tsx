@@ -22,7 +22,7 @@ export const AdminDashboard: React.FC = () => {
       {/* Top Admin Header - Gothic Sanctuary */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#15121b] p-4 sm:p-5 rounded-2xl border border-amber-900/40 shadow-lg">
         <div>
-          <h2 className="text-base sm:text-xl font-black font-amiri text-amber-100 flex items-center gap-2">
+          <h2 className="text-base sm:text-xl font-black font-readex text-amber-100 flex items-center gap-2">
             <span>🕯️</span>
             سجل حارس مقبرة الكتب وإدارة المخزون
           </h2>
@@ -96,14 +96,14 @@ export const AdminDashboard: React.FC = () => {
             <div className="bg-[#15121b] p-4 rounded-2xl border border-amber-900/40 shadow-xs text-right">
               <span className="text-[11px] text-stone-400 block mb-1">إجمالي المبيعات المؤكدة</span>
               <span className="text-xl sm:text-2xl font-black text-amber-400 font-readex">
-                {analytics?.totalRevenue || 0} <span className="text-xs font-normal text-stone-400 font-cairo">ج.م</span>
+                {analytics?.totalRevenue || 0} <span className="text-xs font-normal text-stone-400 font-readex">ج.م</span>
               </span>
             </div>
 
             <div className="bg-[#15121b] p-4 rounded-2xl border border-amber-900/40 shadow-xs text-right">
               <span className="text-[11px] text-stone-400 block mb-1">عدد الطلبات المسجلة</span>
               <span className="text-xl sm:text-2xl font-black text-amber-100 font-readex">
-                {analytics?.totalOrders || 0} <span className="text-xs font-normal text-stone-400 font-cairo">طلب</span>
+                {analytics?.totalOrders || 0} <span className="text-xs font-normal text-stone-400 font-readex">طلب</span>
               </span>
             </div>
 
@@ -121,7 +121,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="flex items-center gap-2 pb-2.5 border-b border-amber-900/30">
               <TrendingUp className="w-5 h-5 text-amber-400" />
               <div>
-                <h3 className="text-sm sm:text-base font-bold text-amber-100 font-amiri">
+                <h3 className="text-sm sm:text-base font-bold text-amber-100 font-readex">
                   تحليلات طلبات المستشار الذكي (Content Gap Analytics)
                 </h3>
                 <p className="text-xs text-stone-400">
@@ -137,7 +137,7 @@ export const AdminDashboard: React.FC = () => {
                     key={log.id}
                     className="p-3 rounded-xl bg-[#181420] border border-amber-900/30 flex items-center justify-between text-xs"
                   >
-                    <span className="font-semibold text-amber-200 truncate max-w-md font-amiri">
+                    <span className="font-semibold text-amber-200 truncate max-w-md font-readex">
                       {log.query_or_quiz.startsWith('{') ? 'استشارة متدرجة: ' + log.query_or_quiz : log.query_or_quiz}
                     </span>
                     <span className="text-[10px] text-stone-500 font-readex">

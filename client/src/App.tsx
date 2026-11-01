@@ -90,11 +90,11 @@ export const App: React.FC = () => {
                   سر برشلونا القديم منذ 1945
                 </div>
 
-                <h2 className="text-xl sm:text-3xl font-black font-amiri text-amber-100 leading-tight">
+                <h2 className="text-xl sm:text-3xl font-black font-readex text-amber-100 leading-tight">
                   «كل كتاب تراه هنا قد نجا من النسيان.. كل كتاب كان له صديق، وله روح.»
                 </h2>
 
-                <p className="text-stone-300 text-xs sm:text-sm leading-relaxed font-amiri">
+                <p className="text-stone-300 text-xs sm:text-sm leading-relaxed font-readex">
                   اختر كتاباً تتبناه لإنقاذه من النسيان، نسخ ورقية أصلية مجلدة محفوظة بعناية، مع شحن سريع لكافة محافظات مصر والدفع نقداً عند الاستلام COD.
                 </p>
 
@@ -108,7 +108,7 @@ export const App: React.FC = () => {
                     <span>استشر حارس المقبرة لاختيار كتابك</span>
                   </button>
 
-                  <div className="flex items-center gap-3 text-stone-400 text-[11px] px-2 py-1 font-amiri">
+                  <div className="flex items-center gap-3 text-stone-400 text-[11px] px-2 py-1 font-readex">
                     <span className="flex items-center gap-1 text-amber-400/90">
                       <Truck className="w-3.5 h-3.5" />
                       دفع عند الاستلام COD
@@ -202,7 +202,7 @@ export const App: React.FC = () => {
             </div>
 
             {/* Catalog Grid Header */}
-            <div className="flex items-center justify-between text-xs text-stone-400 pt-2 border-t border-amber-900/30 font-amiri">
+            <div className="flex items-center justify-between text-xs text-stone-400 pt-2 border-t border-amber-900/30 font-readex">
               <span>عرض <strong>{books.length}</strong> كتاب محفوظ بالمقبرة</span>
               <span className="flex items-center gap-1 text-amber-400 font-semibold">
                 <Flame className="w-3.5 h-3.5" />
@@ -222,8 +222,8 @@ export const App: React.FC = () => {
                 <div className="w-12 h-12 rounded-full bg-stone-900 text-amber-400 flex items-center justify-center mx-auto border border-amber-900/40 text-xl">
                   🕯️
                 </div>
-                <h4 className="text-sm font-bold font-amiri text-amber-200">لم يُعثر على هذا العنوان في رفوف المقبرة</h4>
-                <p className="text-xs text-stone-400 max-w-sm mx-auto font-amiri">
+                <h4 className="text-sm font-bold font-readex text-amber-200">لم يُعثر على هذا العنوان في رفوف المقبرة</h4>
+                <p className="text-xs text-stone-400 max-w-sm mx-auto font-readex">
                   جرّب تغيير كلمات البحث، أو استشر حارس المقبرة لترشيح كتاب بديل يلائم شغفك.
                 </p>
                 <button
@@ -264,7 +264,7 @@ export const App: React.FC = () => {
 
       {/* Footer info */}
       <footer className="mt-12 border-t border-amber-900/30 bg-[#120f17] py-6 text-center text-xs text-stone-400 hidden sm:block">
-        <p className="font-bold font-amiri text-amber-200 mb-1">مقبرة الكتب المنسية للكتب الورقية © 2026</p>
+        <p className="font-bold font-readex text-amber-200 mb-1">مقبرة الكتب المنسية للكتب الورقية © 2026</p>
         <p className="text-[11px] text-stone-500">
           معمارية سحابية دائمة ومجانية بنسبة 100% للأبد • الدفع نقداً عند الاستلام COD • مستشار حارس المقبرة
         </p>

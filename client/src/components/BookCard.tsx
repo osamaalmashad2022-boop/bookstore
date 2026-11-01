@@ -89,7 +89,7 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
           </div>
 
           {/* Book Title */}
-          <h3 className="text-xs sm:text-sm font-bold font-amiri text-amber-100 line-clamp-1 group-hover:text-amber-400 transition-colors">
+          <h3 className="text-xs sm:text-sm font-bold font-readex text-amber-100 line-clamp-1 group-hover:text-amber-400 transition-colors">
             {book.title}
           </h3>
 
@@ -111,7 +111,7 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
           </div>
 
           {/* Why Read This Book (Concise Gothic Callout) */}
-          <p className="text-[10px] text-amber-200/80 line-clamp-2 bg-black/40 rounded-lg p-2 border border-amber-900/30 mb-2.5 font-amiri leading-relaxed">
+          <p className="text-[10px] text-amber-200/80 line-clamp-2 bg-black/40 rounded-lg p-2 border border-amber-900/30 mb-2.5 font-readex leading-relaxed">
             💡 {book.why_read}
           </p>
         </div>

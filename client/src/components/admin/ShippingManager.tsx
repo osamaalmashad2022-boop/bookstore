@@ -46,7 +46,7 @@ export const ShippingManager: React.FC = () => {
     <div className="bg-[#15121b] rounded-2xl border border-amber-900/40 p-4 sm:p-6 space-y-4 text-right">
       <div className="flex items-center justify-between pb-3 border-b border-amber-900/30">
         <div>
-          <h3 className="text-sm sm:text-base font-bold font-amiri text-amber-100 flex items-center gap-2">
+          <h3 className="text-sm sm:text-base font-bold font-readex text-amber-100 flex items-center gap-2">
             <Truck className="w-5 h-5 text-amber-400" />
             إدارة أسعار الشحن لمحافظات مصر
           </h3>
@@ -66,7 +66,7 @@ export const ShippingManager: React.FC = () => {
               className="p-3.5 rounded-xl border border-amber-900/30 bg-[#181420] flex items-center justify-between gap-3 text-right"
             >
               <div className="flex-1 min-w-0">
-                <span className="text-xs font-bold text-amber-100 block truncate font-amiri">{gov.name}</span>
+                <span className="text-xs font-bold text-amber-100 block truncate font-readex">{gov.name}</span>
                 <input
                   type="text"
                   value={gov.delivery_days}

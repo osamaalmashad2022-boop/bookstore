@@ -81,7 +81,7 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
             </div>
             <div className="flex-1 flex flex-col justify-between">
               <div>
-                <h2 className="text-base sm:text-xl font-bold font-amiri text-amber-100 leading-snug mb-1">
+                <h2 className="text-base sm:text-xl font-bold font-readex text-amber-100 leading-snug mb-1">
                   {book.title}
                 </h2>
                 <p className="text-xs text-amber-400/80 font-medium mb-3">
@@ -166,10 +166,10 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
 
           {/* Tab Contents */}
           {activeTab === 'overview' ? (
-            <div className="space-y-4 text-xs sm:text-sm text-stone-300 leading-relaxed font-amiri">
+            <div className="space-y-4 text-xs sm:text-sm text-stone-300 leading-relaxed font-readex">
               {/* Why Read This Book Callout */}
               <div className="bg-amber-950/40 border border-amber-500/30 rounded-2xl p-4">
-                <div className="flex items-center gap-1.5 text-amber-300 font-bold text-xs mb-1.5 font-cairo">
+                <div className="flex items-center gap-1.5 text-amber-300 font-bold text-xs mb-1.5 font-readex">
                   <Sparkles className="w-4 h-4 text-amber-400" />
                   لماذا تتبنى هذا الكتاب بالتحديد؟
                 </div>
@@ -179,18 +179,18 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
               </div>
 
               {/* Physical Book Specifications */}
-              <div className="text-[11px] text-stone-400 space-y-1 bg-black/40 p-3 rounded-xl border border-stone-800 font-cairo">
+              <div className="text-[11px] text-stone-400 space-y-1 bg-black/40 p-3 rounded-xl border border-stone-800 font-readex">
                 <p>📦 <strong>نوع المنتج:</strong> نسخة ورقية أصلية مجلدة فاخرة، محفوظة بعناية.</p>
                 <p>🚚 <strong>التوصيل:</strong> شحن سريع لجميع المحافظات مع الدفع نقداً عند الاستلام COD.</p>
               </div>
             </div>
           ) : (
-            <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/40 space-y-3">
+            <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/40 space-y-3 font-readex">
               <div className="flex items-center justify-between pb-2 border-b border-amber-900/30">
-                <span className="text-xs font-bold text-amber-300 font-amiri">مقتطف من صفحات المخطوطة الأولى</span>
+                <span className="text-xs font-bold text-amber-300 font-readex">مقتطف من صفحات المخطوطة الأولى</span>
                 <span className="text-[10px] text-stone-400">معاينة أصلية</span>
               </div>
-              <p className="text-xs sm:text-sm text-stone-200 whitespace-pre-line leading-relaxed font-amiri">
+              <p className="text-xs sm:text-sm text-stone-200 whitespace-pre-line leading-relaxed font-readex">
                 {book.excerpt_text || '«كل كتاب تراه هنا قد نجا من النسيان.. كل كتاب كان له صديق، وله روح.»'}
               </p>
             </div>

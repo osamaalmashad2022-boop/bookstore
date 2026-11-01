@@ -127,7 +127,7 @@ export const CheckoutModal: React.FC = () => {
         <div className="px-5 py-4 border-b border-amber-900/30 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-            <h3 className="text-sm sm:text-base font-bold font-amiri text-amber-100">
+            <h3 className="text-sm sm:text-base font-bold font-readex text-amber-100">
               {orderSuccess ? 'تم تسجيل طلبك في مقبرة الكتب!' : 'إتمام الطلب - الدفع عند الاستلام (COD)'}
             </h3>
           </div>
@@ -147,13 +147,13 @@ export const CheckoutModal: React.FC = () => {
                 <Check className="w-8 h-8" />
               </div>
               <div>
-                <h4 className="text-base sm:text-lg font-black font-amiri text-amber-100">تم تسجيل طلبك بنجاح!</h4>
+                <h4 className="text-base sm:text-lg font-black font-readex text-amber-100">تم تسجيل طلبك بنجاح!</h4>
                 <p className="text-xs text-stone-400 mt-1">
                   رقم مرجع الفاتورة: <strong className="text-amber-400 text-sm font-readex">{orderSuccess.orderRef}</strong>
                 </p>
               </div>
 
-              <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/30 text-right space-y-2 text-xs font-amiri">
+              <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/30 text-right space-y-2 text-xs font-readex">
                 <div className="flex justify-between">
                   <span className="text-stone-400">طريقة الدفع:</span>
                   <span className="font-bold text-amber-200">الدفع نقداً عند الاستلام (COD)</span>
@@ -168,7 +168,7 @@ export const CheckoutModal: React.FC = () => {
                 </div>
               </div>
 
-              <p className="text-xs text-stone-300 leading-relaxed max-w-sm mx-auto font-amiri">
+              <p className="text-xs text-stone-300 leading-relaxed max-w-sm mx-auto font-readex">
                 تم تجهيز رسالة الفاتورة المنسقة وفتح تطبيق واتساب المتجر. إذا لم تفتح نافذة المحادثة، اضغط على الزر الأخضر أدناه:
               </p>
 
@@ -193,7 +193,7 @@ export const CheckoutModal: React.FC = () => {
 
               {/* Full Name */}
               <div>
-                <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
+                <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">
                   الاسم بالكامل *
                 </label>
                 <input
@@ -209,7 +209,7 @@ export const CheckoutModal: React.FC = () => {
               {/* Phone & WhatsApp */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
+                  <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">
                     رقم الهاتف للتواصل *
                   </label>
                   <input
@@ -224,7 +224,7 @@ export const CheckoutModal: React.FC = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-amber-200 font-amiri">
+                    <label className="text-xs font-bold text-amber-200 font-readex">
                       رقم الواتساب
                     </label>
                     <button
@@ -249,7 +249,7 @@ export const CheckoutModal: React.FC = () => {
               {/* Governorate Dropdown */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-bold text-amber-200 font-amiri">
+                  <label className="text-xs font-bold text-amber-200 font-readex">
                     المحافظة (لحساب الشحن تلقائياً) *
                   </label>
                   <span className="text-[10px] text-stone-400">
@@ -271,7 +271,7 @@ export const CheckoutModal: React.FC = () => {
 
               {/* Street Address */}
               <div>
-                <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
+                <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">
                   العنوان بالتفصيل *
                 </label>
                 <textarea
@@ -286,7 +286,7 @@ export const CheckoutModal: React.FC = () => {
 
               {/* Delivery Notes */}
               <div>
-                <label className="text-xs font-bold text-amber-200 block mb-1 font-amiri">
+                <label className="text-xs font-bold text-amber-200 block mb-1 font-readex">
                   ملاحظات التوصيل (اختياري)
                 </label>
                 <input
@@ -299,7 +299,7 @@ export const CheckoutModal: React.FC = () => {
               </div>
 
               {/* Invoice Breakdown Summary */}
-              <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/30 space-y-1.5 text-xs font-amiri">
+              <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/30 space-y-1.5 text-xs font-readex">
                 <div className="flex justify-between text-stone-300">
                   <span>سعر الكتب بالصندوق:</span>
                   <span className="font-readex">{subtotal} ج.م</span>

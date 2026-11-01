@@ -7,9 +7,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        sans: ['"Readex Pro"', 'Cairo', 'sans-serif'],
+        readex: ['"Readex Pro"', 'sans-serif'],
         cairo: ['Cairo', 'sans-serif'],
         amiri: ['Amiri', 'serif'],
-        readex: ['Readex Pro', 'sans-serif'],
       },
       colors: {
         gothic: {

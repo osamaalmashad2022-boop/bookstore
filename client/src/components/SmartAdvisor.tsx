@@ -110,10 +110,10 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
             <span>🗝️</span>
             مستشار حارس مقبرة الكتب المنسية
           </div>
-          <h2 className="text-lg sm:text-2xl font-black font-amiri text-amber-100 mb-2 leading-tight">
+          <h2 className="text-lg sm:text-2xl font-black font-readex text-amber-100 mb-2 leading-tight">
             «لا تضع وقتك في حيرة الاختيار.. أخبر الحارس ليصمم مسار قراءتك»
           </h2>
-          <p className="text-stone-300 text-xs sm:text-sm max-w-xl leading-relaxed font-amiri">
+          <p className="text-stone-300 text-xs sm:text-sm max-w-xl leading-relaxed font-readex">
             محرك ترشيح هجين دائم يطابق شغفك ومستواك القرائي مع المخطوطات والكتب الورقية المحفوظة في المقبرة، مع مسار قراءة متدرج من كتابين أو ثلاثة بخصم باقة خاص 10%.
           </p>
 
@@ -152,7 +152,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
               <span className="w-7 h-7 rounded-full bg-amber-500 text-stone-950 text-xs font-black flex items-center justify-center">
                 {step}
               </span>
-              <span className="text-xs sm:text-sm font-bold text-amber-100 font-amiri">
+              <span className="text-xs sm:text-sm font-bold text-amber-100 font-readex">
                 {step === 1 && 'الخطوة 1: اختر أروقة المعرفة التي تود استكشافها'}
                 {step === 2 && 'الخطوة 2: ما هو مستوى قراءتك الحالي في هذا الميدان؟'}
                 {step === 3 && 'الخطوة 3: حدد الموضوع الفرعي وحجم الكتاب'}
@@ -180,7 +180,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                   >
                     <span className="text-2xl p-2 rounded-xl bg-black/40 border border-stone-800">{cat.icon}</span>
                     <div>
-                      <h4 className="text-xs sm:text-sm font-bold text-amber-100 font-amiri">{cat.name}</h4>
+                      <h4 className="text-xs sm:text-sm font-bold text-amber-100 font-readex">{cat.name}</h4>
                       <p className="text-[10px] text-stone-400 line-clamp-1">{cat.topics.join(' • ')}</p>
                     </div>
                   </button>
@@ -212,7 +212,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                   }`}
                 >
                   <span className="text-lg block mb-1">🌱 مبتدئ</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-amiri">مدخل تأسيسي مبسط</h4>
+                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-readex">مدخل تأسيسي مبسط</h4>
                   <p className="text-[10px] text-stone-400">لغة سلسة خالية من التعقيد، سريعة الفهم وتطبيقية فوراً.</p>
                 </button>
 
@@ -225,7 +225,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                   }`}
                 >
                   <span className="text-lg block mb-1">🌿 قارئ متوسط</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-amiri">فهم أعمق وتطبيقات</h4>
+                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-readex">فهم أعمق وتطبيقات</h4>
                   <p className="text-[10px] text-stone-400">قرأت بعض العناوين وتريد تشريحاً عملياً وعلمياً معمقاً.</p>
                 </button>
 
@@ -238,7 +238,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                   }`}
                 >
                   <span className="text-lg block mb-1">🌳 متعمق وباحث</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-amiri">أمهات الكتب وأصولها</h4>
+                  <h4 className="text-xs sm:text-sm font-bold text-amber-100 mb-1 font-readex">أمهات الكتب وأصولها</h4>
                   <p className="text-[10px] text-stone-400">أطروحات عميقة وأعمال تأسيسية أصيلة بدون تبسيط مخل.</p>
                 </button>
               </div>
@@ -266,7 +266,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
           {step === 3 && (
             <div className="space-y-5">
               <div>
-                <label className="text-xs font-bold text-amber-200 block mb-2 font-amiri">
+                <label className="text-xs font-bold text-amber-200 block mb-2 font-readex">
                   الموضوع الفرعي الذي ترغب بالتركيز عليه:
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -287,7 +287,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-amber-200 block mb-2 font-amiri">
+                <label className="text-xs font-bold text-amber-200 block mb-2 font-readex">
                   حجم الكتاب المفضل:
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -357,7 +357,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
       {/* Mode B: Natural Language Arabic Search */}
       {mode === 'natural' && !result && (
         <div className="bg-[#15121b] rounded-3xl p-5 sm:p-7 border border-amber-900/40 shadow-xl space-y-4 animate-fade-in">
-          <label className="text-xs sm:text-sm font-bold text-amber-100 block font-amiri">
+          <label className="text-xs sm:text-sm font-bold text-amber-100 block font-readex">
             صف لحارس المقبرة ما تبحث عنه أو المشكلة التي تريد حلاً لها:
           </label>
           <div className="relative">
@@ -422,7 +422,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
         <div className="space-y-6 animate-fade-in">
           {/* Reset / New Search Action */}
           <div className="flex items-center justify-between bg-[#16131d] p-3 rounded-2xl border border-amber-900/30 text-xs">
-            <span className="text-amber-200/90 font-amiri">
+            <span className="text-amber-200/90 font-readex">
               💡 {result.intent_summary}
             </span>
             <button
@@ -451,7 +451,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
 
               <div className="flex-1 space-y-3 text-right">
                 <div>
-                  <h3 className="text-base sm:text-xl font-black font-amiri text-amber-100">
+                  <h3 className="text-base sm:text-xl font-black font-readex text-amber-100">
                     {result.primary_recommendation.title}
                   </h3>
                   <p className="text-xs text-amber-400 font-medium">
@@ -464,19 +464,19 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                   <span className="text-[11px] font-black text-amber-300 block mb-1">
                     🎯 لماذا اختار لك حارس المقبرة هذا الكتاب؟
                   </span>
-                  <p className="text-xs text-stone-200 leading-relaxed font-amiri">
+                  <p className="text-xs text-stone-200 leading-relaxed font-readex">
                     {result.primary_recommendation.why_recommended}
                   </p>
                 </div>
 
                 {/* Key Takeaways */}
                 <div>
-                  <span className="text-[10px] font-bold text-amber-400/80 block mb-1.5 font-amiri">
+                  <span className="text-[10px] font-bold text-amber-400/80 block mb-1.5 font-readex">
                     ✦ أبرز ما ستخرج به من هذه المخطوطة:
                   </span>
                   <ul className="space-y-1">
                     {result.primary_recommendation.key_takeaways.map((point, i) => (
-                      <li key={i} className="text-xs text-stone-300 flex items-center gap-1.5 font-amiri">
+                      <li key={i} className="text-xs text-stone-300 flex items-center gap-1.5 font-readex">
                         <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                         <span>{point}</span>
                       </li>
@@ -525,11 +525,11 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <Layers className="w-5 h-5 text-amber-400" />
-                    <h3 className="text-base font-bold font-amiri text-amber-100">
+                    <h3 className="text-base font-bold font-readex text-amber-100">
                       {result.reading_path_title}
                     </h3>
                   </div>
-                  <p className="text-[11px] text-stone-400 mt-0.5 font-amiri">
+                  <p className="text-[11px] text-stone-400 mt-0.5 font-readex">
                     مسار قراءة متدرج من {result.reading_path_steps.length} كتب مصممة لتنقلك خطوة بخطوة
                   </p>
                 </div>
@@ -557,7 +557,7 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                       <span className="text-[9px] font-bold text-amber-400 block mb-0.5">
                         {stepItem.step_label}
                       </span>
-                      <h4 className="text-xs font-bold text-amber-100 truncate font-amiri">
+                      <h4 className="text-xs font-bold text-amber-100 truncate font-readex">
                         {stepItem.title}
                       </h4>
                       <p className="text-[10px] text-stone-400 truncate mb-1">
