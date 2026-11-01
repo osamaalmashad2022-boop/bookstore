@@ -585,10 +585,10 @@
                   متوفر بالمقبرة
                 </span>
               </div>
-              <div class="p-2.5 space-y-1">
-                <span class="text-[9px] text-amber-500/80 font-readex">${book.level} • ${book.pages} ص</span>
-                <h4 class="text-xs font-bold text-amber-100 truncate">${book.title}</h4>
-                <p class="text-[10px] text-stone-400 truncate">${book.author}</p>
+              <div class="p-2.5">
+                <span class="text-[9px] text-amber-500/80 font-readex block mb-1">${book.level} • ${book.pages} ص</span>
+                <h4 class="text-xs font-bold text-amber-100 truncate leading-snug mb-1">${book.title}</h4>
+                <p class="text-[10px] text-stone-400 truncate leading-normal mb-2">${book.author}</p>
                 <div class="pt-1.5 border-t border-amber-950/60 flex items-center justify-between">
                   <span class="text-xs font-bold text-amber-400">${book.price} ج.م</span>
                   <button onclick="event.stopPropagation(); addToCartMock();" class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 hover:bg-amber-500 hover:text-black font-bold">

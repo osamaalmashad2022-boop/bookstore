@@ -110,10 +110,10 @@ export const CartDrawer: React.FC = () => {
 
                   {/* Details */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-xs sm:text-sm font-bold font-readex text-amber-100 truncate">
+                    <h4 className="text-xs sm:text-sm font-bold font-readex text-amber-100 truncate leading-snug mb-0.5">
                       {item.book.title}
                     </h4>
-                    <p className="text-[10px] text-stone-400 truncate mb-1">
+                    <p className="text-[10px] text-stone-400 truncate mb-1 leading-normal">
                       {item.book.author}
                     </p>
                     <div className="flex items-center justify-between">

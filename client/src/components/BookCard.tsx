@@ -77,7 +77,7 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
       <div className="p-3 sm:p-3.5 flex flex-col flex-1 justify-between bg-gradient-to-b from-[#15121b] to-[#120f17]">
         <div>
           {/* Category & Level Badges */}
-          <div className="flex items-center gap-1.5 mb-1 flex-wrap text-[10px]">
+          <div className="flex items-center gap-1.5 mb-1.5 flex-wrap text-[10px]">
             <span className="px-1.5 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-800/40 font-readex">
               {getLevelLabel(book.reader_level)}
             </span>
@@ -89,17 +89,17 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
           </div>
 
           {/* Book Title */}
-          <h3 className="text-xs sm:text-sm font-bold font-readex text-amber-100 line-clamp-1 group-hover:text-amber-400 transition-colors">
+          <h3 className="text-xs sm:text-sm font-bold font-readex text-amber-100 line-clamp-1 leading-snug mb-1.5 group-hover:text-amber-400 transition-colors">
             {book.title}
           </h3>
 
           {/* Author */}
-          <p className="text-[11px] text-stone-400 line-clamp-1 mb-2 font-medium">
+          <p className="text-[11px] text-stone-400 line-clamp-1 leading-normal mb-2.5 font-medium">
             {book.author}
           </p>
 
           {/* DNA Stats: Pages & Reading Time */}
-          <div className="flex items-center gap-3 text-[10px] text-stone-500 mb-2">
+          <div className="flex items-center gap-3 text-[10px] text-stone-500 mb-2.5">
             <div className="flex items-center gap-1">
               <BookText className="w-3 h-3 text-amber-500/70" />
               <span>{book.page_count} صفحة</span>
@@ -111,9 +111,11 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
           </div>
 
           {/* Why Read This Book (Concise Gothic Callout) */}
-          <p className="text-[10px] text-amber-200/80 line-clamp-2 bg-black/40 rounded-lg p-2 border border-amber-900/30 mb-2.5 font-readex leading-relaxed">
-            💡 {book.why_read}
-          </p>
+          <div className="bg-black/40 rounded-lg p-2.5 border border-amber-900/30 mb-2.5 overflow-hidden">
+            <p className="text-[10px] text-amber-200/90 line-clamp-2 font-readex leading-relaxed">
+              💡 {book.why_read}
+            </p>
+          </div>
         </div>
 
         {/* Price & Action Area */}

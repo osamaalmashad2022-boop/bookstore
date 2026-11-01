@@ -451,10 +451,10 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
 
               <div className="flex-1 space-y-3 text-right">
                 <div>
-                  <h3 className="text-base sm:text-xl font-black font-readex text-amber-100">
+                  <h3 className="text-base sm:text-xl font-black font-readex text-amber-100 leading-snug mb-1">
                     {result.primary_recommendation.title}
                   </h3>
-                  <p className="text-xs text-amber-400 font-medium">
+                  <p className="text-xs text-amber-400 font-medium leading-normal mb-1">
                     تأليف: {result.primary_recommendation.author}
                   </p>
                 </div>
@@ -557,10 +557,10 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                       <span className="text-[9px] font-bold text-amber-400 block mb-0.5">
                         {stepItem.step_label}
                       </span>
-                      <h4 className="text-xs font-bold text-amber-100 truncate font-readex">
+                      <h4 className="text-xs font-bold text-amber-100 truncate font-readex leading-snug mb-0.5">
                         {stepItem.title}
                       </h4>
-                      <p className="text-[10px] text-stone-400 truncate mb-1">
+                      <p className="text-[10px] text-stone-400 truncate mb-1 leading-normal">
                         {stepItem.author}
                       </p>
                       <span className="text-xs font-bold text-amber-400">
