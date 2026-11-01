@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { queryAll, queryOne, execute } from '../db/database';
-import { searchGoogleBooks } from '../services/googleBooks';
+import { searchGoogleBooks, searchBooksMetadata } from '../services/googleBooks';
 
 const router = Router();
 
@@ -34,12 +34,18 @@ router.use((req: Request, res: Response, next) => {
 // GET /api/admin/google-books - 1-Click Smart Auto-Fill metadata
 router.get('/google-books', async (req: Request, res: Response) => {
   try {
-    const query = String(req.query.q || '');
+    const query = String(req.query.q || '').trim();
     if (!query) {
       return res.status(400).json({ success: false, error: 'يرجى تقديم اسم الكتاب أو الـ ISBN' });
     }
-    const results = await searchGoogleBooks(query);
-    res.json({ success: true, results });
+    const result = await searchBooksMetadata(query);
+    res.json({
+      success: true,
+      results: result.items,
+      source: result.source,
+      quotaExceeded: result.quotaExceeded,
+      message: result.message
+    });
   } catch (error: any) {
     console.error('Admin Google Books error:', error);
     res.status(500).json({ success: false, error: 'فشل جلب بيانات الكتاب تلقائياً' });

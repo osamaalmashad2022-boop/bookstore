@@ -44,6 +44,9 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
           alt={book.title}
           loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400" viewBox="0 0 300 400"><rect width="100%" height="100%" fill="%231c1917"/><rect x="15" y="15" width="270" height="370" rx="8" fill="%23292524" stroke="%23d97706" stroke-width="2" stroke-dasharray="4 4"/><text x="50%" y="45%" text-anchor="middle" fill="%23fbbf24" font-family="sans-serif" font-size="20" font-weight="bold">دار المعرفة</text><text x="50%" y="55%" text-anchor="middle" fill="%23a8a29e" font-family="sans-serif" font-size="14">غلاف الكتاب</text></svg>';
+          }}
         />
 
         {/* Stock Status Badge */}

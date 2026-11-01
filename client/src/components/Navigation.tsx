@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search, QrCode, BookOpen, Compass, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { Logo } from './Logo';
 
 interface NavigationProps {
   currentTab: 'catalog' | 'advisor' | 'admin';
@@ -23,19 +24,9 @@ export const Navigation: React.FC<NavigationProps> = ({
           {/* Logo & Store Name */}
           <div
             onClick={() => setCurrentTab('catalog')}
-            className="flex items-center gap-2.5 cursor-pointer select-none"
+            className="cursor-pointer select-none"
           >
-            <div className="w-10 h-10 rounded-xl bg-amber-950/80 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xl shadow-md candle-glow-sm">
-              🕯️
-            </div>
-            <div>
-              <h1 className="text-base sm:text-lg font-black font-readex text-amber-100 leading-tight">
-                مقبرة الكتب المنسية
-              </h1>
-              <p className="text-[10px] text-amber-500/80 font-readex">
-                ملاذ الأرواح والكتب الناجية من النسيان
-              </p>
-            </div>
+            <Logo variant="horizontal" size="md" />
           </div>
 
           {/* Quick Header Actions */}

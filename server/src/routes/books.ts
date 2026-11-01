@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { queryAll, queryOne } from '../db/database';
+import { searchBooksMetadata } from '../services/googleBooks';
 
 const router = Router();
 
@@ -107,6 +108,27 @@ router.get('/settings', async (_req: Request, res: Response) => {
   } catch (error: any) {
     console.error('Error fetching settings:', error);
     res.status(500).json({ success: false, error: 'حدث خطأ أثناء جلب إعدادات المتجر' });
+  }
+});
+
+// GET /api/books/lookup - Public metadata lookup using Google Books & Open Library
+router.get('/lookup', async (req: Request, res: Response) => {
+  try {
+    const query = String(req.query.q || '').trim();
+    if (!query) {
+      return res.status(400).json({ success: false, error: 'يرجى تقديم اسم الكتاب أو رقم ISBN' });
+    }
+    const result = await searchBooksMetadata(query);
+    res.json({
+      success: true,
+      results: result.items,
+      source: result.source,
+      quotaExceeded: result.quotaExceeded,
+      message: result.message
+    });
+  } catch (error: any) {
+    console.error('Book metadata lookup error:', error);
+    res.status(500).json({ success: false, error: 'فشل جلب بيانات الكتاب' });
   }
 });
 

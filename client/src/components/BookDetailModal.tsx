@@ -77,6 +77,9 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
                 src={book.cover_image}
                 alt={book.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400" viewBox="0 0 300 400"><rect width="100%" height="100%" fill="%231c1917"/><rect x="15" y="15" width="270" height="370" rx="8" fill="%23292524" stroke="%23d97706" stroke-width="2" stroke-dasharray="4 4"/><text x="50%" y="45%" text-anchor="middle" fill="%23fbbf24" font-family="sans-serif" font-size="20" font-weight="bold">دار المعرفة</text><text x="50%" y="55%" text-anchor="middle" fill="%23a8a29e" font-family="sans-serif" font-size="14">غلاف الكتاب</text></svg>';
+                }}
               />
             </div>
             <div className="flex-1 flex flex-col justify-between">

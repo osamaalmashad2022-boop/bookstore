@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Vignette Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1e1828" />
+      <stop offset="60%" stop-color="#120e1a" />
+      <stop offset="100%" stop-color="#09070d" />
+    </radialGradient>
+
+    <!-- Master Gold Gradient -->
+    <linearGradient id="goldLuxury" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF4D0" />
+      <stop offset="25%" stop-color="#E5C158" />
+      <stop offset="60%" stop-color="#B88A28" />
+      <stop offset="85%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#7A5614" />
+    </linearGradient>
+
+    <!-- Warm Flame Gradient -->
+    <linearGradient id="candleFlame" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="15%" stop-color="#FFF69B" />
+      <stop offset="45%" stop-color="#FF9D00" />
+      <stop offset="80%" stop-color="#E63900" />
+      <stop offset="100%" stop-color="#7B0D00" />
+    </linearGradient>
+
+    <!-- Candle Glow Radial -->
+    <radialGradient id="flameRadialGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFBE3B" stop-opacity="0.8" />
+      <stop offset="30%" stop-color="#FF8A00" stop-opacity="0.35" />
+      <stop offset="70%" stop-color="#E63900" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Parchment Pages Gradient -->
+    <linearGradient id="parchment" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C2B295" />
+      <stop offset="18%" stop-color="#FAF4E8" />
+      <stop offset="50%" stop-color="#D9CBB0" />
+      <stop offset="82%" stop-color="#FAF4E8" />
+      <stop offset="100%" stop-color="#C2B295" />
+    </linearGradient>
+
+    <!-- Filter for Dreamy Ambient Glow -->
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="flameBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+    </filter>
+  </defs>
+
+  <!-- Base Outer Circle with Royal Filigree Border -->
+  <circle cx="256" cy="256" r="248" fill="url(#bgGlow)" stroke="url(#goldLuxury)" stroke-width="4" />
+  <circle cx="256" cy="256" r="236" fill="none" stroke="url(#goldLuxury)" stroke-width="1.2" stroke-dasharray="3 4" opacity="0.65" />
+  <circle cx="256" cy="256" r="226" fill="none" stroke="url(#goldLuxury)" stroke-width="1.8" opacity="0.4" />
+
+  <!-- Mystical Astrolabe / Constellation Orbit Rings -->
+  <g opacity="0.25">
+    <ellipse cx="256" cy="256" rx="200" ry="110" fill="none" stroke="url(#goldLuxury)" stroke-width="1" transform="rotate(-25 256 256)" />
+    <ellipse cx="256" cy="256" rx="200" ry="110" fill="none" stroke="url(#goldLuxury)" stroke-width="1" transform="rotate(25 256 256)" />
+  </g>
+
+  <!-- Architectural Gothic Sanctuary Arch -->
+  <g id="gothicArch" stroke="url(#goldLuxury)" stroke-width="2.5" fill="none">
+    <!-- Outer Arch -->
+    <path d="M 120,400 L 120,230 C 120,135 256,70 256,70 C 256,70 392,135 392,230 L 392,400" />
+    <!-- Inner Arch -->
+    <path d="M 136,400 L 136,238 C 136,155 256,98 256,98 C 256,98 376,155 376,238 L 376,400" stroke-width="1.5" stroke-dasharray="2 3" opacity="0.7" />
+    <!-- Arch Keystone & Trefoil Gothic Ornament -->
+    <circle cx="256" cy="142" r="18" fill="none" stroke="url(#goldLuxury)" stroke-width="2" />
+    <circle cx="240" cy="156" r="10" fill="none" stroke="url(#goldLuxury)" stroke-width="1.5" opacity="0.8" />
+    <circle cx="272" cy="156" r="10" fill="none" stroke="url(#goldLuxury)" stroke-width="1.5" opacity="0.8" />
+    <circle cx="256" cy="132" r="9" fill="url(#goldLuxury)" opacity="0.9" />
+  </g>
+
+  <!-- Candle Light Volumetric Halo -->
+  <circle cx="256" cy="195" r="95" fill="url(#flameRadialGlow)" filter="url(#flameBlur)" />
+
+  <!-- Classical Cathedral Candle & Wax -->
+  <g id="candleBase">
+    <!-- Brass Ornate Candleholder Base -->
+    <path d="M 232,305 C 232,298 280,298 280,305 L 286,316 C 288,320 284,324 278,324 L 234,324 C 228,324 224,320 226,316 Z" fill="url(#goldLuxury)" stroke="#52390B" stroke-width="1" />
+    <ellipse cx="256" cy="305" rx="24" ry="4" fill="#FFEAA0" opacity="0.5" />
+    
+    <!-- Candle Pillar -->
+    <path d="M 245,215 L 267,215 L 265,305 L 247,305 Z" fill="#F4EEE1" />
+    <!-- Candle Wax Shading & Drips -->
+    <path d="M 245,215 C 245,219 250,221 256,221 C 262,221 267,219 267,215 C 267,212 262,210 256,210 C 250,210 245,212 245,215 Z" fill="#FAF6EE" />
+    <path d="M 248,221 C 248,230 251,234 250,242 C 249,248 246,246 246,240 Z" fill="#E2D5BE" opacity="0.8" />
+
+    <!-- Candle Wick -->
+    <path d="M 256,210 Q 257,202 255,196" fill="none" stroke="#2B1A0A" stroke-width="2.5" stroke-linecap="round" />
+  </g>
+
+  <!-- Living Eternal Flame -->
+  <g id="flame" filter="url(#softGlow)">
+    <!-- Outer Flame -->
+    <path d="M 256,150 C 267,166 274,180 273,194 C 272,207 264,215 256,215 C 248,215 240,207 239,194 C 238,180 245,166 256,150 Z" fill="url(#candleFlame)" />
+    <!-- Inner Radiant Core -->
+    <ellipse cx="256" cy="198" rx="5.5" ry="11" fill="#FFFFFF" />
+    <circle cx="256" cy="202" r="3" fill="#D2F0FF" opacity="0.8" />
+  </g>
+
+  <!-- Ancient Open Tome of Wisdom (الكتاب المفتوح الخالد) -->
+  <g id="openBook" transform="translate(0, 45)">
+    <!-- Spine & Shadow -->
+    <ellipse cx="256" cy="308" rx="22" ry="5" fill="#000000" opacity="0.6" />
+    
+    <!-- Book Covers / Leather Binding (Auburn / Deep Mahogany with Gold Edging) -->
+    <path d="M 256,290 C 220,286 160,278 104,295 C 98,297 94,302 96,308 L 108,352 C 110,358 116,361 122,359 C 172,342 222,352 256,362 C 290,352 340,342 390,359 C 396,361 402,358 404,352 L 416,308 C 418,302 414,297 408,295 C 352,278 292,286 256,290 Z" fill="#2E1610" stroke="url(#goldLuxury)" stroke-width="2.5" />
+
+    <!-- Left Open Pages (Fan of Leaves) -->
+    <path d="M 256,284 C 218,278 164,272 112,287 L 122,345 C 170,331 220,338 256,348 Z" fill="url(#parchment)" stroke="#8A7759" stroke-width="0.8" />
+    <path d="M 256,278 C 219,273 168,268 118,282 L 125,340 C 173,327 221,334 256,344 Z" fill="#FCF8EE" stroke="#A99573" stroke-width="0.8" />
+    
+    <!-- Right Open Pages (Fan of Leaves) -->
+    <path d="M 256,284 C 294,278 348,272 400,287 L 390,345 C 342,331 292,338 256,348 Z" fill="url(#parchment)" stroke="#8A7759" stroke-width="0.8" />
+    <path d="M 256,278 C 293,273 344,268 394,282 L 387,340 C 339,327 291,334 256,344 Z" fill="#FCF8EE" stroke="#A99573" stroke-width="0.8" />
+
+    <!-- Script Lines (Text of Forgotten Knowledge) -->
+    <g stroke="url(#goldLuxury)" stroke-width="1.2" stroke-linecap="round" opacity="0.65">
+      <!-- Left Page Script Lines -->
+      <line x1="140" y1="294" x2="236" y2="288" />
+      <line x1="142" y1="304" x2="236" y2="298" />
+      <line x1="144" y1="314" x2="236" y2="308" />
+      <line x1="148" y1="324" x2="216" y2="318" />
+
+      <!-- Right Page Script Lines -->
+      <line x1="276" y1="288" x2="372" y2="294" />
+      <line x1="276" y1="298" x2="370" y2="304" />
+      <line x1="276" y1="308" x2="368" y2="314" />
+      <line x1="296" y1="318" x2="364" y2="324" />
+    </g>
+
+    <!-- Golden Bookmark Ribbon (الوشاح المرجعي الذهبي) -->
+    <path d="M 256,280 C 255,310 252,345 248,375 L 256,368 L 264,375 C 260,345 257,310 256,280 Z" fill="url(#goldLuxury)" stroke="#8C6D1F" stroke-width="1" />
+  </g>
+
+  <!-- Ascending Particles of Enlightenment (شذرات النور والمعرفة الطافية) -->
+  <g fill="url(#goldLuxury)">
+    <!-- 8-point Wisdom Stars -->
+    <path d="M 256,46 L 259,57 L 270,60 L 259,63 L 256,74 L 253,63 L 242,60 L 253,57 Z" filter="url(#softGlow)" />
+    <path d="M 175,160 L 177,166 L 183,168 L 177,170 L 175,176 L 173,170 L 167,168 L 173,166 Z" opacity="0.85" />
+    <path d="M 337,160 L 339,166 L 345,168 L 339,170 L 337,176 L 335,170 L 329,168 L 335,166 Z" opacity="0.85" />
+    <circle cx="198" cy="120" r="2.2" opacity="0.6" />
+    <circle cx="314" cy="120" r="2.2" opacity="0.6" />
+    <circle cx="256" cy="112" r="3" opacity="0.9" />
+    <circle cx="218" cy="180" r="1.8" opacity="0.7" />
+    <circle cx="294" cy="180" r="1.8" opacity="0.7" />
+    <circle cx="160" cy="225" r="2" opacity="0.5" />
+    <circle cx="352" cy="225" r="2" opacity="0.5" />
+  </g>
+
+  <!-- Circular Outer Inscription Arc (Decorative Golden Filigree Beads) -->
+  <g fill="url(#goldLuxury)" opacity="0.85">
+    <circle cx="256" cy="22" r="3.5" />
+    <circle cx="256" cy="490" r="3.5" />
+    <circle cx="22" cy="256" r="3.5" />
+    <circle cx="490" cy="256" r="3.5" />
+  </g>
+</svg>
+

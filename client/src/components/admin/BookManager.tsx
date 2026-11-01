@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Book, Category } from '../../types';
-import { Plus, Search, Trash2, Edit, Sparkles, Loader2, BookOpen, Image as ImageIcon, Check, X } from 'lucide-react';
+import { Plus, Search, Trash2, Edit, Sparkles, Loader2, BookOpen, Image as ImageIcon, Check, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { adminFetch } from '../../utils/adminApi';
 
 export const BookManager: React.FC = () => {
@@ -33,6 +33,9 @@ export const BookManager: React.FC = () => {
   const [autoFillQuery, setAutoFillQuery] = useState('');
   const [autoFillLoading, setAutoFillLoading] = useState(false);
   const [autoFillResults, setAutoFillResults] = useState<any[]>([]);
+  const [autoFillNotice, setAutoFillNotice] = useState<string | null>(null);
+  const [autoFillSource, setAutoFillSource] = useState<string | null>(null);
+  const [autoFillSuccess, setAutoFillSuccess] = useState(false);
 
   const fetchBooks = () => {
     setLoading(true);
@@ -73,6 +76,8 @@ export const BookManager: React.FC = () => {
     setIsFeatured(false);
     setAutoFillQuery('');
     setAutoFillResults([]);
+    setAutoFillNotice(null);
+    setAutoFillSuccess(false);
     setIsModalOpen(true);
   };
 
@@ -92,21 +97,34 @@ export const BookManager: React.FC = () => {
     setCoverImage(book.cover_image);
     setIsBestseller(book.is_bestseller === 1);
     setIsFeatured(book.is_featured === 1);
+    setAutoFillQuery(book.title);
     setAutoFillResults([]);
+    setAutoFillNotice(null);
+    setAutoFillSuccess(false);
     setIsModalOpen(true);
   };
 
-  const handleAutoFill = async () => {
-    if (!autoFillQuery.trim()) return;
+  const handleAutoFill = async (overrideQuery?: string) => {
+    const q = (typeof overrideQuery === 'string' ? overrideQuery : autoFillQuery).trim();
+    if (!q) return;
     setAutoFillLoading(true);
+    setAutoFillNotice(null);
     try {
-      const res = await adminFetch(`/api/admin/google-books?q=${encodeURIComponent(autoFillQuery)}`);
+      const res = await adminFetch(`/api/admin/google-books?q=${encodeURIComponent(q)}`);
       const data = await res.json();
-      if (data.success && data.results) {
+      if (data.success && data.results && data.results.length > 0) {
         setAutoFillResults(data.results);
+        setAutoFillSource(data.source || 'google-books');
+        if (data.message) {
+          setAutoFillNotice(data.message);
+        }
+      } else {
+        setAutoFillResults([]);
+        setAutoFillNotice(data.message || 'لم يتم العثور على نتائج. تأكد من كتابة الاسم بدقة أو جرب البحث برقم ISBN الدولي.');
       }
     } catch (e) {
       console.error(e);
+      setAutoFillNotice('تعذر الاتصال بخدمة الكتب. تحقق من اتصال الإنترنت.');
     } finally {
       setAutoFillLoading(false);
     }
@@ -118,10 +136,14 @@ export const BookManager: React.FC = () => {
     if (item.pageCount) setPageCount(String(item.pageCount));
     if (item.coverImage) setCoverImage(item.coverImage);
     if (item.description) {
-      setWhyRead(item.description.slice(0, 180) + '...');
-      setExcerptText(item.description);
+      const cleanDesc = item.description.trim();
+      setWhyRead(cleanDesc.slice(0, 180) + (cleanDesc.length > 180 ? '...' : ''));
+      setExcerptText(cleanDesc);
     }
     setAutoFillResults([]);
+    setAutoFillNotice(null);
+    setAutoFillSuccess(true);
+    setTimeout(() => setAutoFillSuccess(false), 4000);
   };
 
   const handleSaveBook = async (e: React.FormEvent) => {
@@ -217,7 +239,14 @@ export const BookManager: React.FC = () => {
               className="bg-[#15121b] p-3.5 rounded-2xl border border-amber-900/30 flex gap-3.5 items-center justify-between"
             >
               <div className="w-14 aspect-[3/4] rounded-lg overflow-hidden bg-stone-900 shrink-0 border border-amber-900/40">
-                <img src={book.cover_image} alt={book.title} className="w-full h-full object-cover" />
+                <img
+                  src={book.cover_image}
+                  alt={book.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="140" viewBox="0 0 100 140"><rect width="100%" height="100%" fill="%231c1917"/><text x="50%" y="50%" text-anchor="middle" fill="%23d97706" font-size="14">📖</text></svg>';
+                  }}
+                />
               </div>
 
               <div className="flex-1 min-w-0 text-right">
@@ -289,60 +318,128 @@ export const BookManager: React.FC = () => {
 
             {/* Scrollable Form Body */}
             <div className="max-h-[75vh] overflow-y-auto p-5 sm:p-7 space-y-6">
-              {/* 1-Click Smart Auto-Fill helper */}
-              {!editingBook && (
-                <div className="bg-gradient-to-r from-amber-950/40 via-[#1e1728] to-amber-950/40 border border-amber-500/30 rounded-2xl p-4 shadow-inner space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 font-readex">
-                      <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
-                      <span>ميزة الملء الذكي التلقائي (Google Books):</span>
-                    </div>
-                    <span className="text-[10px] text-amber-400/80 hidden sm:inline">جلب الغلاف والعنوان والتفاصيل بضغطة واحدة</span>
+              {/* 1-Click Smart Auto-Fill helper (Google Books & Open Library) */}
+              <div className="bg-gradient-to-r from-amber-950/40 via-[#1e1728] to-amber-950/40 border border-amber-500/30 rounded-2xl p-4 shadow-inner space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 font-readex">
+                    <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+                    <span>
+                      {editingBook ? 'تحديث وتعبئة البيانات تلقائياً:' : 'ميزة الملء الذكي التلقائي للكتب:'}
+                    </span>
                   </div>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      placeholder="اكتب اسم الكتاب أو الـ ISBN (مثال: ظل الريح، جلسات نفسية)..."
-                      value={autoFillQuery}
-                      onChange={e => setAutoFillQuery(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAutoFill())}
-                      className="flex-1 px-4 py-2 rounded-xl border border-amber-900/60 text-xs sm:text-sm bg-[#120e18] text-amber-100 placeholder-stone-500 focus:outline-none focus:border-amber-400 transition-all"
-                    />
+                  <span className="text-[10px] text-amber-400/80 hidden sm:inline">جلب الغلاف والعنوان والتفاصيل بضغطة واحدة</span>
+                </div>
+
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="اكتب اسم الكتاب أو الـ ISBN (مثال: ظل الريح، جلسات نفسية، 9789778240580)..."
+                    value={autoFillQuery}
+                    onChange={e => setAutoFillQuery(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAutoFill())}
+                    className="flex-1 px-4 py-2 rounded-xl border border-amber-900/60 text-xs sm:text-sm bg-[#120e18] text-amber-100 placeholder-stone-500 focus:outline-none focus:border-amber-400 transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleAutoFill()}
+                    disabled={autoFillLoading || !autoFillQuery.trim()}
+                    className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-98 disabled:opacity-50 text-stone-950 text-xs sm:text-sm font-bold shrink-0 flex items-center gap-1.5 transition-all shadow-md shadow-amber-950/50"
+                  >
+                    {autoFillLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                    <span>{autoFillLoading ? 'جارٍ البحث...' : 'جلب البيانات'}</span>
+                  </button>
+                </div>
+
+                {/* Auto-Fill Success Alert */}
+                {autoFillSuccess && (
+                  <div className="bg-emerald-950/70 border border-emerald-500/50 rounded-xl p-2.5 text-xs text-emerald-300 flex items-center gap-2 animate-fade-in font-readex">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>تم تطبيق بيانات الكتاب وتعبئة الحقول بنجاح! يمكنك الآن مراجعتها وتعديلها.</span>
+                  </div>
+                )}
+
+                {/* Auto-Fill Notice or Help */}
+                {autoFillNotice && (
+                  <div className="bg-amber-950/60 border border-amber-600/40 rounded-xl p-2.5 text-xs text-amber-200 flex items-start gap-2 animate-fade-in font-readex">
+                    <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <span>{autoFillNotice}</span>
+                    </div>
                     <button
                       type="button"
-                      onClick={handleAutoFill}
-                      disabled={autoFillLoading || !autoFillQuery.trim()}
-                      className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-98 disabled:opacity-50 text-stone-950 text-xs sm:text-sm font-bold shrink-0 flex items-center gap-1.5 transition-all shadow-md shadow-amber-950/50"
+                      onClick={() => setAutoFillNotice(null)}
+                      className="text-stone-400 hover:text-stone-200"
                     >
-                      {autoFillLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                      <span>جلب البيانات</span>
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
+                )}
 
-                  {/* Auto fill suggestions */}
-                  {autoFillResults.length > 0 && (
-                    <div className="mt-2 space-y-1.5 max-h-48 overflow-y-auto">
+                {/* Auto fill suggestions */}
+                {autoFillResults.length > 0 && (
+                  <div className="space-y-2 mt-2">
+                    <div className="flex items-center justify-between text-[11px] text-stone-400 px-1">
+                      <span>
+                        النتائج المطابقة ({autoFillResults.length})
+                        {autoFillSource && (
+                          <span className="ms-1.5 px-1.5 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-800/40 text-[10px] font-mono">
+                            {autoFillSource === 'arabic-archive' ? 'الأرشيف العربي' : autoFillSource === 'open-library' ? 'Open Library' : 'Google Books'}
+                          </span>
+                        )}
+                        {' '}- اضغط لتطبيق البيانات:
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setAutoFillResults([])}
+                        className="text-stone-500 hover:text-stone-300 flex items-center gap-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                        مسح
+                      </button>
+                    </div>
+                    <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                       {autoFillResults.map((item, idx) => (
                         <div
                           key={idx}
                           onClick={() => applyAutoFillItem(item)}
-                          className="bg-[#120e18] p-2.5 rounded-xl border border-amber-900/50 flex items-center gap-3 cursor-pointer hover:bg-amber-950/50 hover:border-amber-500/50 transition-all"
+                          className="bg-[#120e18] p-3 rounded-xl border border-amber-900/50 flex items-center gap-3 cursor-pointer hover:bg-amber-950/50 hover:border-amber-500/50 transition-all group"
                         >
-                          <img src={item.coverImage} className="w-10 h-14 object-cover rounded-lg shrink-0 border border-amber-900/40" />
+                          <img
+                            src={item.coverImage}
+                            alt={item.title}
+                            className="w-11 h-16 object-cover rounded-lg shrink-0 border border-amber-900/40 shadow-sm"
+                            onError={e => {
+                              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80';
+                            }}
+                          />
                           <div className="flex-1 min-w-0 text-right">
-                            <h5 className="text-xs sm:text-sm font-bold text-amber-100 truncate font-readex">{item.title}</h5>
-                            <span className="text-[11px] text-stone-400 truncate block mt-0.5">{item.author}</span>
+                            <div className="flex items-center gap-2">
+                              <h5 className="text-xs sm:text-sm font-bold text-amber-100 truncate font-readex group-hover:text-amber-300">
+                                {item.title}
+                              </h5>
+                              {item.source && (
+                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-stone-800 text-stone-300 border border-stone-700 font-mono shrink-0">
+                                  {item.source === 'arabic-archive' ? 'الأرشيف العربي' : item.source === 'open-library' ? 'Open Library' : 'Google Books'}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[11px] text-stone-400 truncate block mt-0.5">المؤلف: {item.author}</span>
+                            <div className="flex items-center gap-3 text-[10px] text-stone-500 mt-1">
+                              {item.pageCount ? <span>{item.pageCount} صفحة</span> : null}
+                              {item.publishedDate ? <span>سنة النشر: {item.publishedDate.slice(0, 4)}</span> : null}
+                              {item.isbn ? <span className="font-mono">ISBN: {item.isbn}</span> : null}
+                            </div>
                           </div>
-                          <span className="text-[11px] px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold shrink-0 flex items-center gap-1">
-                            <Check className="w-3 h-3" />
-                            اختيار
+                          <span className="text-[11px] px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold shrink-0 flex items-center gap-1 group-hover:bg-amber-500 group-hover:text-stone-950 transition-colors">
+                            <Check className="w-3.5 h-3.5" />
+                            اختيار وتطبيق
                           </span>
                         </div>
                       ))}
                     </div>
-                  )}
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
 
               <form id="book-manager-form" onSubmit={handleSaveBook} className="space-y-5">
                 {/* Section 1: Basic Info */}
@@ -352,7 +449,23 @@ export const BookManager: React.FC = () => {
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-bold text-amber-200 block mb-1.5 font-readex">عنوان الكتاب *</label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs font-bold text-amber-200 block font-readex">عنوان الكتاب *</label>
+                        {title.trim().length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setAutoFillQuery(title);
+                              handleAutoFill(title);
+                            }}
+                            className="text-[10px] text-amber-400 hover:text-amber-300 flex items-center gap-1 transition-colors"
+                            title="بحث عن تفاصيل هذا العنوان في Google Books"
+                          >
+                            <Sparkles className="w-3 h-3 text-amber-400" />
+                            <span>جلب تلقائي بالاسم</span>
+                          </button>
+                        )}
+                      </div>
                       <input
                         type="text"
                         required

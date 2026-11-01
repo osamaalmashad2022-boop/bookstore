@@ -52,7 +52,7 @@ export async function runSeed() {
       reading_time_hours: 11.0,
       why_read: 'المدخل المقدس لعالم مقبرة الكتب المنسية؛ سر خفي ورواية تحرك نبضات القلوب وتنسج حب الكتب كقدر أبدي.',
       excerpt_text: '«تذكر يا دانيال، المرة الأولى التي يزور فيها شخص ما مقبرة الكتب المنسية، يتوجب عليه أن يتبنى كتاباً وينقذه، ويتعهد بألا يتركه يموت أبداً...»',
-      cover_image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/zill-al-reeh.jpg',
       is_bestseller: 1,
       is_featured: 1,
       recommended_next_book_id: 'bk_202'
@@ -72,7 +72,7 @@ export async function runSeed() {
       reading_time_hours: 10.5,
       why_read: 'الجزء الثاني من ملحمة المقبرة؛ كاتب شاب في أزقة برشلونة القديمة يُطلب منه تأليف كتاب يغير معتقدات العالم.',
       excerpt_text: '«الخطوات التي تقودك إلى مقبرة الكتب المنسية لا يمكن نسيانها أبداً، لأنها محفورة في ذاكرة الأرواح الحائرة...»',
-      cover_image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/leabat-al-malak.jpg',
       is_bestseller: 1,
       is_featured: 1,
       recommended_next_book_id: null
@@ -92,7 +92,7 @@ export async function runSeed() {
       reading_time_hours: 4.5,
       why_read: 'مدخل سلس وعملي يفكك التفكير الزائد والضغوط اليومية بلغة دافئة ومفهومة لكل مبتدئ.',
       excerpt_text: 'الفصل الأول: أنت لست أفكارك\nكثير منا يعيش حبيساً لحديثه الداخلي، نصدق كل فكرة سلبية تخطر ببالنا وكأنها حقيقة مطلقة. تعلم أن تراقب أفكارك دون أن تصبح أسيراً لها...',
-      cover_image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/jalasat-nafsiya.jpg',
       is_bestseller: 1,
       is_featured: 1,
       recommended_next_book_id: 'bk_102'
@@ -112,7 +112,7 @@ export async function runSeed() {
       reading_time_hours: 5.0,
       why_read: 'يساعدك على التوقف عن تمثيل أدوار فرضها عليك الآخرون، والبدء في كتابة نص حياتك الحقيقي.',
       excerpt_text: 'مقدمة:\nمن قال أنك مضطر للالتزام بالنص المكتوب لك سلفاً؟ في هذا الكتاب دعوة صريحة لإعادة اكتشاف نفسك بعيداً عن أقنعة المجتمع وتوقعاته المسبقة...',
-      cover_image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/al-khoroog-an-al-nas.jpg',
       is_bestseller: 1,
       is_featured: 1,
       recommended_next_book_id: 'bk_103'
@@ -132,7 +132,7 @@ export async function runSeed() {
       reading_time_hours: 6.0,
       why_read: 'دليلك التشريحي لأكثر من 30 نوعاً من العلاقات المؤذية وكيف تحمي حدودك النفسية بوعي.',
       excerpt_text: 'علاقة التقمص والاحتواء:\nحين تصبح العلاقة ساحة لامتصاص طاقة طرف لحساب طرف آخر دون تبادل عادل، هنا يدق ناقوس الخطر...',
-      cover_image: 'https://images.unsplash.com/photo-1532012164546-f432f2e3777f?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/alaqat-khatira.jpg',
       is_bestseller: 1,
       is_featured: 0,
       recommended_next_book_id: 'bk_104'
@@ -152,7 +152,7 @@ export async function runSeed() {
       reading_time_hours: 6.5,
       why_read: 'مواجهة شجاعة وصريحة مع الجروح غير الملتئمة وترسبات الطفولة التي تتحكم في اختياراتك الحالية.',
       excerpt_text: 'العقدة الأولى: الشعور بالذنب غير المبرر.\nهل تشعر دائماً بأنك مسؤول عن سعادة الجميع من حولك؟ هذا الفخ النفسي يبدأ مبكراً جداً...',
-      cover_image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/oqadak-al-nafsiya.jpg',
       is_bestseller: 0,
       is_featured: 1,
       recommended_next_book_id: null
@@ -172,7 +172,7 @@ export async function runSeed() {
       reading_time_hours: 4.5,
       why_read: 'تحفة علم النفس الإنساني الخالدة؛ كيف يجد الإنسان سبباً للعيش حتى في أحلك ظروف المعاناة.',
       excerpt_text: 'تجارب معسكر الاعتقال:\nيمكن تجريد الإنسان من كل شيء عدا حرية واحدة: حريته في اختيار موقفه وتصرفه حيال أي ظرف كان...',
-      cover_image: 'https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/al-insan-wa-al-bahth-an-al-maana.jpg',
       is_bestseller: 1,
       is_featured: 1,
       recommended_next_book_id: null
@@ -192,7 +192,7 @@ export async function runSeed() {
       reading_time_hours: 6.5,
       why_read: 'أفضل نظام عملي مثبت لبناء العادات الطيبة والتخلص من العادات السيئة بتغييرات صغيرة بنسبة 1%.',
       excerpt_text: 'القوانين الأربعة لتغيير السلوك:\n1. اجعلها واضحة.\n2. اجعلها جذابة.\n3. اجعلها سهلة.\n4. اجعلها مشبعة...',
-      cover_image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/al-adat-al-thariya.jpg',
       is_bestseller: 1,
       is_featured: 1,
       recommended_next_book_id: null
@@ -212,7 +212,7 @@ export async function runSeed() {
       reading_time_hours: 5.5,
       why_read: 'طرح غير مألوف وصادم للتصالح مع النقص والمعاناة واختيار المعارك التي تستحق اهتمامك حقاً.',
       excerpt_text: 'الفصل الأول: لا تحاول.\nالإيجابية المفرطة أصبحت عبئاً ثقيلاً. التعاسة جزء طبيعي من التجربة البشرية التي تصقل وعينا...',
-      cover_image: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/fann-al-lamobala.jpg',
       is_bestseller: 1,
       is_featured: 0,
       recommended_next_book_id: null
@@ -232,7 +232,7 @@ export async function runSeed() {
       reading_time_hours: 6.0,
       why_read: 'كيف تحول حكمة كبار الفلاسفة (سقراط، إبيقور، سينيكا) إلى ترياق عملي يهدئ قلقك اليومي.',
       excerpt_text: 'عزاء في قلة الشعبية:\nحين حاكمت أثينا سقراط لم يكن ذلك دليلاً على خطئه بل على ارتباك الحشود أمام التفكير المنطقي الصارم...',
-      cover_image: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/aza-at-al-falsafa.jpg',
       is_bestseller: 0,
       is_featured: 1,
       recommended_next_book_id: 'bk_109'
@@ -252,7 +252,7 @@ export async function runSeed() {
       reading_time_hours: 11.0,
       why_read: 'أشهر رواية فلسفية في العالم؛ تأخذك في رحلة مشوقة عبر تاريخ الفكر الإنساني بأكمله.',
       excerpt_text: 'رسالة في صندوق البريد:\nمن أنتِ؟ من أين جاء العالم؟ سؤالان بسيطان قلبا حياة فتاة في الرابعة عشرة من عمرها رأساً على عقب...',
-      cover_image: 'https://images.unsplash.com/photo-1495640388908-05fa85288e61?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/alam-sofi.jpg',
       is_bestseller: 1,
       is_featured: 1,
       recommended_next_book_id: null
@@ -272,7 +272,7 @@ export async function runSeed() {
       reading_time_hours: 10.0,
       why_read: 'ملحمة روائية إنسانية خالدة تروي قصة سقوط الأندلس من عيون أهلها البسطاء وصمود ذاكرتهم.',
       excerpt_text: 'في حي البيازين:\nكانت غرناطة تحتضر ببطء، لكن في بيت أبي جعفر كان الورق يُصنع، والحروف تُكتب، لأن الكلمة هي الحصن الأخير...',
-      cover_image: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=600&auto=format&fit=crop&q=80',
+      cover_image: '/covers/thulathiyat-gharnata.jpg',
       is_bestseller: 1,
       is_featured: 1,
       recommended_next_book_id: null

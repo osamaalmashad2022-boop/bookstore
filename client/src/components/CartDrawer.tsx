@@ -105,6 +105,9 @@ export const CartDrawer: React.FC = () => {
                       src={item.book.cover_image}
                       alt={item.book.title}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="140" viewBox="0 0 100 140"><rect width="100%" height="100%" fill="%231c1917"/><text x="50%" y="50%" text-anchor="middle" fill="%23d97706" font-size="14">📖</text></svg>';
+                      }}
                     />
                   </div>
 

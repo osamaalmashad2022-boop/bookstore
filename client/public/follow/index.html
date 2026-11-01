@@ -890,24 +890,8 @@
     <!-- 1. Header & Identity (Pure Handcrafted Vectors) -->
     <header class="brand-header">
       <div class="avatar-wrapper">
-        <div class="avatar-frame">
-          <!-- Artisanal Vector Candle with Wavering Flame -->
-          <svg viewBox="0 0 40 50" width="52" height="52">
-            <rect x="14" y="24" width="12" height="22" rx="3" fill="#FAF6ED" stroke="#D4AF37" stroke-width="1.5" />
-            <path d="M14 24c0 3 4 3 6 3s6 0 6-3" fill="#E2D7C2" />
-            <line x1="20" y1="24" x2="20" y2="18" stroke="#5a4522" stroke-width="2" />
-            <g class="svg-flame">
-              <path d="M20 4c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z" fill="url(#flameGradMaster)" />
-              <circle cx="20" cy="14" r="2.5" fill="#FFFBE6" />
-            </g>
-            <defs>
-                <linearGradient id="flameGradMaster" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#FFF385" />
-                  <stop offset="50%" stop-color="#FFAE19" />
-                  <stop offset="100%" stop-color="#E63900" />
-                </linearGradient>
-            </defs>
-          </svg>
+        <div class="avatar-frame" style="overflow: hidden; padding: 2px;">
+          <img src="/logo.jpg" alt="شعار مقبرة الكتب المنسية" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: drop-shadow(0 0 10px rgba(212,175,55,0.4));" />
         </div>
         <div class="avatar-badge">
           <svg viewBox="0 0 24 24">
@@ -956,7 +940,7 @@
         <div class="card-body">
           <div class="card-heading">مكافأة الانضمام الحصرية:</div>
           <div class="card-offer">
-            خصم <span>10% فوري</span> على أول طلب ورقي مع فاصل كتاب مجاني
+            خصم <span>10% فوري</span> على أول طلب ورقي
           </div>
 
           <div class="promo-action-box" onclick="copyCouponCode(event)">

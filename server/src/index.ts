@@ -46,6 +46,15 @@ const healthCheck = (_req: express.Request, res: express.Response) => {
 app.get('/api/health', healthCheck);
 app.get('/health', healthCheck);
 
+// Serve static covers from client/public/covers or client/dist/covers
+const clientPublicCovers = path.resolve(__dirname, '../../client/public/covers');
+const clientDistCovers = path.resolve(__dirname, '../../client/dist/covers');
+if (fs.existsSync(clientPublicCovers)) {
+  app.use('/covers', express.static(clientPublicCovers));
+} else if (fs.existsSync(clientDistCovers)) {
+  app.use('/covers', express.static(clientDistCovers));
+}
+
 // Serve frontend static assets in production (if client/dist exists)
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
 if (fs.existsSync(clientDistPath)) {
