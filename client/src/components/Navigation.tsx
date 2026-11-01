@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, QrCode } from 'lucide-react';
+import { Search, QrCode, BookOpen, Compass, ShoppingBag, Settings } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 interface NavigationProps {
@@ -64,14 +64,28 @@ export const Navigation: React.FC<NavigationProps> = ({
             {/* Smart Advisor Pill for Desktop / Tablet */}
             <button
               onClick={() => setCurrentTab('advisor')}
-              className={`hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 currentTab === 'advisor'
                   ? 'bg-amber-500 text-stone-950 shadow-md font-black'
                   : 'bg-amber-950/40 text-amber-300 border border-amber-500/30 hover:bg-amber-900/50'
               }`}
             >
-              <span>🗝️</span>
-              مستشار حارس المقبرة
+              <Compass className="w-3.5 h-3.5" />
+              <span>مستشار القراءة</span>
+            </button>
+
+            {/* Admin Dashboard Pill for Desktop */}
+            <button
+              onClick={() => setCurrentTab('admin')}
+              title="لوحة تحكم المتجر والمخزون"
+              className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                currentTab === 'admin'
+                  ? 'bg-amber-500 text-stone-950 shadow-md font-black'
+                  : 'bg-[#1c1724] text-stone-300 border border-amber-900/40 hover:border-amber-500/50'
+              }`}
+            >
+              <Settings className="w-3.5 h-3.5 text-amber-400" />
+              <span>لوحة الإدارة</span>
             </button>
 
             {/* Cart Button (صندوق الكتب) */}
@@ -80,7 +94,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               aria-label="صندوق الكتب"
               className="relative w-9 h-9 rounded-xl bg-[#1c1724] border border-amber-900/40 hover:border-amber-500/50 flex items-center justify-center text-amber-300 transition-colors"
             >
-              <span className="text-sm">📜</span>
+              <ShoppingBag className="w-4 h-4" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 bg-amber-500 text-stone-950 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
                   {totalItems}
@@ -103,7 +117,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 : 'text-stone-400 hover:text-stone-200 font-medium'
             }`}
           >
-            <span className="text-lg leading-none mb-0.5">🏰</span>
+            <BookOpen className="w-4 h-4 mb-0.5" />
             <span className="text-[11px] font-readex">المقبرة</span>
           </button>
 
@@ -117,7 +131,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             }`}
           >
             <div className="relative">
-              <span className="text-lg leading-none mb-0.5">🗝️</span>
+              <Compass className="w-4 h-4 mb-0.5" />
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
             </div>
             <span className="text-[11px] font-readex">المستشار</span>
@@ -129,7 +143,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             className="flex flex-col items-center justify-center py-1 px-1 rounded-xl text-stone-400 hover:text-stone-200 font-medium relative transition-all"
           >
             <div className="relative">
-              <span className="text-lg leading-none mb-0.5">📜</span>
+              <ShoppingBag className="w-4 h-4 mb-0.5" />
               {totalItems > 0 && (
                 <span className="absolute -top-1.5 -right-2 bg-amber-500 text-stone-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center">
                   {totalItems}
@@ -148,8 +162,8 @@ export const Navigation: React.FC<NavigationProps> = ({
                 : 'text-stone-400 hover:text-stone-200 font-medium'
             }`}
           >
-            <span className="text-lg leading-none mb-0.5">🕯️</span>
-            <span className="text-[11px] font-readex">السجل</span>
+            <Settings className="w-4 h-4 mb-0.5" />
+            <span className="text-[11px] font-readex">الإدارة</span>
           </button>
         </div>
       </nav>
