@@ -8,6 +8,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { CandleTorch } from './components/CandleTorch';
+import { Candle } from './components/Candle';
 import { Search, Truck, ShieldCheck, Flame, Lock } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -250,8 +251,8 @@ export const App: React.FC = () => {
               </div>
             ) : books.length === 0 ? (
               <div className="text-center py-16 bg-[#15121b] rounded-3xl border border-amber-900/40 p-8 space-y-3">
-                <div className="w-12 h-12 rounded-full bg-stone-900 text-amber-400 flex items-center justify-center mx-auto border border-amber-900/40 text-xl">
-                  🕯️
+                <div className="flex justify-center mb-1">
+                  <Candle size="lg" state="lit" withPlate={true} withGlow={true} />
                 </div>
                 <h4 className="text-sm font-bold font-readex text-amber-200">لم يُعثر على هذا العنوان في رفوف المقبرة</h4>
                 <p className="text-xs text-stone-400 max-w-sm mx-auto font-readex">

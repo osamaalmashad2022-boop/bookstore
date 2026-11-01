@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Candle } from './Candle';
 
 export const CandleTorch: React.FC = () => {
   const [isActive, setIsActive] = useState<boolean>(() => {
@@ -62,23 +63,14 @@ export const CandleTorch: React.FC = () => {
               : 'bg-[#15111d]/90 border-amber-900/40 text-stone-400 hover:text-amber-300 hover:border-amber-500/50'
           }`}
         >
-          {/* Animated Artisanal Candle SVG Icon */}
-          <div className="relative w-4 h-6 flex items-end justify-center">
-            {/* Candle Body */}
-            <div className={`w-2.5 h-3.5 rounded-sm transition-colors ${isActive ? 'bg-amber-100' : 'bg-stone-500'}`} />
-            {/* Flame */}
-            <div
-              className={`absolute top-0 w-2 h-3 rounded-full transition-all duration-300 ${
-                isActive
-                  ? 'bg-gradient-to-t from-orange-600 via-amber-400 to-yellow-100 candle-flame-anim shadow-[0_0_10px_#f59e0b]'
-                  : 'opacity-0 scale-50'
-              }`}
-            />
-            {/* Smoke wisp when off */}
-            {!isActive && (
-              <div className="absolute top-0.5 w-0.5 h-1.5 bg-stone-500/60 rounded-full" />
-            )}
-          </div>
+          {/* Artisanal Vector Candle */}
+          <Candle
+            size="sm"
+            state={isActive ? 'lit' : 'unlit'}
+            withPlate={false}
+            withGlow={isActive}
+            className="flex-shrink-0"
+          />
 
           <span className="text-xs font-bold font-readex hidden sm:inline">
             {isActive ? 'شمعة المقبرة مشتعلة' : 'أشعل شمعة المقبرة'}
@@ -90,7 +82,7 @@ export const CandleTorch: React.FC = () => {
           <div className="hidden sm:block absolute bottom-full left-0 mb-2 w-48 p-2.5 bg-[#1b1524] border border-amber-500/40 rounded-xl text-[11px] text-amber-100 font-readex shadow-2xl animate-fade-in pointer-events-none">
             {isActive
               ? 'تتجول الآن ونور الشمعة يضيء الممرات ورفوف الكتب بين يديك ✨'
-              : 'انقر لتفعيل وضع التجول على ضوء الشموع، ليتبع نور الشمعة حركتك بين الرفوف 🕯️'}
+              : 'انقر لتفعيل وضع التجول على ضوء الشموع، ليتبع نور الشمعة حركتك بين الرفوف.'}
           </div>
         )}
       </div>

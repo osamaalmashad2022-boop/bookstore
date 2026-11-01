@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Trash2, Plus, Minus, ArrowLeft, Sparkles, Truck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { Candle } from './Candle';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -74,10 +75,13 @@ export const CartDrawer: React.FC = () => {
                 className="h-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-300 rounded-full transition-all duration-300 relative shadow-[0_0_10px_#f59e0b]"
                 style={{ width: `${freeShippingProgress}%` }}
               >
-                {/* Flame indicator on the leading edge */}
+                {/* Handcrafted vector flame on the leading edge */}
                 {freeShippingProgress > 0 && (
-                  <div className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 text-xs candle-flame-anim pointer-events-none">
-                    🔥
+                  <div className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 pointer-events-none filter drop-shadow-[0_0_6px_#f59e0b]">
+                    <svg viewBox="0 0 20 28" width="13" height="19" className="candle-flame-anim">
+                      <path d="M10 2 C13 7 16 11 15 15 C14 19 11 20 10 20 C9 20 6 19 5 15 C4 11 7 7 10 2 Z" fill="#FFAE00" />
+                      <path d="M10 7 C12 11 13 14 12 16 C11 18 10 18 10 18 C10 18 9 18 8 16 C7 14 8 11 10 7 Z" fill="#FFFBE6" />
+                    </svg>
                   </div>
                 )}
               </div>
@@ -88,13 +92,12 @@ export const CartDrawer: React.FC = () => {
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {items.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 text-stone-500">
-                <div className="relative w-16 h-20 flex items-end justify-center mb-3">
-                  <div className="w-6 h-12 rounded-t-sm bg-stone-800 border border-stone-700/60 shadow-inner" />
-                  <div className="absolute top-4 w-0.5 h-3 bg-stone-600 rounded-full" />
-                  <div className="absolute top-1 w-2 h-2 rounded-full bg-stone-600/40 animate-ping" />
+                {/* Artisanal Unlit Candle on Brass Plate */}
+                <div className="mb-4">
+                  <Candle size="lg" state="unlit" withPlate={true} withGlow={false} />
                 </div>
                 <p className="text-sm font-bold text-amber-200/80 mb-1 font-readex">شمعة صندوقك لم تُشعل بعد...</p>
-                <p className="text-xs text-stone-400 mb-4 font-readex">أضف كتابك الأول لتشعل نور المقبرة وتنال خصم الباقة</p>
+                <p className="text-xs text-stone-400 mb-4 font-readex max-w-xs">أضف كتابك الأول لتشعل نور المقبرة وتنال خصم الباقة والشحن المجاني</p>
                 <button
                   onClick={() => setIsCartOpen(false)}
                   className="px-5 py-2.5 rounded-xl bg-amber-500 text-stone-950 text-xs font-black shadow-md hover:bg-amber-400 transition-colors"

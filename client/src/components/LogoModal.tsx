@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Download, Flame, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
+import { X, Download, Flame, Sparkles, ExternalLink, ShieldCheck, Wind } from 'lucide-react';
+import { Candle } from './Candle';
 
 interface LogoModalProps {
   isOpen: boolean;
@@ -141,14 +142,19 @@ export const LogoModal: React.FC<LogoModalProps> = ({ isOpen, onClose }) => {
           <div className="flex justify-center">
             <button
               onClick={toggleCandle}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all ${
+              className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-bold border transition-all ${
                 isCandleLit
-                  ? 'bg-amber-950/40 border-amber-500/40 text-amber-300 hover:bg-amber-900/50 hover:border-amber-400 shadow-[0_0_12px_rgba(212,175,55,0.2)]'
-                  : 'bg-stone-900 border-stone-700 text-stone-400 hover:text-amber-200'
+                  ? 'bg-amber-950/50 border-amber-500/50 text-amber-200 hover:bg-amber-900/60 hover:border-amber-400 shadow-[0_0_15px_rgba(212,175,55,0.25)]'
+                  : 'bg-stone-900 border-stone-700 text-stone-400 hover:text-amber-200 hover:border-amber-500/30'
               }`}
             >
-              <Flame className={`w-3.5 h-3.5 ${isCandleLit ? 'text-amber-400 animate-bounce' : 'text-stone-500'}`} />
-              <span>{isCandleLit ? 'انقر للنفخ على شمعة المقبرة 🌬️' : 'أشعل شمعة المقبرة من جديد 🔥'}</span>
+              <Candle size="xs" state={isCandleLit ? 'lit' : 'unlit'} withPlate={false} withGlow={false} />
+              <span>{isCandleLit ? 'انقر للنفخ على شمعة المقبرة' : 'أشعل شمعة المقبرة من جديد'}</span>
+              {isCandleLit ? (
+                <Wind className="w-3.5 h-3.5 text-amber-400/80" />
+              ) : (
+                <Flame className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
+              )}
             </button>
           </div>
 

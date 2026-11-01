@@ -2,6 +2,7 @@ import React from 'react';
 import { Book } from '../types';
 import { Clock, BookText, Plus, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { Candle } from './Candle';
 
 interface BookCardProps {
   book: Book;
@@ -75,10 +76,10 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
           </div>
         )}
 
-        {/* Subtle Candle Flame on Hover */}
-        <div className="absolute bottom-2.5 left-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-          <div className="w-6 h-6 rounded-full bg-amber-950/90 border border-amber-500/50 flex items-center justify-center text-xs shadow-[0_0_12px_#f59e0b] candle-flame-anim">
-            🕯️
+        {/* Artisanal Candle Flame on Hover */}
+        <div className="absolute bottom-2.5 left-2.5 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-10 transform scale-90 group-hover:scale-100">
+          <div className="w-7 h-7 rounded-full bg-[#140f1a]/95 border border-amber-400/60 flex items-center justify-center shadow-[0_0_14px_rgba(255,174,25,0.4)]">
+            <Candle size="xs" state="lit" withPlate={false} withGlow={false} />
           </div>
         </div>
       </div>

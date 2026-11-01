@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { RecommendationResponse, Book } from '../types';
 import { Sparkles, ArrowRight, ArrowLeft, Check, Layers, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { Candle } from './Candle';
 
 interface SmartAdvisorProps {
   onSelectBook?: (book: Book) => void;
@@ -415,27 +416,15 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
         <div className="p-8 sm:p-12 rounded-3xl bg-[#15111c] border border-amber-500/40 text-center space-y-4 animate-fade-in shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-amber-500/10 to-transparent pointer-events-none" />
           
-          {/* Animated Cathedral Candle */}
-          <div className="relative mx-auto w-16 h-28 flex items-end justify-center">
-            {/* Candle Halo */}
-            <div className="absolute top-2 w-28 h-28 rounded-full bg-amber-500/20 blur-xl candle-pulse-halo pointer-events-none" />
-            
-            {/* Wax Body */}
-            <div className="w-8 h-16 rounded-t-sm bg-gradient-to-r from-[#FAF6EE] via-[#FFFDF7] to-[#E2D5BE] border border-amber-400/40 shadow-md relative">
-              <div className="absolute top-2 left-1 w-1.5 h-6 bg-amber-200/50 rounded-full" />
-            </div>
-
-            {/* Wick */}
-            <div className="absolute top-7 w-1 h-3 bg-stone-900 rounded-full" />
-
-            {/* Living Dancing Flame */}
-            <div className="absolute top-0 w-6 h-9 rounded-full bg-gradient-to-t from-orange-600 via-amber-400 to-yellow-100 candle-flame-anim shadow-[0_0_20px_#f59e0b,0_0_35px_#ea580c] flex items-center justify-center">
-              <div className="w-2 h-4 rounded-full bg-white opacity-80" />
-            </div>
-
-            {/* Rising Embers */}
-            <div className="absolute -top-3 left-3 w-1.5 h-1.5 rounded-full bg-amber-300 ember-particle" />
-            <div className="absolute -top-6 right-2 w-1 h-1 rounded-full bg-amber-400 ember-particle" style={{ animationDelay: '0.7s' }} />
+          {/* Artisanal Masterwork Cathedral Candle */}
+          <div className="flex justify-center py-2">
+            <Candle
+              size="xl"
+              state="lit"
+              withPlate={true}
+              withGlow={true}
+              withEmbers={true}
+            />
           </div>
 
           <h4 className="text-base font-bold font-readex text-amber-100">
