@@ -73,7 +73,7 @@
     }
   </style>
 </head>
-<body class="bg-[#121216] text-stone-100 font-cairo min-h-screen antialiased flex flex-col items-center">
+<body class="bg-[#121216] text-stone-100 font-ibm min-h-screen antialiased flex flex-col items-center">
 
   <!-- TOP BAR: Controls & Presentation Header -->
   <header class="w-full bg-[#18181f]/95 border-b border-stone-800 sticky top-0 z-50 backdrop-blur-md px-4 py-3 shadow-lg">
@@ -344,11 +344,26 @@
       }
     }
 
+    // Track currently chosen font globally
+    let currentActiveFont = 'ibm';
+
+    function getActiveFontClass() {
+      const fontClasses = {
+        ibm: 'font-ibm',
+        almarai: 'font-almarai',
+        readex: 'font-readex',
+        tajawal: 'font-tajawal',
+        noto: 'font-noto',
+        cairo: 'font-cairo',
+      };
+      return fontClasses[currentActiveFont] || 'font-ibm';
+    }
+
     // =========================================================================
     // VARIANT 1: الغموض الكلاسيكي المعتق (VINTAGE GOTHIC SANCTUARY)
     // =========================================================================
     function renderGothic(content, nav, store) {
-      store.className = 'mobile-mockup bg-[#0d0b0f] text-[#ede6d6] font-cairo border-2 border-amber-900/40 candle-glow';
+      store.className = 'mobile-mockup bg-[#0d0b0f] text-[#ede6d6] ' + getActiveFontClass() + ' border-2 border-amber-900/40 candle-glow';
 
       content.innerHTML = `
         <!-- Top App Bar -->
@@ -500,7 +515,7 @@
     // VARIANT 3: الدفء الورقي العتيق (WARM PARCHMENT & COFFEE)
     // =========================================================================
     function renderWarm(content, nav, store) {
-      store.className = 'mobile-mockup bg-[#faf6f0] text-[#2c1d15] font-cairo border-2 border-[#d9c7b0] shadow-2xl';
+      store.className = 'mobile-mockup bg-[#faf6f0] text-[#2c1d15] ' + getActiveFontClass() + ' border-2 border-[#d9c7b0] shadow-2xl';
 
       content.innerHTML = `
         <!-- Warm Paper Header -->
@@ -659,12 +674,13 @@
       document.getElementById('modalExcerpt').innerText = book.excerpt + '\n\n💡 سر القراءة: ' + book.why;
 
       const modalBox = document.getElementById('modalBox');
+      const fontCls = getActiveFontClass();
       if (currentTheme === 'gothic') {
-        modalBox.className = 'w-full max-w-md rounded-3xl p-5 border-2 border-amber-900/60 bg-[#120f17] text-[#ede6d6] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden text-right candle-glow font-cairo';
+        modalBox.className = 'w-full max-w-md rounded-3xl p-5 border-2 border-amber-900/60 bg-[#120f17] text-[#ede6d6] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden text-right candle-glow ' + fontCls;
       } else if (currentTheme === 'noir') {
-        modalBox.className = 'w-full max-w-md rounded-3xl p-5 border border-purple-500/40 bg-[#14161f] text-[#f1f3f9] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden text-right neon-glow font-readex';
+        modalBox.className = 'w-full max-w-md rounded-3xl p-5 border border-purple-500/40 bg-[#14161f] text-[#f1f3f9] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden text-right neon-glow ' + fontCls;
       } else {
-        modalBox.className = 'w-full max-w-md rounded-3xl p-5 border border-[#dfd0bd] bg-[#faf6f0] text-[#2c1d15] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden text-right font-cairo';
+        modalBox.className = 'w-full max-w-md rounded-3xl p-5 border border-[#dfd0bd] bg-[#faf6f0] text-[#2c1d15] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden text-right ' + fontCls;
       }
 
       const modal = document.getElementById('previewModal');
@@ -702,13 +718,14 @@
       const notch = document.getElementById('phoneNotch');
       const btnMobile = document.getElementById('btnMobileView');
       const btnFull = document.getElementById('btnFullView');
+      const fontCls = getActiveFontClass();
 
       if (mode === 'mobile') {
         store.className = currentTheme === 'gothic'
-          ? 'mobile-mockup bg-[#0d0b0f] text-[#ede6d6] font-cairo border-2 border-amber-900/40 candle-glow'
+          ? 'mobile-mockup bg-[#0d0b0f] text-[#ede6d6] ' + fontCls + ' border-2 border-amber-900/40 candle-glow'
           : currentTheme === 'noir'
-          ? 'mobile-mockup bg-[#0f1015] text-[#f1f3f9] font-readex border-2 border-purple-500/30 neon-glow'
-          : 'mobile-mockup bg-[#faf6f0] text-[#2c1d15] font-cairo border-2 border-[#d9c7b0] shadow-2xl';
+          ? 'mobile-mockup bg-[#0f1015] text-[#f1f3f9] ' + fontCls + ' border-2 border-purple-500/30 neon-glow'
+          : 'mobile-mockup bg-[#faf6f0] text-[#2c1d15] ' + fontCls + ' border-2 border-[#d9c7b0] shadow-2xl';
         store.style.maxWidth = '412px';
         store.style.height = '870px';
         notch.style.display = 'flex';
@@ -717,10 +734,10 @@
         btnFull.className = 'px-3.5 py-1.5 rounded-xl font-bold transition-all text-stone-300 hover:text-white flex items-center gap-1.5';
       } else {
         store.className = currentTheme === 'gothic'
-          ? 'w-full max-w-4xl bg-[#0d0b0f] text-[#ede6d6] font-cairo border-2 border-amber-900/40 candle-glow rounded-3xl min-h-[750px] shadow-2xl'
+          ? 'w-full max-w-4xl bg-[#0d0b0f] text-[#ede6d6] ' + fontCls + ' border-2 border-amber-900/40 candle-glow rounded-3xl min-h-[750px] shadow-2xl'
           : currentTheme === 'noir'
-          ? 'w-full max-w-4xl bg-[#0f1015] text-[#f1f3f9] font-readex border-2 border-purple-500/30 neon-glow rounded-3xl min-h-[750px] shadow-2xl'
-          : 'w-full max-w-4xl bg-[#faf6f0] text-[#2c1d15] font-cairo border-2 border-[#d9c7b0] rounded-3xl min-h-[750px] shadow-2xl';
+          ? 'w-full max-w-4xl bg-[#0f1015] text-[#f1f3f9] ' + fontCls + ' border-2 border-purple-500/30 neon-glow rounded-3xl min-h-[750px] shadow-2xl'
+          : 'w-full max-w-4xl bg-[#faf6f0] text-[#2c1d15] ' + fontCls + ' border-2 border-[#d9c7b0] rounded-3xl min-h-[750px] shadow-2xl';
         store.style.maxWidth = '100%';
         store.style.height = 'auto';
         notch.style.display = 'none';
@@ -731,6 +748,7 @@
     }
 
     function applyGlobalFont(fontKey) {
+      currentActiveFont = fontKey;
       const fontClasses = {
         ibm: 'font-ibm',
         almarai: 'font-almarai',
@@ -741,9 +759,7 @@
       };
       const store = document.getElementById('storeContainer');
       Object.values(fontClasses).forEach(cls => store.classList.remove(cls));
-      if (fontClasses[fontKey]) {
-        store.classList.add(fontClasses[fontKey]);
-      }
+      store.classList.add(getActiveFontClass());
     }
 
     // INIT

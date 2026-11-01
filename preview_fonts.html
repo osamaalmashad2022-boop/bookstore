@@ -8,7 +8,7 @@
   <!-- Google Fonts Candidates for Ultimate Reading Comfort -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Cairo:wght@400;600;700;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -126,6 +126,87 @@
 
   <!-- LIVE PREVIEWS WORKSPACE -->
   <main class="w-full max-w-5xl space-y-6">
+
+    <!-- 0. SPECIAL ZOOM INSPECTION: HAA & JEEM LETTERS COMPARISON -->
+    <div class="bg-gradient-to-br from-[#1c1424] via-[#15121b] to-[#100d14] border-2 border-amber-500/50 rounded-3xl p-5 sm:p-7 shadow-2xl candle-glow text-right space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-amber-900/40">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/40 mb-1">
+            <span>🔬</span> فحص دقيق لرسم حرفي الحاء (الريح) والجيم (الخروج)
+          </div>
+          <h3 class="text-base sm:text-lg font-black text-amber-100">
+            لماذا بدا حرف الحاء والجيم «مسطحاً ومقطوعاً من الأسفل» في لقطة الشاشة؟
+          </h3>
+        </div>
+        <span class="text-xs text-amber-400/90 font-medium self-start sm:self-auto bg-black/40 px-3 py-1 rounded-xl border border-stone-800">
+          مقارنة حية لسر الانحناءة الدائرية
+        </span>
+      </div>
+
+      <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+        في خط <strong>Cairo</strong>، صُمم بطن حرفي <strong>الحاء (ح) والجيم (ج)</strong> هندسياً بقاعدة أفقية مستقيمة ومسطحة، مما يجعله يبدو مبتوراً ومقطوعاً. قارن أدناه كيف ترسم الخطوط الأخرى نفس الحروف بتقوّس دائري ممتلئ وأصيل:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
+        
+        <!-- Cairo (Flat / Cut-off) -->
+        <div class="p-4 rounded-2xl bg-[#120f17] border-2 border-rose-900/40 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-rose-400">خط Cairo (الذي ظهر في لقطتك)</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-rose-950 text-rose-300 font-bold">قاعدة أفقية مسطحة ⚠️</span>
+          </div>
+          <p class="text-xl sm:text-2xl font-bold text-amber-100 leading-normal" style="font-family: 'Cairo', sans-serif;">
+            ظل الريـح • الخـروج عن النص
+          </p>
+          <p class="text-[11px] text-stone-400">
+            لاحظ قاع حرف الحاء في (الريح) والجيم في (الخروج): مستقيم تماماً وكأنه مقصوص أفقياً.
+          </p>
+        </div>
+
+        <!-- IBM Plex Sans Arabic (Round & Calligraphic) -->
+        <div class="p-4 rounded-2xl bg-[#120f17] border-2 border-amber-500/80 space-y-2 shadow-lg">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300 font-ibm">1. IBM Plex Sans Arabic (الأكمل والأجمل 🏆)</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">تقوس دائري نسخي كامل ✨</span>
+          </div>
+          <p class="font-ibm text-xl sm:text-2xl font-bold text-amber-100 leading-normal">
+            ظل الريـح • الخـروج عن النص
+          </p>
+          <p class="text-[11px] text-stone-300">
+            انحناءة دائرية ممتلئة وناعمة مستوحاة من خط النسخ الأصيل، يستحيل أن تبدو مقطوعة أو مشوهة.
+          </p>
+        </div>
+
+        <!-- Almarai -->
+        <div class="p-4 rounded-2xl bg-[#120f17] border border-amber-900/40 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300 font-almarai">2. Almarai (المراعي)</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-stone-800 text-stone-300 font-bold">انسيابي وعصري 🌿</span>
+          </div>
+          <p class="font-almarai text-xl sm:text-2xl font-bold text-amber-100 leading-normal">
+            ظل الريـح • الخـروج عن النص
+          </p>
+          <p class="text-[11px] text-stone-400">
+            بطن الحاء والجيم مقوس بدوران ناعم ومتوازن خالي من أي استقامة حادة.
+          </p>
+        </div>
+
+        <!-- Readex Pro -->
+        <div class="p-4 rounded-2xl bg-[#120f17] border border-amber-900/40 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300 font-readex">3. Readex Pro</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-stone-800 text-stone-300 font-bold">هندسي سريع 🎯</span>
+          </div>
+          <p class="font-readex text-xl sm:text-2xl font-bold text-amber-100 leading-normal">
+            ظل الريـح • الخـروج عن النص
+          </p>
+          <p class="text-[11px] text-stone-400">
+            زوايا مفتوحة ودوران متوازن مصمم لسرعة القراءة على الشاشات الصغيرة.
+          </p>
+        </div>
+
+      </div>
+    </div>
 
     <!-- 1. LIVE BOOK STORE CARD & READING SAMPLE -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">

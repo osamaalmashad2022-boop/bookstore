@@ -89,7 +89,7 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
           </div>
 
           {/* Book Title */}
-          <h3 className="text-xs sm:text-sm font-bold font-readex text-amber-100 line-clamp-1 leading-snug mb-1.5 group-hover:text-amber-400 transition-colors">
+          <h3 className="text-xs sm:text-sm font-bold font-readex text-amber-100 line-clamp-1 leading-snug pb-1 mb-1.5 group-hover:text-amber-400 transition-colors">
             {book.title}
           </h3>
 

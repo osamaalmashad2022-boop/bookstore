@@ -7,8 +7,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Readex Pro"', 'Cairo', 'sans-serif'],
+        sans: ['"Readex Pro"', '"IBM Plex Sans Arabic"', 'Almarai', 'sans-serif'],
         readex: ['"Readex Pro"', 'sans-serif'],
+        ibm: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+        almarai: ['Almarai', 'sans-serif'],
         cairo: ['Cairo', 'sans-serif'],
         amiri: ['Amiri', 'serif'],
       },

@@ -5,7 +5,6 @@
 @layer base {
   body {
     @apply bg-[#0d0b0f] text-[#ede6d6] font-readex;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     letter-spacing: normal;
     line-height: 1.6;
   }
