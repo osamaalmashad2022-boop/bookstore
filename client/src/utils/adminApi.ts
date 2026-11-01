@@ -24,3 +24,4 @@ export const adminFetch = (url: string, options: RequestInit = {}): Promise<Resp
   };
   return fetch(url, { ...options, headers });
 };
+

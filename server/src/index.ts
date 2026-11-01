@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
 import booksRouter from './routes/books';
 import advisorRouter from './routes/advisor';
 import ordersRouter from './routes/orders';
@@ -34,6 +36,17 @@ app.get('/api/health', (_req, res) => {
     mode: 'Perpetual Zero-Cost',
   });
 });
+
+// Serve frontend static assets in production (if client/dist exists)
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
 
 // Start server
 async function start() {
