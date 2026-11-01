@@ -1,16 +1,58 @@
 import { Router, Request, Response } from 'express';
+import crypto from 'crypto';
 import { queryAll, queryOne, execute } from '../db/database';
 import { searchGoogleBooks, searchBooksMetadata } from '../services/googleBooks';
 
 const router = Router();
 
+const ADMIN_SECRET = process.env.ADMIN_PASSWORD || 'maqbara_gothic_sentinel_2026';
+const HMAC_KEY = crypto.createHash('sha256').update(ADMIN_SECRET + '_token_salt').digest();
+
+function generateAdminToken(): string {
+  const timestamp = Date.now();
+  const payload = `admin:${timestamp}`;
+  const hmac = crypto.createHmac('sha256', HMAC_KEY).update(payload).digest('hex');
+  return `${Buffer.from(payload).toString('base64url')}.${hmac}`;
+}
+
+function verifyAdminToken(token: string): boolean {
+  if (!token) return false;
+
+  // Direct secret match for CLI scripts and development convenience
+  if (token.trim() === ADMIN_SECRET.trim()) return true;
+
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 2) return false;
+    const [payloadB64, providedHmac] = parts;
+    const payload = Buffer.from(payloadB64, 'base64url').toString('utf8');
+    const expectedHmac = crypto.createHmac('sha256', HMAC_KEY).update(payload).digest('hex');
+
+    const providedBuf = Buffer.from(providedHmac, 'hex');
+    const expectedBuf = Buffer.from(expectedHmac, 'hex');
+    if (providedBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(providedBuf, expectedBuf)) {
+      return false;
+    }
+
+    const [role, timestampStr] = payload.split(':');
+    if (role !== 'admin') return false;
+    const timestamp = parseInt(timestampStr, 10);
+    const maxAge = 1000 * 60 * 60 * 24 * 7; // 7 days
+    if (Date.now() - timestamp > maxAge) return false;
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // POST /api/admin/login - Authenticate admin with secret key
 router.post('/login', (req: Request, res: Response) => {
   try {
     const { password } = req.body;
-    const adminKey = process.env.ADMIN_PASSWORD || '123456';
-    if (password && String(password).trim() === adminKey.trim()) {
-      return res.json({ success: true, token: adminKey });
+    if (password && String(password).trim() === ADMIN_SECRET.trim()) {
+      const token = generateAdminToken();
+      return res.json({ success: true, token });
     }
     return res.status(401).json({ success: false, error: 'مفتاح الحارس السري غير صحيح' });
   } catch (err: any) {
@@ -20,9 +62,8 @@ router.post('/login', (req: Request, res: Response) => {
 
 // Admin Authorization Middleware - Protects ALL /api/admin/* endpoints
 router.use((req: Request, res: Response, next) => {
-  const token = (req.headers['x-admin-token'] || req.headers['authorization']?.replace('Bearer ', '')) as string;
-  const adminKey = process.env.ADMIN_PASSWORD || '123456';
-  if (token && String(token).trim() === adminKey.trim()) {
+  const token = (req.headers['x-admin-token'] || req.headers['authorization']?.replace(/^Bearer\s+/i, '')) as string;
+  if (token && verifyAdminToken(token)) {
     return next();
   }
   return res.status(401).json({
@@ -180,13 +221,27 @@ router.get('/orders', async (_req: Request, res: Response) => {
       ORDER BY o.created_at DESC
     `);
 
-    // Fetch items for each order
-    const ordersWithItems = await Promise.all(
-      orders.map(async (order: any) => {
-        const items = await queryAll(`SELECT * FROM order_items WHERE order_id = ?`, [order.id]);
-        return { ...order, items };
-      })
-    );
+    if (orders.length === 0) {
+      return res.json({ success: true, orders: [] });
+    }
+
+    // Fetch items for all orders in a single SQL query
+    const orderIds = orders.map((o: any) => o.id);
+    const placeholders = orderIds.map(() => '?').join(',');
+    const allItems = await queryAll(`SELECT * FROM order_items WHERE order_id IN (${placeholders})`, orderIds);
+
+    const itemsByOrderId: Record<string, any[]> = {};
+    for (const item of allItems) {
+      if (!itemsByOrderId[item.order_id]) {
+        itemsByOrderId[item.order_id] = [];
+      }
+      itemsByOrderId[item.order_id].push(item);
+    }
+
+    const ordersWithItems = orders.map((order: any) => ({
+      ...order,
+      items: itemsByOrderId[order.id] || [],
+    }));
 
     res.json({ success: true, orders: ordersWithItems });
   } catch (error: any) {

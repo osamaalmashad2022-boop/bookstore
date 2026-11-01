@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { queryAll, queryOne, execute } from '../db/database';
+import { queryAll, queryOne, execute, batch } from '../db/database';
 import { generateWhatsAppMessage, generateWhatsAppUrl } from '../services/whatsapp';
 
 const router = Router();
@@ -88,47 +88,70 @@ router.post('/', async (req: Request, res: Response) => {
 
     const finalTotal = priceAfterDiscount + shippingFee;
 
-    // 5. Generate Order Reference
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const orderRef = `ORD-${randomSuffix}`;
+    // 5. Generate Collision-Proof Order Reference
+    const timestampSuffix = Date.now().toString(36).toUpperCase();
+    const randomSuffix = Math.floor(100 + Math.random() * 900);
+    const orderRef = `ORD-${timestampSuffix}-${randomSuffix}`;
     const orderId = `order_${Date.now()}_${randomSuffix}`;
 
-    // 6. Save order into database
-    await execute(`
-      INSERT INTO orders (
-        id, order_ref, customer_name, customer_phone, customer_whatsapp,
-        governorate_id, street_address, notes, total_books_price,
-        discount_amount, shipping_fee, final_total, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING_WHATSAPP_CONFIRMATION')
-    `, [
-      orderId,
-      orderRef,
-      customer_name,
-      customer_phone,
-      customer_whatsapp || customer_phone,
-      governorate_id,
-      street_address,
-      notes || '',
-      totalBooksPrice,
-      discountAmount,
-      shippingFee,
-      finalTotal,
-    ]);
+    // 6. Build atomic transaction batch for order, items, and conditional stock decrements
+    const batchStatements: Array<{ sql: string; args: any[] }> = [
+      {
+        sql: `
+          INSERT INTO orders (
+            id, order_ref, customer_name, customer_phone, customer_whatsapp,
+            governorate_id, street_address, notes, total_books_price,
+            discount_amount, shipping_fee, final_total, status
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING_WHATSAPP_CONFIRMATION')
+        `,
+        args: [
+          orderId,
+          orderRef,
+          customer_name,
+          customer_phone,
+          customer_whatsapp || customer_phone,
+          governorate_id,
+          street_address,
+          notes || '',
+          totalBooksPrice,
+          discountAmount,
+          shippingFee,
+          finalTotal,
+        ],
+      },
+    ];
 
-    // 7. Save order items & decrement stock
     for (const v of validatedItems) {
       const itemId = `item_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-      await execute(`
-        INSERT INTO order_items (id, order_id, book_id, title, price, quantity)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `, [itemId, orderId, v.book.id, v.book.title, v.book.price, v.quantity]);
+      batchStatements.push({
+        sql: `
+          INSERT INTO order_items (id, order_id, book_id, title, price, quantity)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `,
+        args: [itemId, orderId, v.book.id, v.book.title, v.book.price, v.quantity],
+      });
 
-      // Deduct stock
-      await execute(`
-        UPDATE books
-        SET stock_quantity = stock_quantity - ?
-        WHERE id = ?
-      `, [v.quantity, v.book.id]);
+      // Conditional decrement: will throw via trigger or affect 0 rows if stock insufficient
+      batchStatements.push({
+        sql: `
+          UPDATE books
+          SET stock_quantity = stock_quantity - ?
+          WHERE id = ? AND stock_quantity >= ?
+        `,
+        args: [v.quantity, v.book.id, v.quantity],
+      });
+    }
+
+    try {
+      await batch(batchStatements, 'write');
+    } catch (batchErr: any) {
+      if (batchErr.message && (batchErr.message.includes('INSUFFICIENT_STOCK') || batchErr.message.includes('CONSTRAINT'))) {
+        return res.status(400).json({
+          success: false,
+          error: 'عذراً، نفدت كمية أحد الكتب المطلوبة أثناء تسجيل طلبك',
+        });
+      }
+      throw batchErr;
     }
 
     // 8. Generate WhatsApp payload

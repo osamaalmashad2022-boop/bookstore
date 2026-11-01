@@ -78,3 +78,14 @@ CREATE TABLE IF NOT EXISTS site_settings (
   value TEXT NOT NULL
 );
 
+-- Trigger to guarantee atomic stock integrity across concurrent orders
+CREATE TRIGGER IF NOT EXISTS prevent_negative_book_stock
+BEFORE UPDATE OF stock_quantity ON books
+FOR EACH ROW
+BEGIN
+  SELECT CASE
+    WHEN NEW.stock_quantity < 0 THEN RAISE(ABORT, 'INSUFFICIENT_STOCK: Stock quantity cannot be negative')
+  END;
+END;
+
+

@@ -50,41 +50,41 @@ export const Candle: React.FC<CandleProps> = ({
         <defs>
           {/* Flame Gradient */}
           <linearGradient id={`flameGrad_${uid}`} x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stop-color="#FFFFFF" />
-            <stop offset="20%" stop-color="#FFF275" />
-            <stop offset="55%" stop-color="#FF9E00" />
-            <stop offset="85%" stop-color="#E63900" />
-            <stop offset="100%" stop-color="#7A0900" />
+            <stop offset="0%" stopColor="#FFFFFF" />
+            <stop offset="20%" stopColor="#FFF275" />
+            <stop offset="55%" stopColor="#FF9E00" />
+            <stop offset="85%" stopColor="#E63900" />
+            <stop offset="100%" stopColor="#7A0900" />
           </linearGradient>
 
           {/* Candle Wax Shading */}
           <linearGradient id={`waxGrad_${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#D9C9B0" />
-            <stop offset="35%" stop-color="#FAF5EB" />
-            <stop offset="70%" stop-color="#FFFDF8" />
-            <stop offset="100%" stop-color="#D4C3A9" />
+            <stop offset="0%" stopColor="#D9C9B0" />
+            <stop offset="35%" stopColor="#FAF5EB" />
+            <stop offset="70%" stopColor="#FFFDF8" />
+            <stop offset="100%" stopColor="#D4C3A9" />
           </linearGradient>
 
           {/* Melted Top Wax Pool */}
           <linearGradient id={`meltGrad_${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#C2B295" />
-            <stop offset="100%" stop-color="#EFE7D8" />
+            <stop offset="0%" stopColor="#C2B295" />
+            <stop offset="100%" stopColor="#EFE7D8" />
           </linearGradient>
 
           {/* Antique Gold Brass Plate */}
           <linearGradient id={`brassGrad_${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#FFE8A3" />
-            <stop offset="35%" stop-color="#D4AF37" />
-            <stop offset="70%" stop-color="#8C6D1F" />
-            <stop offset="100%" stop-color="#4A370E" />
+            <stop offset="0%" stopColor="#FFE8A3" />
+            <stop offset="35%" stopColor="#D4AF37" />
+            <stop offset="70%" stopColor="#8C6D1F" />
+            <stop offset="100%" stopColor="#4A370E" />
           </linearGradient>
 
           {/* Radial Ambient Glow */}
           <radialGradient id={`haloGrad_${uid}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#FFB300" stop-opacity="0.75" />
-            <stop offset="35%" stop-color="#FF7700" stop-opacity="0.3" />
-            <stop offset="70%" stop-color="#D4AF37" stop-opacity="0.08" />
-            <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+            <stop offset="0%" stopColor="#FFB300" stopOpacity="0.75" />
+            <stop offset="35%" stopColor="#FF7700" stopOpacity="0.3" />
+            <stop offset="70%" stopColor="#D4AF37" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#000000" stopOpacity="0" />
           </radialGradient>
 
           {/* Soft Glow Filter */}
@@ -116,7 +116,7 @@ export const Candle: React.FC<CandleProps> = ({
               d="M 6,83 C 6,80 18,78 30,78 C 42,78 54,80 54,83 C 54,87 42,88 30,88 C 18,88 6,87 6,83 Z"
               fill={`url(#brassGrad_${uid})`}
               stroke="#594314"
-              stroke-width="0.8"
+              strokeWidth="0.8"
             />
             {/* Inner Plate Lip */}
             <ellipse cx="30" cy="82" rx="20" ry="2.5" fill="#523D10" opacity="0.5" />
@@ -124,7 +124,7 @@ export const Candle: React.FC<CandleProps> = ({
             <path
               d="M 12,83 C 18,84.5 42,84.5 48,83"
               stroke="#FFF3B8"
-              stroke-width="0.7"
+              strokeWidth="0.7"
               fill="none"
               opacity="0.75"
             />
@@ -133,8 +133,8 @@ export const Candle: React.FC<CandleProps> = ({
               d="M 10,81 C 4,80 1,73 4,68 C 7,64 12,67 12,71"
               fill="none"
               stroke={`url(#brassGrad_${uid})`}
-              stroke-width="2"
-              stroke-linecap="round"
+              strokeWidth="2"
+              strokeLinecap="round"
             />
           </g>
         )}
@@ -146,7 +146,7 @@ export const Candle: React.FC<CandleProps> = ({
             d="M 20,44 L 40,44 L 39,81 L 21,81 Z"
             fill={`url(#waxGrad_${uid})`}
             stroke="#9E8D74"
-            stroke-width="0.6"
+            strokeWidth="0.6"
           />
 
           {/* Natural Wax Drips */}
@@ -174,7 +174,7 @@ export const Candle: React.FC<CandleProps> = ({
             ry="3.2"
             fill={`url(#meltGrad_${uid})`}
             stroke="#8F7E66"
-            stroke-width="0.6"
+            strokeWidth="0.6"
           />
           {/* Liquid Molten Wax Core */}
           <ellipse cx="30" cy="44.2" rx="7" ry="1.8" fill="#FFF2BD" opacity="0.6" />
@@ -185,8 +185,8 @@ export const Candle: React.FC<CandleProps> = ({
           d="M 30,44 Q 31,37 29.5,32"
           fill="none"
           stroke="#26190D"
-          stroke-width="1.8"
-          stroke-linecap="round"
+          strokeWidth="1.8"
+          strokeLinecap="round"
         />
 
         {/* 5. Living Flame (When Lit) */}

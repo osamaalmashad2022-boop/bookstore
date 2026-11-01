@@ -93,12 +93,12 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
 
                 {/* Topics / Tags */}
                 <div className="flex flex-wrap gap-1 mb-2">
-                  {book.sub_topics.split(',').map((tag, i) => (
+                  {(book.sub_topics || '').split(',').map(t => t.trim()).filter(Boolean).map((tag, i) => (
                     <span
                       key={i}
                       className="text-[10px] px-2 py-0.5 rounded-md bg-stone-900 text-stone-300 border border-stone-800"
                     >
-                      {tag.trim()}
+                      {tag}
                     </span>
                   ))}
                 </div>

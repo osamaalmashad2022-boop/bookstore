@@ -1,15 +1,18 @@
-import { createClient, Client } from '@libsql/client';
+import { createClient, Client, InStatement, ResultSet } from '@libsql/client';
 import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const defaultTursoUrl = 'libsql://maqbara-books-osospiracy.aws-eu-central-1.turso.io';
-const defaultTursoToken = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTM1NjIxMjksImlkIjoiMDFhMTk4YTEtZjkwMS03YWQwLWFlNGEtOWE0MWM5NjBmNWM0Iiwia2lkIjoiMUprejlIN0EyVk1IZmhhcFpzaHljT3pFY2paRnZ6cE14QzJCb1hGSmJOayIsInJpZCI6ImU2MTFkNTAyLTEwNGEtNDA4ZS05NGJiLWVmY2I2ZTMzODZiOSJ9.8b3G_ypD7kDpwpeSOFuJJNyHo03ZfO8ygW7-2z4BmbQ-L_GY4xrqy7cCrVF5bD68HpqRjcVKYGwizpQYpInkCQ';
+const localDbPath = path.resolve(__dirname, '../../data/bookstore.db');
+const localDbDir = path.dirname(localDbPath);
+if (!fs.existsSync(localDbDir)) {
+  fs.mkdirSync(localDbDir, { recursive: true });
+}
 
-const dbUrl = process.env.DATABASE_URL || defaultTursoUrl;
-const authToken = process.env.DATABASE_AUTH_TOKEN || defaultTursoToken;
+const dbUrl = process.env.DATABASE_URL || `file:${localDbPath}`;
+const authToken = process.env.DATABASE_AUTH_TOKEN || undefined;
 
 export const db: Client = createClient({
   url: dbUrl,
@@ -29,6 +32,10 @@ export async function queryOne<T = any>(sql: string, args: any[] = []): Promise<
 
 export async function execute(sql: string, args: any[] = []): Promise<any> {
   return await db.execute({ sql, args });
+}
+
+export async function batch(statements: InStatement[], mode: 'write' | 'read' | 'deferred' = 'write'): Promise<ResultSet[]> {
+  return await db.batch(statements, mode);
 }
 
 export async function initDb(): Promise<void> {

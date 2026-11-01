@@ -51,6 +51,15 @@ export interface ReadingPathStep {
   author: string;
   price: number;
   cover_image: string;
+  stock_quantity?: number;
+  category_id?: string;
+  sub_topics?: string;
+  reader_level?: 'beginner' | 'intermediate' | 'advanced';
+  page_count?: number;
+  reading_time_hours?: number;
+  why_read?: string;
+  is_bestseller?: number;
+  is_featured?: number;
 }
 
 export interface RecommendationResponse {

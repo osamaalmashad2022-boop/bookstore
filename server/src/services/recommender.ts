@@ -42,6 +42,15 @@ export interface RecommendationResult {
     author: string;
     price: number;
     cover_image: string;
+    stock_quantity: number;
+    category_id: string;
+    sub_topics: string;
+    reader_level: string;
+    page_count: number;
+    reading_time_hours: number;
+    why_read: string;
+    is_bestseller: number;
+    is_featured: number;
   }>;
   engine_mode: string;
 }
@@ -173,17 +182,29 @@ export async function getSmartRecommendation(req: RecommendRequest): Promise<Rec
   // Build reading path: Step 1 (Primary or Foundational), Step 2 (Follow-up or intermediate), Step 3 (Mastery or related)
   const pathSteps: any[] = [];
 
-  // Step 1: Foundation
-  pathSteps.push({
-    step_number: 1,
-    step_label: 'الخطوة 1: المدخل التأسيسي المبسط',
-    book_id: primaryBook.id,
-    slug: primaryBook.slug,
-    title: primaryBook.title,
-    author: primaryBook.author,
-    price: primaryBook.price,
-    cover_image: primaryBook.cover_image,
+  // Helper to format reading path steps with complete book entity metadata
+  const formatStep = (stepNumber: number, stepLabel: string, book: any) => ({
+    step_number: stepNumber,
+    step_label: stepLabel,
+    book_id: book.id,
+    slug: book.slug,
+    title: book.title,
+    author: book.author,
+    price: book.price,
+    cover_image: book.cover_image,
+    stock_quantity: book.stock_quantity,
+    category_id: book.category_id,
+    sub_topics: book.sub_topics || '',
+    reader_level: book.reader_level || 'beginner',
+    page_count: book.page_count || 200,
+    reading_time_hours: book.reading_time_hours || 4,
+    why_read: book.why_read || '',
+    is_bestseller: book.is_bestseller || 0,
+    is_featured: book.is_featured || 0,
   });
+
+  // Step 1: Foundation
+  pathSteps.push(formatStep(1, 'الخطوة 1: المدخل التأسيسي المبسط', primaryBook));
 
   // Step 2: Next recommended book or highest ranked complementary book
   let step2Book = null;
@@ -198,30 +219,12 @@ export async function getSmartRecommendation(req: RecommendRequest): Promise<Rec
   }
 
   if (step2Book) {
-    pathSteps.push({
-      step_number: 2,
-      step_label: 'الخطوة 2: الفهم والتطبيق العملي',
-      book_id: step2Book.id,
-      slug: step2Book.slug,
-      title: step2Book.title,
-      author: step2Book.author,
-      price: step2Book.price,
-      cover_image: step2Book.cover_image,
-    });
+    pathSteps.push(formatStep(2, 'الخطوة 2: الفهم والتطبيق العملي', step2Book));
 
     // Step 3: Deepening
     const step3Book = matchedBooks.find(b => b.id !== primaryBook.id && b.id !== step2Book.id);
     if (step3Book) {
-      pathSteps.push({
-        step_number: 3,
-        step_label: 'الخطوة 3: التوسع والتعمق الفكري',
-        book_id: step3Book.id,
-        slug: step3Book.slug,
-        title: step3Book.title,
-        author: step3Book.author,
-        price: step3Book.price,
-        cover_image: step3Book.cover_image,
-      });
+      pathSteps.push(formatStep(3, 'الخطوة 3: التوسع والتعمق الفكري', step3Book));
     }
   }
 

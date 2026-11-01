@@ -16,6 +16,8 @@ export const CandleTorch: React.FC = () => {
   useEffect(() => {
     if (!isActive) return;
 
+    let animationFrameId: number | null = null;
+
     const handlePointerMove = (e: MouseEvent | TouchEvent) => {
       let clientX = 0;
       let clientY = 0;
@@ -26,13 +28,22 @@ export const CandleTorch: React.FC = () => {
         clientX = e.clientX;
         clientY = e.clientY;
       }
-      setMousePos({ x: clientX, y: clientY });
+
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      animationFrameId = requestAnimationFrame(() => {
+        setMousePos({ x: clientX, y: clientY });
+      });
     };
 
-    window.addEventListener('mousemove', handlePointerMove);
-    window.addEventListener('touchmove', handlePointerMove);
+    window.addEventListener('mousemove', handlePointerMove, { passive: true });
+    window.addEventListener('touchmove', handlePointerMove, { passive: true });
 
     return () => {
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
       window.removeEventListener('mousemove', handlePointerMove);
       window.removeEventListener('touchmove', handlePointerMove);
     };
