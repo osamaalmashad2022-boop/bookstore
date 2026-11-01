@@ -21,21 +21,30 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes
+// Routes - mounted both with and without /api for seamless Vercel / serverless routing
 app.use('/api/books', booksRouter);
+app.use('/books', booksRouter);
+
 app.use('/api/recommend', advisorRouter);
+app.use('/recommend', advisorRouter);
+
 app.use('/api/orders', ordersRouter);
+app.use('/orders', ordersRouter);
+
 app.use('/api/admin', adminRouter);
+app.use('/admin', adminRouter);
 
 // Health check
-app.get('/api/health', (_req, res) => {
+const healthCheck = (_req: express.Request, res: express.Response) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
     service: 'Dar Al-Maarefa Bookstore API',
     mode: 'Perpetual Zero-Cost',
   });
-});
+};
+app.get('/api/health', healthCheck);
+app.get('/health', healthCheck);
 
 // Serve frontend static assets in production (if client/dist exists)
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
@@ -48,7 +57,7 @@ if (fs.existsSync(clientDistPath)) {
   });
 }
 
-// Start server
+// Start server (only when running standalone, not in Vercel serverless)
 async function start() {
   try {
     await initDb();
@@ -61,7 +70,9 @@ async function start() {
   }
 }
 
-start();
+if (!process.env.VERCEL) {
+  start();
+}
 
 export default app;
 

@@ -5,13 +5,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const dataDir = path.resolve(__dirname, '../../data');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
+const defaultTursoUrl = 'libsql://maqbara-books-osospiracy.aws-eu-central-1.turso.io';
+const defaultTursoToken = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTM1NjIxMjksImlkIjoiMDFhMTk4YTEtZjkwMS03YWQwLWFlNGEtOWE0MWM5NjBmNWM0Iiwia2lkIjoiMUprejlIN0EyVk1IZmhhcFpzaHljT3pFY2paRnZ6cE14QzJCb1hGSmJOayIsInJpZCI6ImU2MTFkNTAyLTEwNGEtNDA4ZS05NGJiLWVmY2I2ZTMzODZiOSJ9.8b3G_ypD7kDpwpeSOFuJJNyHo03ZfO8ygW7-2z4BmbQ-L_GY4xrqy7cCrVF5bD68HpqRjcVKYGwizpQYpInkCQ';
 
-const dbUrl = process.env.DATABASE_URL || `file:${path.join(dataDir, 'bookstore.db').replace(/\\/g, '/')}`;
-const authToken = process.env.DATABASE_AUTH_TOKEN;
+const dbUrl = process.env.DATABASE_URL || defaultTursoUrl;
+const authToken = process.env.DATABASE_AUTH_TOKEN || defaultTursoToken;
 
 export const db: Client = createClient({
   url: dbUrl,
