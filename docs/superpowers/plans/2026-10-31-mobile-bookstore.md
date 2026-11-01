@@ -146,3 +146,4 @@ A lightweight, mobile-first Arabic RTL physical bookstore web application that r
   - Complete checkout with governorate selection & verify WhatsApp URL format.
   - Test Admin book addition with Google Books auto-fill.
 - [ ] Create `.env.example` and write comprehensive `README.md` with zero-cost deployment instructions (Vercel/Netlify for frontend, Render/Railway/Fly.io for backend, Turso/SQLite for DB).
+

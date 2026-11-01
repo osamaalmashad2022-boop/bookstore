@@ -32,7 +32,7 @@ export function generateWhatsAppMessage(details: InvoiceDetails): string {
 
   const notesLine = details.notes ? `\n📝 *ملاحظات:* ${details.notes}` : '';
 
-  const message = `📚 *طلب جديد من متجر دار المعرفة* (#${details.orderRef})
+  const message = `📚 *طلب جديد من متجر مقبرة الكتب المنسية* (#${details.orderRef})
 ──────────────────
 👤 *العميل:* ${details.customerName}
 📱 *الهاتف:* ${details.customerPhone}
@@ -60,3 +60,4 @@ export function generateWhatsAppUrl(merchantPhone: string, message: string): str
   const encoded = encodeURIComponent(message);
   return `https://wa.me/${phone}?text=${encoded}`;
 }
+

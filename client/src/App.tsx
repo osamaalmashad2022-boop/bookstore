@@ -264,7 +264,7 @@ export const App: React.FC = () => {
 
       {/* Footer info */}
       <footer className="mt-12 border-t border-stone-200 bg-white py-6 text-center text-xs text-stone-500 hidden sm:block">
-        <p className="font-semibold text-stone-700 mb-1">دار المعرفة للكتب الورقية © 2026</p>
+        <p className="font-semibold text-stone-700 mb-1">مقبرة الكتب المنسية للكتب الورقية © 2026</p>
         <p className="text-[11px] text-stone-400">
           معمارية سحابية دائمة ومجانية بنسبة 100% للأبد • الدفع نقداً عند الاستلام COD • مستشار الكتب الذكي
         </p>

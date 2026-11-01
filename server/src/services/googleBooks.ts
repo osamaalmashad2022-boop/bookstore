@@ -55,3 +55,4 @@ export async function searchGoogleBooks(query: string): Promise<GoogleBookItem[]
     return [];
   }
 }
+

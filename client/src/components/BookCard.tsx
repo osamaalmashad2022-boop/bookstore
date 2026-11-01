@@ -182,3 +182,4 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
     </div>
   );
 };
+

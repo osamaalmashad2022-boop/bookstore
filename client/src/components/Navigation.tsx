@@ -29,8 +29,8 @@ export const Navigation: React.FC<NavigationProps> = ({
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-stone-900 leading-tight">دار المعرفة</h1>
-              <p className="text-[11px] text-stone-500">متجر الكتب الورقية ومستشارك القرائي</p>
+              <h1 className="text-lg font-bold text-stone-900 leading-tight">مقبرة الكتب المنسية</h1>
+              <p className="text-[11px] text-stone-500">ملاذ الكتب الورقية ومستشارك القرائي</p>
             </div>
           </div>
 
@@ -141,3 +141,4 @@ export const Navigation: React.FC<NavigationProps> = ({
     </>
   );
 };
+

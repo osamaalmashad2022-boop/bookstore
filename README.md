@@ -83,3 +83,4 @@ npm run dev
 ### 3. الواجهة الأمامية (Frontend):
 - انشر مجلد `client/` على **Vercel** أو **Netlify** أو **Cloudflare Pages** (استضافة مجانية للأبد وسريعة جداً).
 - في إعدادات الـ Rewrite في Vercel/Netlify، وجّه طلبات `/api/*` لرابط السيرفر الخلفي.
+
