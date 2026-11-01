@@ -7,7 +7,7 @@ LABEL fly_launch_runtime="Node.js"
 
 WORKDIR /app
 
-ENV PORT="8080"
+ENV PORT="3000"
 
 
 # ----------------------------------------------------
@@ -60,6 +60,7 @@ COPY --from=build /app /app
 # Ensure SQLite data directory exists
 RUN mkdir -p /app/server/data
 
-EXPOSE 8080
+EXPOSE 3000
 
 CMD [ "npm", "run", "start" ]
+
