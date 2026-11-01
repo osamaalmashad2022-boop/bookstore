@@ -118,9 +118,9 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in text-right">
+    <div className="fixed inset-0 z-50 overflow-y-auto flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in text-right">
       <div
-        className="bg-[#120f17] text-[#ede6d6] w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-amber-900/60 candle-glow"
+        className="relative my-auto bg-[#120f17] text-[#ede6d6] w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-amber-900/60 candle-glow"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}

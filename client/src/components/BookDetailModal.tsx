@@ -39,10 +39,10 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+    <div className="fixed inset-0 z-50 overflow-y-auto flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in">
       {/* Modal / Bottom Sheet Box - Gothic Sanctuary */}
       <div
-        className="bg-[#120f17] text-[#ede6d6] w-full sm:max-w-xl max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-amber-900/60 candle-glow text-right"
+        className="relative my-auto bg-[#120f17] text-[#ede6d6] w-full sm:max-w-xl max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-amber-900/60 candle-glow text-right"
         onClick={e => e.stopPropagation()}
       >
         {/* Header / Dismiss */}
