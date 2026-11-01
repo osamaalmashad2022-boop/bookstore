@@ -8,7 +8,7 @@ const router = Router();
 router.post('/login', (req: Request, res: Response) => {
   try {
     const { password } = req.body;
-    const adminKey = process.env.ADMIN_PASSWORD || 'maqbara2026';
+    const adminKey = process.env.ADMIN_PASSWORD || '123456';
     if (password && String(password).trim() === adminKey.trim()) {
       return res.json({ success: true, token: adminKey });
     }
@@ -21,7 +21,7 @@ router.post('/login', (req: Request, res: Response) => {
 // Admin Authorization Middleware - Protects ALL /api/admin/* endpoints
 router.use((req: Request, res: Response, next) => {
   const token = (req.headers['x-admin-token'] || req.headers['authorization']?.replace('Bearer ', '')) as string;
-  const adminKey = process.env.ADMIN_PASSWORD || 'maqbara2026';
+  const adminKey = process.env.ADMIN_PASSWORD || '123456';
   if (token && String(token).trim() === adminKey.trim()) {
     return next();
   }
