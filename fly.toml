@@ -1,3 +1,8 @@
+# fly.toml app configuration file generated for bookstore-etpbbq on 2026-11-01T19:27:30Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
 app = 'bookstore-etpbbq'
 primary_region = 'cdg'
 
