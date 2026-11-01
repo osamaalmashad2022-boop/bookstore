@@ -38,8 +38,10 @@
 
 ## 🛠️ المعمارية والتقنيات (Approved Tech Stack)
 
-- **الواجهة الأمامية (Frontend):** Vite + React 19 + TypeScript + Tailwind CSS (RTL عربي أصيل بخط Cairo).
+- **الواجهة الأمامية (Frontend):** Vite + React 19 + TypeScript + Tailwind CSS (RTL عربي أصيل بخط Readex Pro و Amiri).
 - **الخادم البرمجي (Backend API):** Node.js + Express REST API.
+- **بوابة المتابعة ورمز الـ QR (Follow Hub):** صفحة هبوط خفيفة وتفاعلية للهاتف (`follow.html`) بحركات Pure SVG ميكرو، ثلاثية الأبعاد بـ CSS، وخالية تماماً من الإيموجي أو أي اعتماديات خارجية لسرعة قصوى عند مسح رمز الـ QR من أغلفة الكتب.
+- **فواصل وكروت الطباعة المرفقة (Printable QR Bookmarks):** تصميم جاهز للطباعة المباشرة (`qr_card.html`) يتضمن فواصل كتب ورقية وكروت شحنات ترويجية بكود خصم `MAQBARA10`.
 - **قاعدة البيانات (Database):** SQLite محلي مدمج فائق السرعة، أو **Turso Serverless SQLite** (مجاني للأبد: 5 جيجابايت تخزين + 500 مليون قراءة شهرياً).
 - **التشغيل:** متوافق 100% مع بيئات Node.js الحديثة (v20, v22, v24) على Windows وLinux.
 

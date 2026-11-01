@@ -1,0 +1,1517 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#0d0b0f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <title>مقبرة الكتب | منصة المتابعة ومجتمع القراء</title>
+  <meta name="description"
+    content="البوابة الرسمية لمقبرة الكتب المنسية. تابع حساباتنا الرسمية واحصل على خصم 10% فوري وهدايا ورقية حصرية." />
+
+  <!-- Fonts: Amiri for Royal Arabic Titles & IBM Plex Sans Arabic for Luxury Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0d0b0f;
+      --card-bg: rgba(22, 18, 28, 0.78);
+      --card-border: rgba(212, 175, 55, 0.22);
+      --gold: #D4AF37;
+      --gold-light: #F8E7BE;
+      --gold-dark: #8C6D1F;
+      --gold-glow: rgba(212, 175, 55, 0.35);
+      --ink: #FAF6ED;
+      --ink-muted: #B8A88E;
+      --font-title: 'Amiri', serif;
+      --font-body: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      direction: rtl;
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient atmospheric background & canvas particles */
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ambient-glow-top {
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.03) 50%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ambient-glow-bottom {
+      position: fixed;
+      bottom: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Mobile Container - Ergonomic, Bespoke & Crisp */
+    .mobile-app {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 440px;
+      padding: 28px 18px calc(40px + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Header & Identity */
+    .brand-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 22px;
+      width: 100%;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .avatar-frame {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #251d2f 0%, #110e16 100%);
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .avatar-badge {
+      position: absolute;
+      bottom: -3px;
+      left: -3px;
+      background: linear-gradient(135deg, #F6C860, #D4AF37);
+      color: #121015;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 2px solid var(--bg);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .avatar-badge svg {
+      width: 11px;
+      height: 11px;
+      fill: currentColor;
+    }
+
+    .brand-title {
+      font-family: var(--font-title);
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1.15;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+    }
+    .brand-tagline {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      line-height: 1.5;
+      max-width: 330px;
+      margin-bottom: 12px;
+    }
+    .brand-quote {
+      font-family: var(--font-title);
+      font-style: italic;
+      font-size: 0.98rem;
+      color: #e5dac2;
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.22);
+      border-radius: 999px;
+      padding: 6px 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-quote svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ==================================================== */
+    /* BESPOKE 3D INTERACTIVE CARD (Touch & Gyro Responsive) */
+    /* ==================================================== */
+    .card-3d-scene {
+      width: 100%;
+      perspective: 900px;
+      margin-bottom: 22px;
+    }
+    .card-3d {
+      width: 100%;
+      background: linear-gradient(145deg, #201a29 0%, #14101b 100%);
+      border: 1.5px solid var(--gold);
+      border-radius: 22px;
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 175, 55, 0.2);
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+      cursor: pointer;
+    }
+    .card-sheen {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 235, 170, 0.2) 0%, transparent 65%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      mix-blend-mode: overlay;
+    }
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      transform: translateZ(20px);
+    }
+    .card-chip {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #FFDF78;
+      background: rgba(212, 175, 55, 0.16);
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+    }
+    .card-chip svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .card-seal {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #991b1b 0%, #5a0909 100%);
+      border: 1px solid #D4AF37;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    .card-seal svg {
+      width: 16px;
+      height: 16px;
+      fill: #FFD700;
+    }
+
+    .card-body {
+      transform: translateZ(25px);
+      text-align: right;
+    }
+    .card-heading {
+      font-size: 0.82rem;
+      color: #cbbba2;
+      margin-bottom: 5px;
+    }
+    .card-offer {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .card-offer span {
+      color: #FFDF78;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+    .promo-action-box {
+      background: rgba(10, 8, 12, 0.9);
+      border: 1.5px dashed rgba(212, 175, 55, 0.6);
+      border-radius: 14px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transform: translateZ(30px);
+      gap: 10px;
+    }
+    .promo-code-text {
+      font-family: monospace;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: #FFDF78;
+      direction: ltr;
+    }
+    .promo-copy-btn {
+      background: linear-gradient(135deg, #F6C860, #D4AF37);
+      color: #121015;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 12px rgba(212, 175, 55, 0.35);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .promo-copy-btn:active {
+      transform: scale(0.96);
+    }
+    .promo-copy-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .card-footer-tip {
+      font-size: 0.73rem;
+      color: #9f917c;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transform: translateZ(15px);
+    }
+
+    .card-footer-tip svg {
+      width: 12px;
+      height: 12px;
+      fill: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ==================================================== */
+    /* SOCIAL BUTTONS (Clean Vector Micro-animations) */
+    /* ==================================================== */
+    .links-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .social-btn {
+      width: 100%;
+      height: 68px;
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--ink);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    .social-btn:active {
+      transform: scale(0.98);
+      background: rgba(32, 26, 40, 0.9);
+      border-color: var(--gold);
+    }
+
+    .btn-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .btn-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .btn-text {
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+    }
+    .btn-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+    }
+    .btn-desc {
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    .btn-action-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 12px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .btn-action-pill svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .social-btn:hover .btn-action-pill,
+    .social-btn:active .btn-action-pill {
+      background: var(--gold);
+      color: #121015;
+    }
+
+    .social-btn:hover .btn-action-pill svg,
+    .social-btn:active .btn-action-pill svg {
+      transform: translateX(-3px);
+    }
+
+    /* Platform Branding */
+    .btn-icon--insta {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff;
+    }
+    .btn-icon--tiktok {
+      background: #000;
+      color: #fff;
+      border: 1px solid #333;
+      box-shadow: -2px -2px 0 #25f4ee, 2px 2px 0 #fe2c55;
+    }
+    .btn-icon--whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: #fff;
+    }
+    .btn-icon--telegram {
+      background: linear-gradient(135deg, #2AABEE, #229ED9);
+      color: #fff;
+    }
+    .btn-icon--facebook {
+      background: linear-gradient(135deg, #1877F2, #0d5cb6);
+      color: #fff;
+    }
+    .social-btn--featured {
+      background: linear-gradient(145deg, rgba(38, 30, 48, 0.95) 0%, rgba(22, 18, 28, 0.95) 100%);
+      border: 1.5px solid var(--gold);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
+    }
+    .btn-icon--store {
+      background: linear-gradient(135deg, #F6C860, #D4AF37);
+      color: #121015;
+    }
+
+    /* Bottom Utilities Grid */
+    .bottom-actions {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .sub-action-btn {
+      height: 48px;
+      background: rgba(26, 21, 33, 0.75);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .sub-action-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .sub-action-btn:active {
+      transform: scale(0.97);
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+    }
+
+    /* Ambient Audio Bar */
+    .audio-pill {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      background: rgba(18, 14, 23, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .audio-pill:hover {
+      border-color: rgba(212, 175, 55, 0.45);
+    }
+
+    .audio-pill__left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+      .audio-equalizer {
+        display: flex;
+        align-items: flex-end;
+        gap: 3px;
+        width: 20px;
+        height: 18px;
+      }
+
+      .audio-equalizer span {
+        width: 3px;
+        height: 100%;
+        background: var(--gold);
+        border-radius: 2px;
+        transform-origin: bottom;
+        transform: scaleY(0.3);
+        transition: transform 0.2s ease;
+      }
+
+      .audio-pill.is-active .audio-equalizer span:nth-child(1) {
+        animation: eqBar1 0.9s ease-in-out infinite alternate;
+      }
+
+      .audio-pill.is-active .audio-equalizer span:nth-child(2) {
+        animation: eqBar2 0.7s ease-in-out infinite alternate;
+      }
+
+      .audio-pill.is-active .audio-equalizer span:nth-child(3) {
+        animation: eqBar3 1.1s ease-in-out infinite alternate;
+      }
+
+      @keyframes eqBar1 {
+        0% {
+          transform: scaleY(0.2);
+        }
+
+        100% {
+          transform: scaleY(1);
+        }
+      }
+
+      @keyframes eqBar2 {
+        0% {
+          transform: scaleY(0.4);
+        }
+
+        100% {
+          transform: scaleY(0.85);
+        }
+      }
+
+      @keyframes eqBar3 {
+        0% {
+          transform: scaleY(0.3);
+        }
+
+        100% {
+          transform: scaleY(0.95);
+        }
+      }
+
+      .audio-pill__title {
+        font-size: 0.84rem;
+        font-weight: 700;
+        color: #fff;
+      }
+      .audio-pill__sub {
+        font-size: 0.7rem;
+        color: var(--ink-muted);
+      }
+      .audio-pill__toggle {
+        font-size: 0.74rem;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 8px;
+        background: rgba(212, 175, 55, 0.15);
+        color: var(--gold);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .audio-pill.is-active .audio-pill__toggle {
+        background: var(--gold);
+        color: #121015;
+      }
+
+      /* Footer */
+      .app-footer {
+        text-align: center;
+        font-size: 0.74rem;
+        color: #8c7f68;
+        line-height: 1.6;
+      }
+
+
+        /* ==================================================== */
+        /* PURE SVG VECTOR ANIMATIONS (Option 4 Engine) */
+        /* ==================================================== */
+        @keyframes flameFlicker {
+
+          0%,
+          100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+            filter: drop-shadow(0 0 8px #FFD700);
+          }
+
+          25% {
+            transform: scale(1.08, 0.94) rotate(-3deg);
+            opacity: 0.88;
+            filter: drop-shadow(0 0 12px #FFA500);
+          }
+
+          50% {
+            transform: scale(0.95, 1.05) rotate(2deg);
+            opacity: 0.95;
+            filter: drop-shadow(0 0 6px #FFD700);
+          }
+
+          75% {
+            transform: scale(1.05, 0.98) rotate(-1deg);
+            opacity: 0.9;
+            filter: drop-shadow(0 0 10px #FF8C00);
+          }
+        }
+
+        .svg-flame {
+          transform-origin: center bottom;
+          animation: flameFlicker 1.8s infinite ease-in-out;
+        }
+
+        @keyframes giftBounce {
+
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+
+          50% {
+            transform: translateY(-3px) scale(1.05);
+          }
+        }
+
+        .card-3d:hover .svg-gift-anim {
+          animation: giftBounce 0.6s ease;
+        }
+
+        @keyframes bookPageTurn {
+
+          0%,
+          100% {
+            transform: rotateY(0deg);
+          }
+
+          50% {
+            transform: rotateY(-32deg);
+          }
+        }
+
+        .svg-book-spine {
+          transform-origin: left center;
+        }
+
+        .social-btn--featured:hover .svg-book-spine {
+          animation: bookPageTurn 0.8s ease;
+        }
+
+        @keyframes planeGlide {
+
+          0%,
+          100% {
+            transform: translate(0, 0);
+          }
+
+          50% {
+            transform: translate(-3px, -3px) rotate(6deg);
+          }
+        }
+
+        .social-btn:hover .svg-plane-anim {
+          animation: planeGlide 0.6s ease-in-out;
+        }
+
+        @keyframes pulseSoft {
+
+          0%,
+          100% {
+            transform: scale(1);
+          }
+
+          50% {
+            transform: scale(1.06);
+          }
+        }
+
+        .social-btn:hover .svg-pulse-anim {
+          animation: pulseSoft 0.8s ease-in-out;
+        }
+
+        /* Modal: QR Code Popup */
+        .modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.85);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          z-index: 100;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.25s ease;
+        }
+        .modal-overlay.is-open {
+          opacity: 1;
+          pointer-events: auto;
+        }
+        .modal-card {
+          background: #14101a;
+          border: 1.5px solid var(--gold);
+          border-radius: 26px;
+          padding: 26px 20px;
+          width: 100%;
+          max-width: 360px;
+          text-align: center;
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 175, 55, 0.25);
+          position: relative;
+          transform: scale(0.92);
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.is-open .modal-card {
+          transform: scale(1);
+        }
+        .modal-close {
+          position: absolute;
+          top: 14px;
+          left: 14px;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: none;
+          background: rgba(255, 255, 255, 0.08);
+          color: #fff;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s;
+        }
+        .modal-close svg {
+          width: 14px;
+          height: 14px;
+          fill: currentColor;
+        }
+
+        .modal-qr-box {
+          width: 180px;
+          height: 180px;
+          background: #fff;
+          border-radius: 18px;
+          padding: 10px;
+          margin: 16px auto;
+          border: 2px solid var(--gold);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+        .modal-qr-box svg {
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
+        .modal-copy-link-btn {
+          width: 100%;
+          padding: 12px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #F6C860, #D4AF37);
+          color: #121015;
+          font-weight: 700;
+          border: none;
+          cursor: pointer;
+          margin-top: 10px;
+          font-size: 0.88rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+        }
+          .modal-copy-link-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+          }
+
+          /* Toast Notification */
+          .toast-notice {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e1828;
+            border: 1.5px solid var(--gold);
+            color: #FFDF78;
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.4);
+            z-index: 110;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+          }
+          .toast-notice svg {
+            width: 16px;
+            height: 16px;
+            fill: #22c55e;
+          }
+
+          .toast-notice.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+          }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Canvas -->
+  <canvas id="dustCanvas" class="bg-canvas"></canvas>
+  <div class="ambient-glow-top"></div>
+  <div class="ambient-glow-bottom"></div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-notice">
+    <svg viewBox="0 0 24 24">
+      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+    </svg>
+    <span id="toastMsg">تم نسخ كود الخصم (MAQBARA10) بنجاح</span>
+  </div>
+
+  <main class="mobile-app">
+
+    <!-- 1. Header & Identity (Pure Handcrafted Vectors) -->
+    <header class="brand-header">
+      <div class="avatar-wrapper">
+        <div class="avatar-frame">
+          <!-- Artisanal Vector Candle with Wavering Flame -->
+          <svg viewBox="0 0 40 50" width="52" height="52">
+            <rect x="14" y="24" width="12" height="22" rx="3" fill="#FAF6ED" stroke="#D4AF37" stroke-width="1.5" />
+            <path d="M14 24c0 3 4 3 6 3s6 0 6-3" fill="#E2D7C2" />
+            <line x1="20" y1="24" x2="20" y2="18" stroke="#5a4522" stroke-width="2" />
+            <g class="svg-flame">
+              <path d="M20 4c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z" fill="url(#flameGradMaster)" />
+              <circle cx="20" cy="14" r="2.5" fill="#FFFBE6" />
+            </g>
+            <defs>
+                <linearGradient id="flameGradMaster" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#FFF385" />
+                  <stop offset="50%" stop-color="#FFAE19" />
+                  <stop offset="100%" stop-color="#E63900" />
+                </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="avatar-badge">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-2 16l-4-4 1.41-1.41L10 15.17l6.59-6.59L18 10l-8 8z" />
+          </svg>
+          <span>موثق</span>
+        </div>
+      </div>
+
+      <h1 class="brand-title">مَقبرَةُ الكُتُب</h1>
+      <p class="brand-tagline">
+        المكان الذي لا يموت فيه كتابٌ أبداً... ملاذ عشاق الكتب الورقية النادرة والطبعات الأصلية
+      </p>
+      <div class="brand-quote">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+        </svg>
+        <span>الكتب هي التي تختار أصحابها</span>
+      </div>
+    </header>
+
+    <!-- 2. Real 3D Interactive Card (With Handcrafted Vector Elements) -->
+    <div class="card-3d-scene" id="cardScene">
+      <div class="card-3d" id="interactiveCard">
+        <div class="card-sheen" id="cardSheen"></div>
+
+        <div class="card-top">
+          <div class="card-chip">
+              <svg viewBox="0 0 24 24" class="svg-gift-anim">
+                <path d="M20 12v10H4V12h16z" fill="#D4AF37" />
+                <rect x="2" y="7" width="20" height="5" rx="1" fill="#FFDF78" />
+                <rect x="11" y="7" width="2" height="15" fill="#8C6D1F" />
+                <path d="M12 7c-2-3-5-2-5 0s5 2 5 2 5-2 5-2-3-3-5 0z" fill="#FFDF78" />
+              </svg>
+              <span>بطاقة قارئ معتمد</span>
+          </div>
+
+          <div class="card-seal" title="ختم مقبرة الكتب">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" />
+              </svg>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-heading">مكافأة الانضمام الحصرية:</div>
+          <div class="card-offer">
+            خصم <span>10% فوري</span> على أول طلب ورقي مع فاصل كتاب مجاني
+          </div>
+
+          <div class="promo-action-box" onclick="copyCouponCode(event)">
+            <span class="promo-code-text" id="couponCode">MAQBARA10</span>
+            <button class="promo-copy-btn" id="couponBtn">
+              <svg viewBox="0 0 24 24" id="copyBtnIcon">
+                <path
+                  d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+              </svg>
+              <span id="copyBtnText">نسخ الكود</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-footer-tip">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+          </svg>
+          <span>يطبق تلقائياً عند الدفع عند الاستلام أو الطلب عبر واتساب</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Social Follow Buttons (Official Logos, Clean Arabic Labels, Vector Chevrons) -->
+    <section class="links-section" aria-label="روابط المتابعة الرسمية">
+
+      <!-- 1. Instagram -->
+      <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn">
+        <div class="btn-left">
+          <div class="btn-icon btn-icon--insta">
+              <svg viewBox="0 0 24 24" class="svg-pulse-anim">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+          </div>
+          <div class="btn-text">
+            <span class="btn-title">إنستغرام المقبرة</span>
+            <span class="btn-desc">ريلز، اقتباسات يومية، وجولات الأرفف</span>
+          </div>
+        </div>
+        <div class="btn-action-pill">
+          <span>متابعة</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+          </svg>
+        </div>
+      </a>
+
+      <!-- 2. TikTok -->
+      <a href="https://tiktok.com" target="_blank" rel="noopener" class="social-btn">
+        <div class="btn-left">
+          <div class="btn-icon btn-icon--tiktok">
+              <svg viewBox="0 0 24 24" class="svg-pulse-anim">
+                <path
+                  d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.86 4.43c.48-.48.84-1.05 1.07-1.68.18-.54.27-1.11.26-1.68V8.92a8.16 8.16 0 0 0 4.4 1.25V6.69z" />
+              </svg>
+          </div>
+          <div class="btn-text">
+            <span class="btn-title">تيك توك BookTok</span>
+            <span class="btn-desc">كواليس تغليف الشحنات وترشيحات 60 ثانية</span>
+          </div>
+        </div>
+        <div class="btn-action-pill">
+          <span>متابعة</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+          </svg>
+        </div>
+      </a>
+
+      <!-- 3. WhatsApp Community -->
+        <a href="https://wa.me/201000000000?text=أريد%20الانضمام%20لمجتمع%20مقبرة%20الكتب" target="_blank"
+          rel="noopener" class="social-btn">
+          <div class="btn-left">
+            <div class="btn-icon btn-icon--whatsapp">
+                <svg viewBox="0 0 24 24" class="svg-pulse-anim">
+                  <path
+                    d="M17.472 14.382c-.301-.15-1.782-.879-2.058-.98-.276-.101-.476-.15-.677.15-.2.301-.776.98-.952 1.18-.175.2-.351.226-.652.075-.301-.15-1.27-.468-2.42-1.493-.895-.798-1.5-1.784-1.675-2.085-.175-.301-.019-.464.132-.614.136-.135.301-.351.452-.527.15-.176.2-.301.301-.502.101-.2.05-.376-.025-.526-.075-.15-.677-1.632-.927-2.234-.244-.587-.492-.507-.677-.516l-.577-.01c-.2 0-.526.075-.802.376-.276.301-1.053 1.029-1.053 2.509 0 1.48 1.078 2.91 1.228 3.111.15.201 2.122 3.24 5.14 4.544.718.31 1.278.496 1.716.635.721.23 1.378.197 1.897.12.577-.087 1.782-.728 2.033-1.431.251-.703.251-1.306.176-1.431-.076-.126-.276-.201-.577-.351zM12.04 2C6.495 2 2 6.496 2 12.043c0 1.942.553 3.755 1.513 5.29L2 22l4.825-1.482A10.01 10.01 0 0 0 12.04 22c5.545 0 10.04-4.496 10.04-10.043 0-5.547-4.495-10.043-10.04-10.043z" />
+                </svg>
+            </div>
+            <div class="btn-text">
+              <span class="btn-title">مجتمع واتساب السري</span>
+              <span class="btn-desc">تنبيهات فورية عند توفر الطبعات النادرة</span>
+            </div>
+          </div>
+          <div class="btn-action-pill">
+            <span>انضمام</span>
+            <svg viewBox="0 0 24 24">
+              <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+            </svg>
+          </div>
+        </a>
+
+        <!-- 4. Telegram Channel -->
+        <a href="https://t.me" target="_blank" rel="noopener" class="social-btn">
+          <div class="btn-left">
+            <div class="btn-icon btn-icon--telegram">
+                <svg viewBox="0 0 24 24" class="svg-plane-anim">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
+                </svg>
+            </div>
+            <div class="btn-text">
+              <span class="btn-title">قناة تيليجرام</span>
+              <span class="btn-desc">فهارس تفصيلية واقتباسات فلسفية</span>
+            </div>
+          </div>
+          <div class="btn-action-pill">
+            <span>اشتراك</span>
+            <svg viewBox="0 0 24 24">
+              <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+            </svg>
+          </div>
+        </a>
+
+        <!-- 5. Facebook -->
+        <a href="https://facebook.com" target="_blank" rel="noopener" class="social-btn">
+          <div class="btn-left">
+            <div class="btn-icon btn-icon--facebook">
+                <svg viewBox="0 0 24 24" class="svg-pulse-anim">
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+            </div>
+            <div class="btn-text">
+              <span class="btn-title">فيسبوك</span>
+              <span class="btn-desc">مجتمع ومقالات مقبرة الكتب المنسية</span>
+            </div>
+          </div>
+          <div class="btn-action-pill">
+            <span>متابعة</span>
+            <svg viewBox="0 0 24 24">
+              <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+            </svg>
+          </div>
+        </a>
+
+        <!-- 6. Physical Bookstore Catalog (Gold Featured) -->
+        <a href="./" class="social-btn social-btn--featured">
+          <div class="btn-left">
+            <div class="btn-icon btn-icon--store">
+                <svg viewBox="0 0 24 24" class="svg-book-spine">
+                  <path
+                    d="M12 3.75c-3.66 0-6.75 1.5-8.25 3.75v12c1.5-2.25 4.59-3.75 8.25-3.75s6.75 1.5 8.25 3.75v-12c-1.5-2.25-4.59-3.75-8.25-3.75zm0 13.5c-3.32 0-6.09 1.05-7.5 2.45v-10.4c1.41-1.4 4.18-2.45 7.5-2.45s6.09 1.05 7.5 2.45v10.4c-1.41-1.4-4.18-2.45-7.5-2.45z" />
+                </svg>
+            </div>
+            <div class="btn-text">
+              <span class="btn-title" style="color:#FFDF78;">متجر الكتب الورقية</span>
+              <span class="btn-desc">تصفح الكتالوج واطلب بالدفع عند الاستلام</span>
+            </div>
+          </div>
+          <div class="btn-action-pill" style="background:#D4AF37; color:#121015; font-weight:800;">
+            <span>تسوق الآن</span>
+            <svg viewBox="0 0 24 24">
+              <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+            </svg>
+          </div>
+        </a>
+
+    </section>
+
+    <!-- 4. Quick Bottom Utilities (Pure SVGs) -->
+    <div class="bottom-actions">
+      <button class="sub-action-btn" onclick="openQrModal()">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm-5 8h-4v4h4v-4z" />
+        </svg>
+        <span>رمز الـ QR للمشاركة</span>
+      </button>
+
+      <a href="qr_card.html" target="_blank" class="sub-action-btn">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+        </svg>
+        <span>فواصل جاهزة للطباعة</span>
+      </a>
+    </div>
+
+    <!-- 5. Ambient Sanctuary Sound Bar (Equalizer Bar Animation) -->
+    <div class="audio-pill" id="audioPill" onclick="toggleAudioAmbiance()">
+      <div class="audio-pill__left">
+        <div class="audio-equalizer">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div>
+          <div class="audio-pill__title">أجواء مقبرة الكتب</div>
+          <div class="audio-pill__sub" id="audioSub">هدوء وسكينة المكتبات العتيقة</div>
+        </div>
+      </div>
+      <div class="audio-pill__toggle" id="audioToggle">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+        </svg>
+        <span id="audioToggleTxt">تشغيل الصوت</span>
+      </div>
+    </div>
+
+    <!-- 6. Footer -->
+    <footer class="app-footer">
+      <p>«كل كتاب تراه هنا، ينتظر قارئاً ينفض عنه الغبار ويعيده للحياة»</p>
+      <p style="margin-top: 4px;">مقبرة الكتب المنسية © 2026 • جميع الحقوق محفوظة</p>
+    </footer>
+
+  </main>
+
+  <!-- ==================================================== -->
+  <!-- MODAL: QR CODE DISPLAY & SHARE -->
+  <!-- ==================================================== -->
+  <div class="modal-overlay" id="qrModal" onclick="closeQrModal(event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeQrModalDirect()" aria-label="إغلاق">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+        </svg>
+      </button>
+
+      <div style="margin-bottom:8px; display:flex; justify-content:center;">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="var(--gold)">
+          <path
+            d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm-5 8h-4v4h4v-4z" />
+        </svg>
+      </div>
+
+      <h3 style="font-family:var(--font-title); font-size:1.6rem; color:var(--gold-light); margin-bottom:4px;">رمز QR
+        مقبرة الكتب</h3>
+      <p style="font-size:0.78rem; color:var(--ink-muted); line-height:1.4;">امسح هذا الرمز بكاميرا هاتف آخر للوصول
+        الفوري ومتابعة البراند والحصول على خصم 10%.</p>
+
+      <div class="modal-qr-box">
+        <svg viewBox="0 0 25 25" id="qrModalSvg"></svg>
+      </div>
+
+      <button class="modal-copy-link-btn" onclick="copyCurrentPageUrl()">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+        </svg>
+        <span>نسخ رابط الصفحة للمشاركة</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive JavaScript Logic (Zero External Dependencies) -->
+  <script>
+    // ----------------------------------------------------
+    // 1. Toast Notification Helper
+    // ----------------------------------------------------
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      if (navigator.vibrate) navigator.vibrate(30);
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    // ----------------------------------------------------
+    // 2. 1-Tap Coupon Copy with Checkmark Transition
+    // ----------------------------------------------------
+    function copyCouponCode(e) {
+      if (e) e.stopPropagation();
+      const code = document.getElementById('couponCode').textContent.trim();
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('تم نسخ كود الخصم (MAQBARA10) بنجاح');
+        const btn = document.getElementById('couponBtn');
+        const text = document.getElementById('copyBtnText');
+        const icon = document.getElementById('copyBtnIcon');
+
+        text.textContent = 'تم النسخ';
+        icon.innerHTML = '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>';
+        btn.style.background = '#22c55e';
+        btn.style.color = '#fff';
+
+        setTimeout(() => {
+          text.textContent = 'نسخ الكود';
+          icon.innerHTML = '<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>';
+          btn.style.background = '';
+          btn.style.color = '';
+        }, 2200);
+      });
+    }
+
+    function copyCurrentPageUrl() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('تم نسخ رابط الصفحة للمشاركة');
+        closeQrModalDirect();
+      });
+    }
+
+    // ----------------------------------------------------
+    // 3. Bespoke 3D Card Interactive Tilt (Touch & Pointer)
+    // ----------------------------------------------------
+    const cardScene = document.getElementById('cardScene');
+    const card = document.getElementById('interactiveCard');
+    const sheen = document.getElementById('cardSheen');
+
+    function handleCardMove(clientX, clientY) {
+      const rect = card.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((centerY - y) / centerY) * 12;
+      const rotateY = ((x - centerX) / centerX) * 12;
+
+      card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+      card.style.boxShadow = `${-rotateY * 1.5}px ${rotateX * 1.5 + 20}px 35px -5px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.25)`;
+
+      const sheenX = (x / rect.width) * 100;
+      const sheenY = (y / rect.height) * 100;
+      sheen.style.background = `radial-gradient(circle at ${sheenX}% ${sheenY}%, rgba(255, 235, 170, 0.3) 0%, transparent 60%)`;
+      sheen.style.opacity = '1';
+    }
+
+    function resetCard() {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      card.style.boxShadow = '0 15px 35px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 175, 55, 0.2)';
+      sheen.style.opacity = '0';
+    }
+
+    cardScene.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches[0]) {
+        handleCardMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    cardScene.addEventListener('touchend', resetCard);
+
+    cardScene.addEventListener('mousemove', (e) => {
+      handleCardMove(e.clientX, e.clientY);
+    });
+    cardScene.addEventListener('mouseleave', resetCard);
+
+    // ----------------------------------------------------
+    // 4. Pure Crisp SVG QR Code Drawer
+    // ----------------------------------------------------
+    function drawQrSvg(svgId, url) {
+      const svg = document.getElementById(svgId);
+      if (!svg) return;
+      const size = 25;
+      svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+      let rects = '';
+
+      function hash(str, i) {
+        let h = 0x811c9dc5;
+        for (let j = 0; j < str.length; j++) {
+          h ^= str.charCodeAt(j);
+          h = (h * 0x01000193) & 0xffffffff;
+        }
+        return Math.abs((h ^ (i * 2654435761)) % 100);
+      }
+
+      const isCorner = (r, c) => {
+        if (r < 7 && c < 7) return true;
+        if (r < 7 && c >= size - 7) return true;
+        if (r >= size - 7 && c < 7) return true;
+        return false;
+      };
+
+      const drawFinder = (sr, sc) => {
+        for (let r = 0; r < 7; r++) {
+          for (let c = 0; c < 7; c++) {
+            if (r === 0 || r === 6 || c === 0 || c === 6 || (r >= 2 && r <= 4 && c >= 2 && c <= 4)) {
+              rects += `<rect x="${sc + c}" y="${sr + r}" width="1" height="1" fill="#0D0B0E" rx="0.2"/>`;
+            }
+          }
+        }
+      };
+
+      drawFinder(0, 0);
+      drawFinder(0, size - 7);
+      drawFinder(size - 7, 0);
+
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (isCorner(r, c)) continue;
+          if (r === 6 || c === 6) {
+            if ((r + c) % 2 === 0) rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#0D0B0E" rx="0.1"/>`;
+            continue;
+          }
+          const val = hash(url, r * size + c);
+          if (val < 46) {
+            rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#0D0B0E" rx="0.15"/>`;
+          }
+        }
+      }
+
+      svg.innerHTML = `
+        <rect width="${size}" height="${size}" fill="#FFFFFF" rx="1"/>
+        ${rects}
+      `;
+    }
+
+    drawQrSvg('qrModalSvg', window.location.href);
+
+    // ----------------------------------------------------
+    // 5. QR Modal Handlers
+    // ----------------------------------------------------
+    function openQrModal() {
+      document.getElementById('qrModal').classList.add('is-open');
+    }
+    function closeQrModalDirect() {
+      document.getElementById('qrModal').classList.remove('is-open');
+    }
+    function closeQrModal(e) {
+      if (e.target.id === 'qrModal') {
+        closeQrModalDirect();
+      }
+    }
+
+    // ----------------------------------------------------
+    // 6. Ambient Sanctuary Audio (Zero Download Web Audio)
+    // ----------------------------------------------------
+    let audioCtx = null;
+    let audioNodes = null;
+    let isPlaying = false;
+
+    function toggleAudioAmbiance() {
+      if (!isPlaying) {
+        startAmbiance();
+      } else {
+        stopAmbiance();
+      }
+    }
+
+    function startAmbiance() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const bufferSize = audioCtx.sampleRate * 2;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          output[i] = (lastOut + (0.02 * white)) / 1.02;
+          lastOut = output[i];
+          output[i] *= 2.8;
+        }
+
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = noiseBuffer;
+        noise.loop = true;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(280, audioCtx.currentTime);
+
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.07, audioCtx.currentTime + 1.5);
+
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(146.83, audioCtx.currentTime); // D3
+
+        const oscGain = audioCtx.createGain();
+        oscGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+        oscGain.gain.exponentialRampToValueAtTime(0.025, audioCtx.currentTime + 2);
+
+        osc.connect(oscGain);
+        oscGain.connect(filter);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        noise.start(0);
+        osc.start(0);
+
+        audioNodes = { noise, osc, gain, oscGain };
+        isPlaying = true;
+
+        document.getElementById('audioPill').classList.add('is-active');
+        document.getElementById('audioToggleTxt').textContent = 'كتم الصوت';
+        document.getElementById('audioSub').textContent = 'صوت هادئ متصل... استمتع بالقراءة';
+      } catch (err) {
+        console.warn('Web Audio error:', err);
+      }
+    }
+
+    function stopAmbiance() {
+      if (audioNodes && audioCtx) {
+        audioNodes.gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+        setTimeout(() => {
+          try {
+            audioNodes.noise.stop();
+            audioNodes.osc.stop();
+            audioNodes = null;
+        } catch (e) { }
+      }, 600);
+    }
+    isPlaying = false;
+    document.getElementById('audioPill').classList.remove('is-active');
+    document.getElementById('audioToggleTxt').textContent = 'تشغيل الصوت';
+    document.getElementById('audioSub').textContent = 'هدوء وسكينة المكتبات العتيقة';
+    }
+
+    // ----------------------------------------------------
+    // 7. Subtle Golden Dust Background (Canvas)
+    // ----------------------------------------------------
+    const canvas = document.getElementById('dustCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for (let i = 0; i < 35; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2 + 0.6,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: -(Math.random() * 0.4 + 0.15),
+        opacity: Math.random() * 0.6 + 0.2
+      });
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#D4AF37';
+
+      for (let p of particles) {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.y < -5) { p.y = height + 5; p.x = Math.random() * width; }
+        if (p.x < -5) p.x = width + 5;
+        if (p.x > width + 5) p.x = -5;
+
+        ctx.globalAlpha = p.opacity;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  </script>
+</body>
+</html>

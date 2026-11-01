@@ -99,7 +99,7 @@ export const App: React.FC = () => {
                 </p>
 
                 {/* Primary CTA Buttons */}
-                <div className="pt-2 flex flex-wrap gap-2.5">
+                <div className="pt-2 flex flex-wrap items-center gap-2.5">
                   <button
                     onClick={() => setCurrentTab('advisor')}
                     className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 text-stone-950 text-xs sm:text-sm font-black flex items-center gap-2 shadow-lg shadow-amber-950/50 active:scale-98 transition-all"
@@ -107,6 +107,14 @@ export const App: React.FC = () => {
                     <span>🗝️</span>
                     <span>استشر حارس المقبرة لاختيار كتابك</span>
                   </button>
+
+                  <a
+                    href="/follow/index.html"
+                    className="px-4 py-3 rounded-2xl bg-amber-950/70 hover:bg-amber-900/80 border border-amber-500/40 text-amber-200 text-xs sm:text-sm font-bold flex items-center gap-2 shadow-md transition-all"
+                  >
+                    <Flame className="w-4 h-4 text-amber-400" />
+                    <span>بوابة المتابعة والـ QR (خصم 10%)</span>
+                  </a>
 
                   <div className="flex items-center gap-3 text-stone-400 text-[11px] px-2 py-1 font-readex">
                     <span className="flex items-center gap-1 text-amber-400/90">

@@ -6,4 +6,8 @@ data/*.db-wal
 data/*.db-shm
 .DS_Store
 *.log
+scratch/
+follow_final_*.png
+mobile_preview.png
+preview_animated_icons.png
 

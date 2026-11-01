@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>كروت وفواصل الـ QR الجاهزة للطباعة | مقبرة الكتب</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-dark: #8C6D1F;
+      --bg: #0D0B0E;
+      --paper: #FDF9EE;
+      --ink: #1C1820;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 30px 20px;
+      background: #141217;
+      color: #ede6d6;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .toolbar {
+      max-width: 900px;
+      margin: 0 auto 30px;
+      background: #1d1922;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 18px;
+      padding: 16px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .toolbar h1 {
+      margin: 0;
+      font-family: 'Amiri', serif;
+      font-size: 1.4rem;
+      color: #F8E7BE;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toolbar-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #F6C860, #D4AF37);
+      color: #121015;
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.08);
+      color: #F8E7BE;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+    .btn-ghost:hover { background: rgba(212, 175, 55, 0.15); }
+
+    .cards-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    /* Bookmark Template (5cm x 16cm ratio) */
+    .bookmark-card {
+      width: 250px;
+      height: 640px;
+      background: #0d0b0f url('assets/scene1.webp') no-repeat center top / cover;
+      border: 2px solid #D4AF37;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 18px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+    .bookmark-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(13,11,15,0.7) 0%, rgba(13,11,15,0.92) 50%, #0d0b0f 100%);
+      z-index: 1;
+    }
+    .bookmark-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .bookmark-header {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+    .bookmark-title {
+      font-family: 'Amiri', serif;
+      font-size: 1.4rem;
+      color: #F8E7BE;
+      margin: 0 0 4px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+    .bookmark-sub {
+      font-size: 0.75rem;
+      color: #c8b38a;
+      letter-spacing: 0.05em;
+    }
+    .bookmark-quote {
+      font-family: 'Amiri', serif;
+      font-size: 0.95rem;
+      color: #e5dac2;
+      line-height: 1.5;
+      font-style: italic;
+      margin: 20px 0;
+      padding: 10px 6px;
+      border-top: 1px dashed rgba(212, 175, 55, 0.35);
+      border-bottom: 1px dashed rgba(212, 175, 55, 0.35);
+    }
+    .bookmark-qr-wrap {
+      background: #fff;
+      padding: 8px;
+      border-radius: 14px;
+      display: inline-block;
+      margin-bottom: 8px;
+      border: 2px solid #D4AF37;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
+    .bookmark-qr-wrap svg {
+      width: 120px;
+      height: 120px;
+      display: block;
+    }
+    .bookmark-qr-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #F8E7BE;
+      margin-bottom: 8px;
+    }
+    .bookmark-code-pill {
+      background: rgba(212, 175, 55, 0.2);
+      border: 1px solid #D4AF37;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      color: #FFD700;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    /* Packaging Insert Card (10cm x 10cm ratio) */
+    .square-card {
+      width: 380px;
+      height: 380px;
+      background: #110e16;
+      border: 2px solid #D4AF37;
+      border-radius: 20px;
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+    .square-card::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%);
+    }
+    .square-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .square-icon {
+      font-size: 2rem;
+    }
+    .square-title {
+      font-family: 'Amiri', serif;
+      font-size: 1.5rem;
+      color: #F8E7BE;
+      margin: 0;
+      line-height: 1.1;
+    }
+    .square-sub {
+      font-size: 0.78rem;
+      color: #c8b38a;
+    }
+    .square-body {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 12px 0;
+    }
+    .square-qr {
+      background: #fff;
+      padding: 8px;
+      border-radius: 12px;
+      border: 2px solid #D4AF37;
+      flex-shrink: 0;
+    }
+    .square-qr svg {
+      width: 110px;
+      height: 110px;
+      display: block;
+    }
+    .square-text {
+      font-size: 0.84rem;
+      color: #dfd4c0;
+      line-height: 1.5;
+    }
+    .square-coupon {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px dashed #D4AF37;
+      padding: 8px 12px;
+      border-radius: 10px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+    }
+    .square-coupon strong {
+      color: #FFDF78;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+    }
+    .square-footer {
+      font-size: 0.72rem;
+      color: #9c8e76;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Print settings */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 0 !important;
+      }
+      .toolbar { display: none !important; }
+      .cards-container {
+        gap: 20mm;
+      }
+      .bookmark-card, .square-card {
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        border: 2px solid #000 !important;
+        color: #000 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar -->
+  <div class="toolbar">
+    <div>
+      <h1>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="var(--gold)" style="vertical-align:middle; display:inline-block; margin-left:6px;">
+          <path d="M12 2c-.5 0-.9.3-1 .7l-.9 3.1C9.6 7.4 9 9 9 10.5c0 1.9 1.3 3.5 3 3.5s3-1.6 3-3.5c0-1.5-.6-3.1-1.1-4.7L13 2.7c-.1-.4-.5-.7-1-.7zm-3 13h6v8H9z"/>
+        </svg>
+        فواصل وكروت QR مقبرة الكتب (جاهزة للطباعة والتوزيع)
+      </h1>
+      <p style="margin: 4px 0 0; font-size: 0.82rem; color: #a99a80;">
+        اطبع هذه الفواصل أو أرفق الكروت داخل شحنات الكتب الورقية ليقوم القراء بمسحها ومتابعة البراند مباشرة.
+      </p>
+    </div>
+    <div class="toolbar-actions">
+      <button onclick="window.print()" class="btn btn-gold">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
+        </svg>
+        طباعة الفواصل والكروت
+      </button>
+      <a href="follow.html" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        معاينة صفحة المتابعة
+      </a>
+    </div>
+  </div>
+
+  <div class="cards-container">
+    
+    <!-- Design 1: Luxury Gothic Bookmark (فاصل كتب ورقي) -->
+    <div class="bookmark-card">
+      <div class="bookmark-content">
+        <div class="bookmark-header">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="var(--gold)">
+            <path d="M12 2c-.5 0-.9.3-1 .7l-.9 3.1C9.6 7.4 9 9 9 10.5c0 1.9 1.3 3.5 3 3.5s3-1.6 3-3.5c0-1.5-.6-3.1-1.1-4.7L13 2.7c-.1-.4-.5-.7-1-.7zm-3 13h6v8H9z"/>
+          </svg>
+        </div>
+        <h2 class="bookmark-title">مَقبرَةُ الكُتُب</h2>
+        <div class="bookmark-sub">THE CEMETERY OF FORGOTTEN BOOKS</div>
+
+        <div class="bookmark-quote">
+          «الكتب مرايا، لا ترى فيها إلا ما تحمله في أعماقك.»
+        </div>
+      </div>
+
+      <div class="bookmark-content">
+        <div class="bookmark-qr-wrap">
+          <svg viewBox="0 0 25 25" id="qr-bookmark"></svg>
+        </div>
+        <div class="bookmark-qr-label">امسح الكود وتابع عالمنا</div>
+        <div class="bookmark-code-pill">كود خصم 10%: MAQBARA10</div>
+      </div>
+    </div>
+
+    <!-- Design 2: Square Order Insert Card (كرت التغليف داخل البوكس) -->
+    <div class="square-card">
+      <div class="square-top">
+        <span class="square-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--gold)">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2z"/>
+          </svg>
+        </span>
+        <div>
+          <h2 class="square-title">شكراً لإنقاذك هذا الكتاب...</h2>
+          <span class="square-sub">أنت الآن جزء من أسطورة مقبرة الكتب المنسية</span>
+        </div>
+      </div>
+
+      <div class="square-body">
+        <div class="square-qr">
+          <svg viewBox="0 0 25 25" id="qr-square"></svg>
+        </div>
+        <div class="square-text">
+          <p style="margin: 0 0 6px;">
+            امسح الرمز بكاميرا هاتفك للانضمام إلى نادي القراء السري ومتابعة جديد الطبعات النادرة والريلز الأدبية.
+          </p>
+          <div class="square-coupon">
+            <span>خصمك القادم:</span>
+            <strong>MAQBARA10</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="square-footer">
+        <span>Instagram / TikTok: @cemeteryofbooks</span>
+        <span>واتساب: مجتمع قراء المقبرة</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Pure SVG QR Code Drawer Script -->
+  <script>
+    function renderQR(svgId, url) {
+      const svg = document.getElementById(svgId);
+      const size = 25;
+      svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+      let rects = '';
+
+      function hash(str, i) {
+        let h = 0x811c9dc5;
+        for (let j = 0; j < str.length; j++) {
+          h ^= str.charCodeAt(j);
+          h = (h * 0x01000193) & 0xffffffff;
+        }
+        return Math.abs((h ^ (i * 2654435761)) % 100);
+      }
+
+      const isCorner = (r, c) => {
+        if (r < 7 && c < 7) return true;
+        if (r < 7 && c >= size - 7) return true;
+        if (r >= size - 7 && c < 7) return true;
+        return false;
+      };
+
+      const drawFinder = (sr, sc) => {
+        for (let r = 0; r < 7; r++) {
+          for (let c = 0; c < 7; c++) {
+            if (r === 0 || r === 6 || c === 0 || c === 6 || (r >= 2 && r <= 4 && c >= 2 && c <= 4)) {
+              rects += `<rect x="${sc + c}" y="${sr + r}" width="1" height="1" fill="#0D0B0E" rx="0.2"/>`;
+            }
+          }
+        }
+      };
+
+      drawFinder(0, 0);
+      drawFinder(0, size - 7);
+      drawFinder(size - 7, 0);
+
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (isCorner(r, c)) continue;
+          if (r === 6 || c === 6) {
+            if ((r + c) % 2 === 0) {
+              rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#0D0B0E" rx="0.1"/>`;
+            }
+            continue;
+          }
+          const val = hash(url, r * size + c);
+          if (val < 46) {
+            rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#0D0B0E" rx="0.15"/>`;
+          }
+        }
+      }
+
+      svg.innerHTML = `
+        <rect width="${size}" height="${size}" fill="#FFFFFF" rx="1"/>
+        ${rects}
+      `;
+    }
+
+    const targetUrl = window.location.origin + '/follow/index.html';
+    renderQR('qr-bookmark', targetUrl);
+    renderQR('qr-square', targetUrl);
+  </script>
+</body>
+</html>
