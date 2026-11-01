@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Book, Category } from '../../types';
 import { Plus, Search, Trash2, Edit, Sparkles, Loader2 } from 'lucide-react';
+import { adminFetch } from '../../utils/adminApi';
 
 export const BookManager: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -35,7 +36,7 @@ export const BookManager: React.FC = () => {
 
   const fetchBooks = () => {
     setLoading(true);
-    fetch('/api/admin/books')
+    adminFetch('/api/admin/books')
       .then(res => res.json())
       .then(data => {
         if (data.success) setBooks(data.books);
@@ -99,7 +100,7 @@ export const BookManager: React.FC = () => {
     if (!autoFillQuery.trim()) return;
     setAutoFillLoading(true);
     try {
-      const res = await fetch(`/api/admin/google-books?q=${encodeURIComponent(autoFillQuery)}`);
+      const res = await adminFetch(`/api/admin/google-books?q=${encodeURIComponent(autoFillQuery)}`);
       const data = await res.json();
       if (data.success && data.results) {
         setAutoFillResults(data.results);
@@ -147,7 +148,7 @@ export const BookManager: React.FC = () => {
       const url = editingBook ? `/api/admin/books/${editingBook.id}` : '/api/admin/books';
       const method = editingBook ? 'PUT' : 'POST';
 
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -166,7 +167,7 @@ export const BookManager: React.FC = () => {
   const handleDeleteBook = async (id: string) => {
     if (!window.confirm('هل أنت متأكد من حذف هذا الكتاب من سجلات المقبرة؟')) return;
     try {
-      const res = await fetch(`/api/admin/books/${id}`, { method: 'DELETE' });
+      const res = await adminFetch(`/api/admin/books/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         setBooks(prev => prev.filter(b => b.id !== id));

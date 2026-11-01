@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, QrCode, BookOpen, Compass, ShoppingBag, Settings } from 'lucide-react';
+import { Search, QrCode, BookOpen, Compass, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 interface NavigationProps {
@@ -74,20 +74,6 @@ export const Navigation: React.FC<NavigationProps> = ({
               <span>مستشار القراءة</span>
             </button>
 
-            {/* Admin Dashboard Pill for Desktop */}
-            <button
-              onClick={() => setCurrentTab('admin')}
-              title="لوحة تحكم المتجر والمخزون"
-              className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                currentTab === 'admin'
-                  ? 'bg-amber-500 text-stone-950 shadow-md font-black'
-                  : 'bg-[#1c1724] text-stone-300 border border-amber-900/40 hover:border-amber-500/50'
-              }`}
-            >
-              <Settings className="w-3.5 h-3.5 text-amber-400" />
-              <span>لوحة الإدارة</span>
-            </button>
-
             {/* Cart Button (صندوق الكتب) */}
             <button
               onClick={() => setIsCartOpen(true)}
@@ -107,11 +93,11 @@ export const Navigation: React.FC<NavigationProps> = ({
 
       {/* Fixed Bottom Navigation Bar - Optimized for Mobile Thumb Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#120f17]/95 backdrop-blur-lg border-t border-amber-900/40 shadow-2xl px-2 py-1.5 sm:hidden">
-        <div className="max-w-md mx-auto grid grid-cols-4 gap-1">
+        <div className="max-w-md mx-auto grid grid-cols-3 gap-2">
           {/* Tab 1: Sanctuary / Catalog */}
           <button
             onClick={() => setCurrentTab('catalog')}
-            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
+            className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all ${
               currentTab === 'catalog'
                 ? 'text-amber-400 font-black'
                 : 'text-stone-400 hover:text-stone-200 font-medium'
@@ -124,7 +110,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           {/* Tab 2: Smart Book Advisor */}
           <button
             onClick={() => setCurrentTab('advisor')}
-            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl relative transition-all ${
+            className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl relative transition-all ${
               currentTab === 'advisor'
                 ? 'text-amber-400 font-black'
                 : 'text-stone-400 hover:text-stone-200 font-medium'
@@ -140,7 +126,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           {/* Tab 3: Cart */}
           <button
             onClick={() => setIsCartOpen(true)}
-            className="flex flex-col items-center justify-center py-1 px-1 rounded-xl text-stone-400 hover:text-stone-200 font-medium relative transition-all"
+            className="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-stone-400 hover:text-stone-200 font-medium relative transition-all"
           >
             <div className="relative">
               <ShoppingBag className="w-4 h-4 mb-0.5" />
@@ -151,19 +137,6 @@ export const Navigation: React.FC<NavigationProps> = ({
               )}
             </div>
             <span className="text-[11px] font-readex">الصندوق</span>
-          </button>
-
-          {/* Tab 4: Admin */}
-          <button
-            onClick={() => setCurrentTab('admin')}
-            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
-              currentTab === 'admin'
-                ? 'text-amber-400 font-black'
-                : 'text-stone-400 hover:text-stone-200 font-medium'
-            }`}
-          >
-            <Settings className="w-4 h-4 mb-0.5" />
-            <span className="text-[11px] font-readex">الإدارة</span>
           </button>
         </div>
       </nav>

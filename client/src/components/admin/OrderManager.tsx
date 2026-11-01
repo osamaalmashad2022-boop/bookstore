@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Order } from '../../types';
 import { MessageCircle, Package, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
+import { adminFetch } from '../../utils/adminApi';
 
 export const OrderManager: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -9,7 +10,7 @@ export const OrderManager: React.FC = () => {
 
   const fetchOrders = () => {
     setLoading(true);
-    fetch('/api/admin/orders')
+    adminFetch('/api/admin/orders')
       .then(res => res.json())
       .then(data => {
         if (data.success && data.orders) setOrders(data.orders);
@@ -23,7 +24,7 @@ export const OrderManager: React.FC = () => {
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     try {
-      const res = await fetch(`/api/admin/orders/${orderId}/status`, {
+      const res = await adminFetch(`/api/admin/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),

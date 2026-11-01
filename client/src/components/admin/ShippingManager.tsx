@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Governorate } from '../../types';
 import { Truck, Check } from 'lucide-react';
+import { adminFetch } from '../../utils/adminApi';
 
 export const ShippingManager: React.FC = () => {
   const [governorates, setGovernorates] = useState<Governorate[]>([]);
@@ -24,7 +25,7 @@ export const ShippingManager: React.FC = () => {
   const handleUpdate = async (gov: Governorate) => {
     setSavingId(gov.id);
     try {
-      const res = await fetch(`/api/admin/shipping-rates/${gov.id}`, {
+      const res = await adminFetch(`/api/admin/shipping-rates/${gov.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

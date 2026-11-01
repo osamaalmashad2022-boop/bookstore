@@ -4,6 +4,33 @@ import { searchGoogleBooks } from '../services/googleBooks';
 
 const router = Router();
 
+// POST /api/admin/login - Authenticate admin with secret key
+router.post('/login', (req: Request, res: Response) => {
+  try {
+    const { password } = req.body;
+    const adminKey = process.env.ADMIN_PASSWORD || 'maqbara2026';
+    if (password && String(password).trim() === adminKey.trim()) {
+      return res.json({ success: true, token: adminKey });
+    }
+    return res.status(401).json({ success: false, error: 'مفتاح الحارس السري غير صحيح' });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: 'حدث خطأ أثناء التحقق من كلمة السر' });
+  }
+});
+
+// Admin Authorization Middleware - Protects ALL /api/admin/* endpoints
+router.use((req: Request, res: Response, next) => {
+  const token = (req.headers['x-admin-token'] || req.headers['authorization']?.replace('Bearer ', '')) as string;
+  const adminKey = process.env.ADMIN_PASSWORD || 'maqbara2026';
+  if (token && String(token).trim() === adminKey.trim()) {
+    return next();
+  }
+  return res.status(401).json({
+    success: false,
+    error: 'غير مصرح بالوصول إلى لوحة الإدارة. يرجى إدخال مفتاح الحارس السري.'
+  });
+});
+
 // GET /api/admin/google-books - 1-Click Smart Auto-Fill metadata
 router.get('/google-books', async (req: Request, res: Response) => {
   try {

@@ -7,7 +7,7 @@ import { SmartAdvisor } from './components/SmartAdvisor';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
-import { Search, Truck, ShieldCheck, Flame } from 'lucide-react';
+import { Search, Truck, ShieldCheck, Flame, Lock } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'catalog' | 'advisor' | 'admin'>('catalog');
@@ -57,6 +57,21 @@ export const App: React.FC = () => {
     }
   }, [selectedCategory, selectedLevel, onlyInStock, searchQuery, currentTab]);
 
+  // Discreet secret URL detection for store owner (#admin or ?admin)
+  useEffect(() => {
+    const checkAdminRoute = () => {
+      const isHashAdmin = window.location.hash.toLowerCase() === '#admin';
+      const isQueryAdmin = new URLSearchParams(window.location.search).has('admin');
+      const isPathAdmin = window.location.pathname === '/admin' || window.location.pathname === '/admin/';
+      if (isHashAdmin || isQueryAdmin || isPathAdmin) {
+        setCurrentTab('admin');
+      }
+    };
+    checkAdminRoute();
+    window.addEventListener('hashchange', checkAdminRoute);
+    return () => window.removeEventListener('hashchange', checkAdminRoute);
+  }, []);
+
   return (
     <div className="min-h-screen pb-20 sm:pb-10 flex flex-col justify-between bg-[#0d0b0f] text-[#ede6d6]">
       {/* Top Header & Mobile Bottom Bar Navigation */}
@@ -76,7 +91,14 @@ export const App: React.FC = () => {
         )}
 
         {currentTab === 'admin' && (
-          <AdminDashboard />
+          <AdminDashboard
+            onClose={() => {
+              setCurrentTab('catalog');
+              if (window.location.hash.toLowerCase() === '#admin') {
+                window.history.replaceState(null, '', window.location.pathname + window.location.search);
+              }
+            }}
+          />
         )}
 
         {currentTab === 'catalog' && (
@@ -270,10 +292,23 @@ export const App: React.FC = () => {
 
       <CheckoutModal />
 
-      {/* Footer info */}
-      <footer className="mt-12 border-t border-amber-900/30 bg-[#120f17] py-6 text-center text-xs text-stone-400 hidden sm:block">
-        <p className="font-bold font-readex text-amber-200 mb-1">مقبرة الكتب المنسية للكتب الورقية © 2026</p>
-        <p className="text-[11px] text-stone-500">
+      {/* Footer info with discreet secret lock trigger */}
+      <footer className="mt-12 border-t border-amber-900/30 bg-[#120f17] py-6 text-center text-xs text-stone-400">
+        <p className="font-bold font-readex text-amber-200 mb-1 flex items-center justify-center gap-1.5">
+          <span>مقبرة الكتب المنسية للكتب الورقية © 2026</span>
+          <button
+            onClick={() => {
+              setCurrentTab('admin');
+              window.location.hash = 'admin';
+            }}
+            title="بوابة حارس المقبرة"
+            className="text-stone-700 hover:text-amber-400/80 transition-colors p-1 rounded inline-flex items-center"
+            aria-label="Admin"
+          >
+            <Lock className="w-3 h-3 opacity-30 hover:opacity-100 transition-opacity" />
+          </button>
+        </p>
+        <p className="text-[11px] text-stone-500 font-readex">
           معمارية سحابية دائمة ومجانية بنسبة 100% للأبد • الدفع نقداً عند الاستلام COD • مستشار حارس المقبرة
         </p>
       </footer>
