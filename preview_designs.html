@@ -8,7 +8,7 @@
   <!-- Fonts: Cairo, Readex Pro, Amiri (Literary Arabic) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,8 +18,12 @@
       theme: {
         extend: {
           fontFamily: {
+            ibm: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+            almarai: ['Almarai', 'sans-serif'],
+            tajawal: ['Tajawal', 'sans-serif'],
             cairo: ['Cairo', 'sans-serif'],
             readex: ['Readex Pro', 'sans-serif'],
+            noto: ['"Noto Naskh Arabic"', 'serif'],
             amiri: ['Amiri', 'serif'],
           },
         }
@@ -93,14 +97,29 @@
         </div>
       </div>
 
-      {/* Screen Mode Switcher */}
-      <div class="flex items-center gap-2 bg-[#22222b] p-1 rounded-2xl border border-stone-700/60 text-xs">
-        <button id="btnMobileView" onclick="setDeviceMode('mobile')" class="px-3.5 py-1.5 rounded-xl font-bold transition-all bg-amber-500 text-stone-950 shadow-sm flex items-center gap-1.5">
-          <span>📱 وضع شاشة الهاتف</span>
-        </button>
-        <button id="btnFullView" onclick="setDeviceMode('full')" class="px-3.5 py-1.5 rounded-xl font-bold transition-all text-stone-300 hover:text-white flex items-center gap-1.5">
-          <span>💻 العرض الكامل المتجاوب</span>
-        </button>
+      {/* Screen Mode Switcher & Font Selector */}
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Live Font Changer -->
+        <div class="flex items-center gap-1.5 bg-[#22222b] p-1 rounded-2xl border border-stone-700/60 text-xs">
+          <span class="text-[11px] text-amber-400 font-bold px-2">👁️ خط القراءة:</span>
+          <select id="fontSelectDropdown" onchange="applyGlobalFont(this.value)" class="bg-[#18181f] text-amber-200 border border-stone-700 text-xs rounded-xl px-2.5 py-1 focus:outline-none font-bold">
+            <option value="ibm">1. IBM Plex Sans Arabic (الموصى به 🏆)</option>
+            <option value="almarai">2. Almarai - المراعي (انسيابي وعصري ✨)</option>
+            <option value="readex">3. Readex Pro (محسن للراحة والسرعة 🎯)</option>
+            <option value="tajawal">4. Tajawal - تجوال (ناعم ومريح 🌿)</option>
+            <option value="noto">5. Noto Naskh Arabic (أدبي نسخي 📜)</option>
+            <option value="cairo">6. Cairo - كلاسيكي</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-1 bg-[#22222b] p-1 rounded-2xl border border-stone-700/60 text-xs">
+          <button id="btnMobileView" onclick="setDeviceMode('mobile')" class="px-3 py-1.5 rounded-xl font-bold transition-all bg-amber-500 text-stone-950 shadow-sm flex items-center gap-1.5">
+            <span>📱 هاتف</span>
+          </button>
+          <button id="btnFullView" onclick="setDeviceMode('full')" class="px-3 py-1.5 rounded-xl font-bold transition-all text-stone-300 hover:text-white flex items-center gap-1.5">
+            <span>💻 كامل</span>
+          </button>
+        </div>
       </div>
 
     </div>
@@ -711,9 +730,26 @@
       }
     }
 
+    function applyGlobalFont(fontKey) {
+      const fontClasses = {
+        ibm: 'font-ibm',
+        almarai: 'font-almarai',
+        readex: 'font-readex',
+        tajawal: 'font-tajawal',
+        noto: 'font-noto',
+        cairo: 'font-cairo',
+      };
+      const store = document.getElementById('storeContainer');
+      Object.values(fontClasses).forEach(cls => store.classList.remove(cls));
+      if (fontClasses[fontKey]) {
+        store.classList.add(fontClasses[fontKey]);
+      }
+    }
+
     // INIT
     window.onload = () => {
       switchTheme('gothic');
+      applyGlobalFont('ibm');
     };
   </script>
 </body>

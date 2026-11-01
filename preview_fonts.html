@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>معاينة الخطوط العربية الأكثر راحة للعين | مقبرة الكتب المنسية</title>
+  
+  <!-- Google Fonts Candidates for Ultimate Reading Comfort -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            ibm: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+            almarai: ['Almarai', 'sans-serif'],
+            readex: ['"Readex Pro"', 'sans-serif'],
+            noto: ['"Noto Naskh Arabic"', 'serif'],
+            tajawal: ['Tajawal', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Candle Glow */
+    .candle-glow {
+      box-shadow: 0 0 35px -8px rgba(212, 175, 55, 0.25);
+    }
+    
+    .font-preview-active {
+      border-color: #d4af37 !important;
+      background-color: rgba(212, 175, 55, 0.15) !important;
+    }
+  </style>
+</head>
+<body id="pageBody" class="bg-[#0d0b0f] text-[#ede6d6] font-ibm min-h-screen antialiased flex flex-col items-center p-4 sm:p-6 transition-colors duration-300">
+
+  <!-- TOP HEADER -->
+  <header class="w-full max-w-5xl bg-[#15121b]/95 border border-amber-900/40 rounded-3xl p-4 sm:p-6 shadow-2xl mb-6 backdrop-blur-md">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30 mb-2">
+          <span>👁️</span> راحة العين وسهولة القراءة في «مقبرة الكتب المنسية»
+        </div>
+        <h1 class="text-lg sm:text-2xl font-black text-amber-100">
+          معاينة أفضل 5 خطوط عربية مخصصة للشاشات والقراءة الطويلة
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-400 mt-1">
+          تمت تصفية هذه الخطوط بناءً على دراسات الطباعة الرقمية (Typography UX): خطوط مفتوحة الزوايا، متوازنة المسافات، وخالية من الإجهاد البصري.
+        </p>
+      </div>
+
+      <!-- Theme Mode (Dark Gothic vs Soft Eye-Care Paper) -->
+      <div class="flex items-center gap-2 bg-[#1c1724] p-1.5 rounded-2xl border border-stone-800 self-start sm:self-auto">
+        <button onclick="setPreviewBg('dark')" id="bgDarkBtn" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-stone-950 transition-all">
+          🌙 خلفية المقبرة الداكنة
+        </button>
+        <button onclick="setPreviewBg('paper')" id="bgPaperBtn" class="px-3 py-1.5 rounded-xl text-xs font-bold text-stone-400 hover:text-stone-200 transition-all">
+          📜 خلفية ورقية مريحة
+        </button>
+      </div>
+    </div>
+
+    <!-- FONT SELECTOR PILLS -->
+    <div class="mt-5 pt-4 border-t border-amber-900/30">
+      <span class="text-xs font-bold text-amber-400/90 block mb-2.5">
+        اختر الخط للتطبيق الفوري والمعاينة الحية أدناه:
+      </span>
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+        
+        <!-- Font 1: IBM Plex Sans Arabic -->
+        <button onclick="selectFont('ibm')" id="btn-ibm" class="font-btn p-3 rounded-2xl border border-amber-900/40 bg-[#181420] text-right font-preview-active transition-all">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-amber-200 font-ibm text-sm">IBM Plex Arabic</span>
+            <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold">الأفضل 🏆</span>
+          </div>
+          <p class="text-[10px] text-stone-400 line-clamp-2">أعلى وضوح وقراءة مريحة بدون تشتيت، مصمم خصيصاً للشاشات.</p>
+        </button>
+
+        <!-- Font 2: Almarai -->
+        <button onclick="selectFont('almarai')" id="btn-almarai" class="font-btn p-3 rounded-2xl border border-amber-900/40 bg-[#181420] text-right transition-all">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-amber-200 font-almarai text-sm">المراعي (Almarai)</span>
+            <span class="text-[9px] bg-stone-800 text-stone-300 px-1.5 py-0.5 rounded">عصري ✨</span>
+          </div>
+          <p class="text-[10px] text-stone-400 line-clamp-2">انسيابي ناعم، مريح جداً لتصفح الهواتف، ومنتشر في التطبيقات الراقية.</p>
+        </button>
+
+        <!-- Font 3: Readex Pro -->
+        <button onclick="selectFont('readex')" id="btn-readex" class="font-btn p-3 rounded-2xl border border-amber-900/40 bg-[#181420] text-right transition-all">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-amber-200 font-readex text-sm">Readex Pro</span>
+            <span class="text-[9px] bg-stone-800 text-stone-300 px-1.5 py-0.5 rounded">سرعة 🎯</span>
+          </div>
+          <p class="text-[10px] text-stone-400 line-clamp-2">مصمم هندسياً لتحسين سرعة القراءة والراحة البصرية للنصوص الطويلة.</p>
+        </button>
+
+        <!-- Font 4: Tajawal -->
+        <button onclick="selectFont('tajawal')" id="btn-tajawal" class="font-btn p-3 rounded-2xl border border-amber-900/40 bg-[#181420] text-right transition-all">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-amber-200 font-tajawal text-sm">تجوال (Tajawal)</span>
+            <span class="text-[9px] bg-stone-800 text-stone-300 px-1.5 py-0.5 rounded">ناعم 🌿</span>
+          </div>
+          <p class="text-[10px] text-stone-400 line-clamp-2">خط حديث بزوايا مستديرة ناعمة يمنح إحساساً دافئاً وبسيطاً على العين.</p>
+        </button>
+
+        <!-- Font 5: Noto Naskh Arabic -->
+        <button onclick="selectFont('noto')" id="btn-noto" class="font-btn p-3 rounded-2xl border border-amber-900/40 bg-[#181420] text-right transition-all">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-amber-200 font-noto text-sm">نوتو نسخ (Noto)</span>
+            <span class="text-[9px] bg-stone-800 text-stone-300 px-1.5 py-0.5 rounded">أدبي 📜</span>
+          </div>
+          <p class="text-[10px] text-stone-400 line-clamp-2">النسخ الكلاسيكي المحدث؛ إحساس الكتب والمخطوطات الورقية الأصيلة.</p>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- LIVE PREVIEWS WORKSPACE -->
+  <main class="w-full max-w-5xl space-y-6">
+
+    <!-- 1. LIVE BOOK STORE CARD & READING SAMPLE -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+      
+      <!-- Component A: Live Mobile Book Card in Current Font -->
+      <div id="sampleCardBox" class="bg-[#15121b] border-2 border-amber-900/40 rounded-3xl p-5 shadow-2xl candle-glow flex flex-col justify-between text-right">
+        <div>
+          <div class="flex items-center justify-between pb-3 border-b border-amber-900/30 mb-3">
+            <span class="text-xs font-bold text-amber-400">نموذج كارت الكتاب في المتجر</span>
+            <span id="currentFontBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">
+              IBM Plex Sans Arabic
+            </span>
+          </div>
+
+          <div class="flex gap-4">
+            <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80" class="w-24 aspect-[3/4] object-cover rounded-xl shadow-md shrink-0 border border-amber-900/40">
+            <div class="flex-1 min-w-0 space-y-1">
+              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/40 font-bold">
+                متوسط • 540 صفحة
+              </span>
+              <h3 id="sampleBookTitle" class="text-base font-bold text-amber-100 leading-snug">
+                ظل الريح (مقبرة الكتب المنسية)
+              </h3>
+              <p id="sampleBookAuthor" class="text-xs text-stone-400">
+                تأليف: كارلوس زافون
+              </p>
+              <div class="text-sm font-bold text-amber-400 pt-1">
+                260 <span class="text-xs font-normal text-stone-400">ج.م (الدفع عند الاستلام COD)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Why Read Callout Box in Selected Font -->
+          <div class="mt-4 p-3.5 rounded-2xl bg-[#1c1724] border border-amber-900/30 space-y-1">
+            <strong class="text-xs text-amber-300 block">💡 لماذا تقرأ هذا الكتاب بالتحديد؟</strong>
+            <p id="sampleWhyRead" class="text-xs text-stone-300 leading-relaxed">
+              المدخل المقدس لعالم مقبرة الكتب المنسية؛ سر خفي ورواية تحرك نبضات القلوب وتنسج حب الكتب الورقية كقدر أبدي لا يُمحى.
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-4 mt-3 border-t border-amber-900/30 flex items-center justify-between gap-3">
+          <button class="flex-1 py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs shadow-md transition-all">
+            📜 تبنّ هذا الكتاب وأضفه لصندوقك
+          </button>
+          <button class="px-3.5 py-3 rounded-xl bg-[#1c1724] text-amber-300 hover:text-white border border-amber-900/40 text-xs font-bold">
+            معاينة المقتطف
+          </button>
+        </div>
+      </div>
+
+      <!-- Component B: Long Literary Reading Sample (Comfort Test) -->
+      <div id="sampleReadingBox" class="bg-[#15121b] border border-amber-900/40 rounded-3xl p-5 sm:p-6 shadow-xl flex flex-col justify-between text-right">
+        <div>
+          <div class="flex items-center justify-between pb-3 border-b border-amber-900/30 mb-3">
+            <span class="text-xs font-bold text-amber-400">اختبار راحة العين في قراءة النصوص الطويلة</span>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] text-stone-400">حجم الخط:</span>
+              <button onclick="changeFontSize(-1)" class="w-6 h-6 rounded bg-stone-800 text-stone-300 text-xs font-bold hover:bg-stone-700">-A</button>
+              <button onclick="changeFontSize(1)" class="w-6 h-6 rounded bg-stone-800 text-stone-300 text-xs font-bold hover:bg-stone-700">+A</button>
+            </div>
+          </div>
+
+          <h4 class="text-sm font-bold text-amber-200 mb-2">مقتطف من رواية «ظل الريح»:</h4>
+          
+          <div id="readingParagraph" class="space-y-3 text-stone-300 text-sm leading-relaxed transition-all">
+            <p>
+              «تذكر يا دانيال، المرة الأولى التي يزور فيها شخص ما مقبرة الكتب المنسية، يتوجب عليه أن يتبنى كتاباً وينقذه، ويتعهد بألا يتركه يموت أبداً، وأن يبقيه حياً في ذاكرته. هذا المكان سر يا بني، وملاذ مقدس. كل مجلد وكل كتاب تراه هنا يمتلك روحاً؛ روح الذي كتبه، وأرواح كل الذين قرأوه وعاشوا معه وحلموا به. وفي كل مرة يغير فيها الكتاب يديه أو تلمس صفحاته أعين جديدة، فإن روحه تنمو وتزداد قوة.»
+            </p>
+            <p class="text-xs text-stone-400 italic">
+              «في هذا المكان، الكتب التي لم يعد يذكرها أحد، والكتب التي ضاعت في غياهب الزمان، تعيش هنا للأبد في انتظار اليوم الذي ستعود فيه إلى أيدي قارئ جديد.»
+            </p>
+          </div>
+        </div>
+
+        <div class="p-3 bg-[#181420] rounded-xl border border-amber-900/20 text-[11px] text-stone-400 mt-4">
+          ✨ <strong>ملاحظة مريحة:</strong> لاحظ اتزان المسافات بين الأسطر ووضوح الحروف المركبة ونقاط الإعجام.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2. SIDE-BY-SIDE ALL FONTS COMPARISON -->
+    <div class="bg-[#15121b] border border-amber-900/40 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4 text-right">
+      <h3 class="text-sm sm:text-base font-bold text-amber-100 flex items-center gap-2">
+        <span>🔍</span> مقارنة مباشرة جنباً إلى جنب لنفس الجملة بكل الخطوط:
+      </h3>
+
+      <div class="space-y-3 text-sm">
+        
+        <!-- IBM Plex -->
+        <div onclick="selectFont('ibm')" class="p-3.5 rounded-2xl bg-[#1c1724] border border-amber-900/40 hover:border-amber-500/60 cursor-pointer transition-all">
+          <div class="flex justify-between text-xs text-amber-400 mb-1">
+            <span class="font-bold">1. IBM Plex Sans Arabic</span>
+            <span class="text-[10px] text-stone-400">الخيار الموصى به للمنصات الحديثة</span>
+          </div>
+          <p class="font-ibm text-base text-stone-200">
+            «كل كتاب تراه هنا قد نجا من النسيان.. كل كتاب كان له صديق، وله روح.»
+          </p>
+        </div>
+
+        <!-- Almarai -->
+        <div onclick="selectFont('almarai')" class="p-3.5 rounded-2xl bg-[#1c1724] border border-amber-900/40 hover:border-amber-500/60 cursor-pointer transition-all">
+          <div class="flex justify-between text-xs text-amber-400 mb-1">
+            <span class="font-bold">2. Almarai (المراعي)</span>
+            <span class="text-[10px] text-stone-400">انسيابي وعصري جداً على شاشات الجوال</span>
+          </div>
+          <p class="font-almarai text-base text-stone-200">
+            «كل كتاب تراه هنا قد نجا من النسيان.. كل كتاب كان له صديق، وله روح.»
+          </p>
+        </div>
+
+        <!-- Readex Pro -->
+        <div onclick="selectFont('readex')" id="item-readex" class="p-3.5 rounded-2xl bg-[#1c1724] border border-amber-900/40 hover:border-amber-500/60 cursor-pointer transition-all">
+          <div class="flex justify-between text-xs text-amber-400 mb-1">
+            <span class="font-bold">3. Readex Pro</span>
+            <span class="text-[10px] text-stone-400">هندسي حديث ومصمم لسرعة القراءة</span>
+          </div>
+          <p class="font-readex text-base text-stone-200">
+            «كل كتاب تراه هنا قد نجا من النسيان.. كل كتاب كان له صديق، وله روح.»
+          </p>
+        </div>
+
+        <!-- Tajawal -->
+        <div onclick="selectFont('tajawal')" class="p-3.5 rounded-2xl bg-[#1c1724] border border-amber-900/40 hover:border-amber-500/60 cursor-pointer transition-all">
+          <div class="flex justify-between text-xs text-amber-400 mb-1">
+            <span class="font-bold">4. Tajawal (تجوال)</span>
+            <span class="text-[10px] text-stone-400">زوايا ناعمة ومريح بدون حدة</span>
+          </div>
+          <p class="font-tajawal text-base text-stone-200">
+            «كل كتاب تراه هنا قد نجا من النسيان.. كل كتاب كان له صديق، وله روح.»
+          </p>
+        </div>
+
+        <!-- Noto Naskh -->
+        <div onclick="selectFont('noto')" class="p-3.5 rounded-2xl bg-[#1c1724] border border-amber-900/40 hover:border-amber-500/60 cursor-pointer transition-all">
+          <div class="flex justify-between text-xs text-amber-400 mb-1">
+            <span class="font-bold">5. Noto Naskh Arabic</span>
+            <span class="text-[10px] text-stone-400">النسخ الأدبي المريح في الروايات</span>
+          </div>
+          <p class="font-noto text-base text-stone-200">
+            «كل كتاب تراه هنا قد نجا من النسيان.. كل كتاب كان له صديق، وله روح.»
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let currentFont = 'ibm';
+    let fontSize = 14;
+
+    const fontClasses = {
+      ibm: 'font-ibm',
+      almarai: 'font-almarai',
+      readex: 'font-readex',
+      tajawal: 'font-tajawal',
+      noto: 'font-noto',
+    };
+
+    const fontNames = {
+      ibm: 'IBM Plex Sans Arabic (الموصى به)',
+      almarai: 'Almarai (المراعي)',
+      readex: 'Readex Pro',
+      tajawal: 'Tajawal (تجوال)',
+      noto: 'Noto Naskh Arabic',
+    };
+
+    function selectFont(fontKey) {
+      currentFont = fontKey;
+      
+      // Update Button Styles
+      document.querySelectorAll('.font-btn').forEach(btn => {
+        btn.classList.remove('font-preview-active');
+      });
+      const activeBtn = document.getElementById('btn-' + fontKey);
+      if (activeBtn) activeBtn.classList.add('font-preview-active');
+
+      // Update Sample Card & Reading Box font
+      const card = document.getElementById('sampleCardBox');
+      const reading = document.getElementById('sampleReadingBox');
+      const badge = document.getElementById('currentFontBadge');
+
+      // Remove existing font classes
+      Object.values(fontClasses).forEach(cls => {
+        card.classList.remove(cls);
+        reading.classList.remove(cls);
+      });
+
+      // Add selected font class
+      card.classList.add(fontClasses[fontKey]);
+      reading.classList.add(fontClasses[fontKey]);
+
+      badge.innerText = fontNames[fontKey];
+    }
+
+    function changeFontSize(delta) {
+      fontSize = Math.min(22, Math.max(12, fontSize + delta));
+      document.getElementById('readingParagraph').style.fontSize = fontSize + 'px';
+      document.getElementById('readingParagraph').style.lineHeight = (fontSize * 1.7) + 'px';
+    }
+
+    function setPreviewBg(mode) {
+      const body = document.getElementById('pageBody');
+      const darkBtn = document.getElementById('bgDarkBtn');
+      const paperBtn = document.getElementById('bgPaperBtn');
+      const card = document.getElementById('sampleCardBox');
+      const reading = document.getElementById('sampleReadingBox');
+
+      if (mode === 'paper') {
+        body.className = `bg-[#fbf8f2] text-[#2c1d15] ${fontClasses[currentFont]} min-h-screen antialiased flex flex-col items-center p-4 sm:p-6 transition-colors duration-300`;
+        card.style.backgroundColor = '#f4ede2';
+        card.style.borderColor = '#d9c7b0';
+        reading.style.backgroundColor = '#f4ede2';
+        reading.style.borderColor = '#d9c7b0';
+        
+        paperBtn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-[#633a22] text-[#fbf8f4] transition-all';
+        darkBtn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold text-stone-600 hover:text-stone-900 transition-all';
+      } else {
+        body.className = `bg-[#0d0b0f] text-[#ede6d6] ${fontClasses[currentFont]} min-h-screen antialiased flex flex-col items-center p-4 sm:p-6 transition-colors duration-300`;
+        card.style.backgroundColor = '#15121b';
+        card.style.borderColor = 'rgba(120, 53, 15, 0.4)';
+        reading.style.backgroundColor = '#15121b';
+        reading.style.borderColor = 'rgba(120, 53, 15, 0.4)';
+
+        darkBtn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-stone-950 transition-all';
+        paperBtn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold text-stone-400 hover:text-stone-200 transition-all';
+      }
+    }
+  </script>
+</body>
+</html>
