@@ -83,6 +83,7 @@ npm run dev
 - أضف متغيرات البيئة (`DATABASE_URL`, `DATABASE_AUTH_TOKEN`, `MERCHANT_PHONE`).
 
 ### 3. الواجهة الأمامية (Frontend):
-- انشر مجلد `client/` على **Vercel** أو **Netlify** أو **Cloudflare Pages** (استضافة مجانية للأبد وسريعة جداً).
-- في إعدادات الـ Rewrite في Vercel/Netlify، وجّه طلبات `/api/*` لرابط السيرفر الخلفي.
+- انشر مجلد `client/` على **Vercel** أو **Netlify** أو **Cloudflare Pages / Workers** (استضافة مجانية للأبد وسريعة جداً).
+- **على Cloudflare**: المشروع مهيأ بملف `wrangler.jsonc` تلقائياً. عند النشر عبر لوحة Cloudflare، سيتعرف Wrangler على مجلد `client/dist` مباشرة ويدعم توجيه الـ SPA.
+- في إعدادات الـ Rewrite / Proxies (سواء في Vercel أو `client/public/_redirects` لـ Cloudflare)، وجّه طلبات `/api/*` لرابط السيرفر الخلفي.
 
