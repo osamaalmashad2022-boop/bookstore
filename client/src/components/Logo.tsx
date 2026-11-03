@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Maximize2 } from 'lucide-react';
 
 interface LogoProps {
@@ -13,13 +13,10 @@ interface LogoProps {
 export const Logo: React.FC<LogoProps> = ({
   size = 'md',
   variant = 'horizontal',
-  source = 'image',
   className = '',
   showSubtitle = true,
   onEmblemClick,
 }) => {
-  const [imgError, setImgError] = useState(false);
-
   const sizeMap = {
     sm: 'w-8 h-8',
     md: 'w-11 h-11',
@@ -33,8 +30,6 @@ export const Logo: React.FC<LogoProps> = ({
     lg: 'text-xl sm:text-2xl',
     xl: 'text-2xl sm:text-3xl',
   };
-
-  const isVector = source === 'vector' || imgError;
 
   const Emblem = (
     <div
@@ -56,20 +51,11 @@ export const Logo: React.FC<LogoProps> = ({
       <div className="absolute inset-0 bg-gradient-to-t from-amber-950/70 via-transparent to-transparent pointer-events-none z-10" />
 
       {/* Emblem Artwork */}
-      {isVector ? (
-        <img
-          src="/logo.svg"
-          alt="شعار مقبرة الكتب المنسية"
-          className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_8px_rgba(255,190,59,0.3)] transition-all duration-300 group-hover:drop-shadow-[0_4px_14px_rgba(255,190,59,0.5)]"
-        />
-      ) : (
-        <img
-          src="/logo.jpg"
-          alt="شعار مقبرة الكتب المنسية"
-          onError={() => setImgError(true)}
-          className="w-full h-full object-cover transform scale-105 transition-transform duration-500 group-hover:scale-115"
-        />
-      )}
+      <img
+        src="/logo.jpg"
+        alt="شعار مقبرة الكتب المنسية"
+        className="w-full h-full object-cover transform scale-105 transition-transform duration-500 group-hover:scale-115"
+      />
 
       {/* Hover Zoom Indicator Overlay */}
       {onEmblemClick && (
