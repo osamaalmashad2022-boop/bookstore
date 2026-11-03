@@ -1,10 +1,22 @@
 {
   "$schema": "../node_modules/wrangler/config-schema.json",
   "name": "bookstore",
+  "main": "../worker.ts",
   "compatibility_date": "2024-09-23",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "DATABASE_URL": "libsql://maqbara-books-osospiracy.aws-eu-central-1.turso.io",
+    "DATABASE_AUTH_TOKEN": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTM1NjIxMjksImlkIjoiMDFhMTk4YTEtZjkwMS03YWQwLWFlNGEtOWE0MWM5NjBmNWM0Iiwia2lkIjoiMUprejlIN0EyVk1IZmhhcFpzaHljT3pFY2paRnZ6cE14QzJCb1hGSmJOayIsInJpZCI6ImU2MTFkNTAyLTEwNGEtNDA4ZS05NGJiLWVmY2I2ZTMzODZiOSJ9.8b3G_ypD7kDpwpeSOFuJJNyHo03ZfO8ygW7-2z4BmbQ-L_GY4xrqy7cCrVF5bD68HpqRjcVKYGwizpQYpInkCQ",
+    "ADMIN_PASSWORD": "123456",
+    "MERCHANT_PHONE": "201012345678",
+    "STORE_NAME": "مقبرة الكتب المنسية",
+    "FREE_SHIPPING_THRESHOLD": "600",
+    "BUNDLE_DISCOUNT_PERCENT": "10"
   }
 }
-
