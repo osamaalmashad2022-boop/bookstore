@@ -1,7 +1,0 @@
-# Cloudflare Pages & Workers Redirects
-# If your backend API is hosted on Render, Railway, or Fly.io, configure the proxy here:
-# /api/*  https://your-backend-api.onrender.com/api/:splat  200
-
-# Single Page Application (SPA) routing fallback
-/*  /index.html  200
-
