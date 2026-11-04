@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Book, Category } from '../../types';
-import { Plus, Search, Trash2, Edit, Sparkles, Loader2, BookOpen, Image as ImageIcon, Check, X, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Plus, Search, Trash2, Edit, Sparkles, Loader2, BookOpen, Image as ImageIcon, Check, X, CheckCircle2, AlertCircle, Upload, RotateCcw, Link as LinkIcon } from 'lucide-react';
 import { adminFetch } from '../../utils/adminApi';
 
 export const BookManager: React.FC = () => {
@@ -28,6 +28,14 @@ export const BookManager: React.FC = () => {
   const [coverImage, setCoverImage] = useState('');
   const [isBestseller, setIsBestseller] = useState(false);
   const [isFeatured, setIsFeatured] = useState(false);
+
+  // Cover Image Customization & Upload State
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [apiCoverImage, setApiCoverImage] = useState<string | null>(null);
+  const [isProcessingImage, setIsProcessingImage] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [showUrlInput, setShowUrlInput] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   // Auto-Fill State
   const [autoFillQuery, setAutoFillQuery] = useState('');
@@ -72,6 +80,10 @@ export const BookManager: React.FC = () => {
     setWhyRead('');
     setExcerptText('');
     setCoverImage('https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80');
+    setApiCoverImage(null);
+    setUploadError(null);
+    setShowUrlInput(false);
+    setIsDragging(false);
     setIsBestseller(false);
     setIsFeatured(false);
     setAutoFillQuery('');
@@ -95,6 +107,10 @@ export const BookManager: React.FC = () => {
     setWhyRead(book.why_read);
     setExcerptText(book.excerpt_text || '');
     setCoverImage(book.cover_image);
+    setApiCoverImage(null);
+    setUploadError(null);
+    setShowUrlInput(false);
+    setIsDragging(false);
     setIsBestseller(book.is_bestseller === 1);
     setIsFeatured(book.is_featured === 1);
     setAutoFillQuery(book.title);
@@ -134,7 +150,10 @@ export const BookManager: React.FC = () => {
     setTitle(item.title || title);
     setAuthor(item.author || author);
     if (item.pageCount) setPageCount(String(item.pageCount));
-    if (item.coverImage) setCoverImage(item.coverImage);
+    if (item.coverImage) {
+      setCoverImage(item.coverImage);
+      setApiCoverImage(item.coverImage);
+    }
     if (item.description) {
       const cleanDesc = item.description.trim();
       setWhyRead(cleanDesc.slice(0, 180) + (cleanDesc.length > 180 ? '...' : ''));
@@ -143,7 +162,87 @@ export const BookManager: React.FC = () => {
     setAutoFillResults([]);
     setAutoFillNotice(null);
     setAutoFillSuccess(true);
+    setUploadError(null);
     setTimeout(() => setAutoFillSuccess(false), 4000);
+  };
+
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    processImageFile(file);
+    e.target.value = '';
+  };
+
+  const processImageFile = (file: File) => {
+    setUploadError(null);
+    if (!file.type.startsWith('image/')) {
+      setUploadError('يرجى اختيار ملف صورة صالح (JPG, PNG, WebP)');
+      return;
+    }
+
+    if (file.size > 15 * 1024 * 1024) {
+      setUploadError('حجم الصورة كبير جداً، يرجى اختيار صورة أقل من 15 ميجابايت');
+      return;
+    }
+
+    setIsProcessingImage(true);
+    const reader = new FileReader();
+
+    reader.onload = (readerEvent) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const MAX_WIDTH = 600;
+          const MAX_HEIGHT = 900;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+            const ratio = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+
+          if (!ctx) {
+            setCoverImage(readerEvent.target?.result as string);
+            setIsProcessingImage(false);
+            return;
+          }
+
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Compress to lightweight high quality JPEG data URL (~40-80KB)
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          setCoverImage(compressedDataUrl);
+        } catch (err) {
+          console.error('Image processing error:', err);
+          setCoverImage(readerEvent.target?.result as string);
+        } finally {
+          setIsProcessingImage(false);
+        }
+      };
+
+      img.onerror = () => {
+        setIsProcessingImage(false);
+        setUploadError('تعذر قراءة ملف الصورة. تأكد من أن الملف سليم.');
+      };
+
+      img.src = readerEvent.target?.result as string;
+    };
+
+    reader.onerror = () => {
+      setIsProcessingImage(false);
+      setUploadError('فشلت قراءة الصورة من جهازك.');
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleSaveBook = async (e: React.FormEvent) => {
@@ -570,43 +669,193 @@ export const BookManager: React.FC = () => {
                   <h4 className="text-xs font-bold text-amber-400/90 flex items-center gap-1.5 font-readex border-b border-amber-900/20 pb-1">
                     <span>4. غلاف المخطوطة وعدد الصفحات</span>
                   </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
-                    <div className="sm:col-span-8 space-y-3">
-                      <div>
-                        <label className="text-xs font-bold text-amber-200 block mb-1.5 font-readex">رابط صورة الغلاف (URL)</label>
-                        <input
-                          type="url"
-                          placeholder="https://..."
-                          value={coverImage}
-                          onChange={e => setCoverImage(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/40 bg-[#1a1523] text-xs sm:text-sm focus:outline-none focus:border-amber-400 text-amber-100 font-mono"
-                        />
+
+                  {/* API Cover Hint */}
+                  {apiCoverImage && coverImage === apiCoverImage && (
+                    <div className="bg-amber-950/30 border border-amber-900/40 p-2.5 rounded-xl flex items-start gap-2 text-xs text-amber-200/90">
+                      <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <span>تم جلب هذه الصورة تلقائياً من خدمة الكتب. إذا كانت الصورة غير مناسبة أو منخفضة الجودة، يمكنك استبدالها برفع صورة واضحة من جهازك الآن.</span>
                       </div>
-                      <div>
-                        <label className="text-xs font-bold text-amber-200 block mb-1.5 font-readex">عدد الصفحات التقريبي</label>
-                        <input
-                          type="number"
-                          placeholder="200"
-                          value={pageCount}
-                          onChange={e => setPageCount(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/40 bg-[#1a1523] text-xs sm:text-sm focus:outline-none focus:border-amber-400 text-amber-100 font-readex"
-                        />
+                    </div>
+                  )}
+
+                  {/* Upload & Dropzone Area */}
+                  <div
+                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                    onDragLeave={() => setIsDragging(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDragging(false);
+                      const file = e.dataTransfer.files?.[0];
+                      if (file) processImageFile(file);
+                    }}
+                    className={`border-2 border-dashed rounded-2xl p-4 transition-all text-right ${
+                      isDragging 
+                        ? 'border-amber-400 bg-amber-500/10 scale-[1.01]' 
+                        : 'border-amber-900/40 bg-[#16121f] hover:border-amber-500/40'
+                    }`}
+                  >
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png, image/jpeg, image/jpg, image/webp"
+                      onChange={handleImageFileChange}
+                      className="hidden"
+                    />
+
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 w-full sm:w-auto">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
+                          {isProcessingImage ? (
+                            <Loader2 className="w-5 h-5 text-amber-400 animate-spin" />
+                          ) : (
+                            <Upload className="w-5 h-5 text-amber-400" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="text-xs sm:text-sm font-bold text-amber-100 font-readex">
+                            رفع غلاف من جهازك (كمبيوتر / هاتف)
+                          </div>
+                          <p className="text-[11px] text-stone-400 font-readex">
+                            اسحب الصورة وأفلتها هنا أو انقر للاختيار (PNG, JPG, WebP)
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isProcessingImage}
+                          className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-amber-950/40 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>{coverImage?.startsWith('data:image/') ? 'تغيير الصورة المرفوعة' : 'اختر صورة من جهازك'}</span>
+                        </button>
+
+                        {apiCoverImage && coverImage !== apiCoverImage && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCoverImage(apiCoverImage);
+                              setUploadError(null);
+                            }}
+                            className="px-3 py-2 rounded-xl bg-stone-900/80 hover:bg-stone-800 text-amber-300 border border-amber-900/40 font-bold text-xs flex items-center gap-1 transition-colors"
+                            title="استعادة صورة API المقترحة"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">استعادة صورة الـ API</span>
+                          </button>
+                        )}
                       </div>
                     </div>
 
+                    {uploadError && (
+                      <div className="mt-3 bg-rose-950/40 border border-rose-800/60 p-2.5 rounded-xl text-xs text-rose-300 flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <span>{uploadError}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Secondary URL toggle */}
+                  <div className="flex items-center justify-between pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowUrlInput(!showUrlInput)}
+                      className="text-[11px] text-amber-400/80 hover:text-amber-300 flex items-center gap-1 transition-colors font-readex"
+                    >
+                      <LinkIcon className="w-3 h-3" />
+                      <span>{showUrlInput ? 'إخفاء حقل رابط الصورة (URL)' : 'أو إدخال رابط صورة يدوي (URL)...'}</span>
+                    </button>
+
+                    {coverImage && coverImage !== 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80' && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCoverImage('https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80');
+                        }}
+                        className="text-[10px] text-stone-500 hover:text-stone-300 transition-colors"
+                      >
+                        استخدام الغلاف الافتراضي
+                      </button>
+                    )}
+                  </div>
+
+                  {showUrlInput && (
+                    <div>
+                      <label className="text-xs font-bold text-amber-200 block mb-1.5 font-readex">رابط صورة الغلاف (URL)</label>
+                      <input
+                        type="url"
+                        placeholder="https://..."
+                        value={coverImage.startsWith('data:image/') ? '' : coverImage}
+                        onChange={e => {
+                          setCoverImage(e.target.value);
+                          setUploadError(null);
+                        }}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/40 bg-[#1a1523] text-xs sm:text-sm focus:outline-none focus:border-amber-400 text-amber-100 font-mono text-left"
+                        dir="ltr"
+                      />
+                    </div>
+                  )}
+
+                  {/* Pages Count and Live Cover Preview */}
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center pt-2">
+                    <div className="sm:col-span-8">
+                      <label className="text-xs font-bold text-amber-200 block mb-1.5 font-readex">عدد الصفحات التقريبي *</label>
+                      <input
+                        type="number"
+                        placeholder="200"
+                        value={pageCount}
+                        onChange={e => setPageCount(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/40 bg-[#1a1523] text-xs sm:text-sm focus:outline-none focus:border-amber-400 text-amber-100 font-readex"
+                      />
+                      <p className="text-[10px] text-stone-500 mt-1 font-readex">
+                        يُستخدم لحساب ساعات القراءة التقريبية لزوار المتجر
+                      </p>
+                    </div>
+
                     {/* Live Cover Preview */}
-                    <div className="sm:col-span-4 flex items-center justify-center bg-[#1a1523] border border-amber-900/40 rounded-2xl p-3 min-h-[120px]">
+                    <div className="sm:col-span-4 flex items-center justify-center bg-[#1a1523] border border-amber-900/40 rounded-2xl p-3 min-h-[130px]">
                       {coverImage ? (
-                        <div className="text-center space-y-1">
-                          <img
-                            src={coverImage}
-                            alt="معاينة الغلاف"
-                            className="w-16 h-22 object-cover rounded-lg shadow-md mx-auto border border-amber-500/40"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80';
-                            }}
-                          />
-                          <span className="text-[10px] text-stone-400 block font-readex">معاينة الغلاف</span>
+                        <div className="text-center space-y-2">
+                          <div className="relative inline-block">
+                            <img
+                              src={coverImage}
+                              alt="معاينة الغلاف"
+                              className="w-16 h-24 object-cover rounded-lg shadow-md mx-auto border border-amber-500/40"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80';
+                              }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => fileInputRef.current?.click()}
+                              className="absolute -bottom-1.5 -left-1.5 p-1 rounded-full bg-amber-500 text-stone-950 shadow hover:bg-amber-400 transition-colors"
+                              title="تغيير الصورة"
+                            >
+                              <Upload className="w-3 h-3" />
+                            </button>
+                          </div>
+                          
+                          <div>
+                            {coverImage.startsWith('data:image/') ? (
+                              <span className="text-[9px] bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 px-2 py-0.5 rounded-full inline-flex items-center gap-1 font-readex">
+                                <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
+                                صورة من جهازك
+                              </span>
+                            ) : apiCoverImage && coverImage === apiCoverImage ? (
+                              <span className="text-[9px] bg-amber-950/80 text-amber-300 border border-amber-800/60 px-2 py-0.5 rounded-full inline-flex items-center gap-1 font-readex">
+                                <Sparkles className="w-2.5 h-2.5 text-amber-400" />
+                                تلقائية من الـ API
+                              </span>
+                            ) : (
+                              <span className="text-[9px] bg-stone-800 text-stone-300 border border-stone-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1 font-readex">
+                                رابط إنترنت
+                              </span>
+                            )}
+                          </div>
                         </div>
                       ) : (
                         <div className="text-center text-stone-500 space-y-1">
