@@ -1,7 +1,11 @@
 import { createClient, Client, InStatement, ResultSet } from '@libsql/client/web';
 import dotenv from 'dotenv';
 
-dotenv.config();
+try {
+  dotenv.config();
+} catch {
+  // Edge runtime safe (e.g. Cloudflare Workers without local filesystem)
+}
 
 // Determine Turso / SQLite connection URL
 const defaultUrl = 'libsql://maqbara-books-osospiracy.aws-eu-central-1.turso.io';

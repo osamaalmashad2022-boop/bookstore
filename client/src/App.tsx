@@ -9,7 +9,7 @@ import { CheckoutModal } from './components/CheckoutModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { CandleTorch } from './components/CandleTorch';
 import { Candle } from './components/Candle';
-import { Search, Truck, ShieldCheck, Flame, Lock } from 'lucide-react';
+import { Search, Truck, ShieldCheck, Flame, Lock, Phone, MessageCircle, Users } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'catalog' | 'advisor' | 'admin'>('catalog');
@@ -297,8 +297,56 @@ export const App: React.FC = () => {
       {/* Atmospheric Sanctuary Torchlight Cursor Engine */}
       <CandleTorch />
 
-      {/* Footer info with discreet secret lock trigger */}
-      <footer className="mt-12 border-t border-amber-900/30 bg-[#120f17] py-6 text-center text-xs text-stone-400">
+      {/* Footer info with contact channels and discreet secret lock trigger */}
+      <footer className="mt-12 border-t border-amber-900/30 bg-[#120f17] py-8 text-center text-xs text-stone-400">
+        <div className="max-w-4xl mx-auto px-4 mb-6">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 text-xs mb-2 font-readex">
+            {/* Facebook */}
+            <a
+              href="https://www.facebook.com/share/1Hv4zSzqdc/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1a1523] border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:border-blue-400/50 transition-all font-semibold"
+            >
+              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+              <span>فيسبوك</span>
+            </a>
+
+            {/* WhatsApp Group */}
+            <a
+              href="https://chat.whatsapp.com/DrEMvZCSlMV2J1CQgpDjbt?s=sh&p=a&iam=2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1a1523] border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-400/50 transition-all font-semibold"
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>مجموعة واتساب</span>
+            </a>
+
+            {/* Direct WhatsApp */}
+            <a
+              href="https://wa.me/201555779084"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1a1523] border border-green-500/30 text-green-400 hover:bg-green-500/10 hover:border-green-400/50 transition-all font-semibold"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>واتساب (+20 15 55779084)</span>
+            </a>
+
+            {/* Phone Call */}
+            <a
+              href="tel:01025135734"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1a1523] border border-amber-500/30 text-amber-300 hover:bg-amber-500/10 hover:border-amber-400/50 transition-all font-semibold"
+            >
+              <Phone className="w-3.5 h-3.5" />
+              <span>إتصال (01025135734)</span>
+            </a>
+          </div>
+        </div>
+
         <p className="font-bold font-readex text-amber-200 mb-1 flex items-center justify-center gap-1.5">
           <span>مقبرة الكتب المنسية للكتب الورقية © 2026</span>
           <button

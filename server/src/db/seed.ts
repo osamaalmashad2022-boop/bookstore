@@ -16,7 +16,7 @@ export async function runSeed() {
   // 1. Site Settings
   await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['free_shipping_threshold', '600']);
   await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['bundle_discount_percent', '10']);
-  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['merchant_phone', '201012345678']);
+  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['merchant_phone', '201555779084']);
   await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['merchant_email', 'store@dar-almaarefa.com']);
   await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['store_name', 'مقبرة الكتب المنسية']);
 

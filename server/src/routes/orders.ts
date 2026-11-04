@@ -45,7 +45,7 @@ router.post('/', async (req: Request, res: Response) => {
       settings[r.key] = r.value;
     });
 
-    const merchantPhone = settings['merchant_phone'] || '201012345678';
+    const merchantPhone = settings['merchant_phone'] || '201555779084';
     const freeShippingThreshold = parseFloat(settings['free_shipping_threshold'] || '600');
     const bundleDiscountPercent = parseFloat(settings['bundle_discount_percent'] || '10');
 

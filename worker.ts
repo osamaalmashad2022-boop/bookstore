@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { queryAll, queryOne, execute, batch } from './server/src/db/database';
 import { getSmartRecommendation } from './server/src/services/recommender';
 import { searchBooksMetadata } from './server/src/services/googleBooks';
@@ -76,6 +76,9 @@ function verifyAdminToken(token: string, secret: string): boolean {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    if (env.DATABASE_URL) process.env.DATABASE_URL = env.DATABASE_URL;
+    if (env.DATABASE_AUTH_TOKEN) process.env.DATABASE_AUTH_TOKEN = env.DATABASE_AUTH_TOKEN;
+
     const url = new URL(request.url);
 
     // 1. Handle CORS Preflight
@@ -464,7 +467,7 @@ export default {
         const settings: Record<string, string> = {};
         settingsRows.forEach((r: any) => { settings[r.key] = r.value; });
 
-        const merchantPhone = env.MERCHANT_PHONE || settings['merchant_phone'] || '201012345678';
+        const merchantPhone = env.MERCHANT_PHONE || settings['merchant_phone'] || '201555779084';
         const freeShippingThreshold = parseFloat(env.FREE_SHIPPING_THRESHOLD || settings['free_shipping_threshold'] || '600');
         const bundleDiscountPercent = parseFloat(env.BUNDLE_DISCOUNT_PERCENT || settings['bundle_discount_percent'] || '10');
 
