@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, QrCode, BookOpen, Compass, ShoppingBag } from 'lucide-react';
+import { Search, Share2, BookOpen, Compass, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { Logo } from './Logo';
 import { LogoModal } from './LogoModal';
@@ -47,15 +47,15 @@ export const Navigation: React.FC<NavigationProps> = ({
               </button>
             )}
 
-            {/* Follow Hub & QR Link */}
+            {/* Follow Hub Link */}
             <a
               href="/follow/index.html"
-              title="صفحة المتابعة عبر السوشيل ميديا ورمز الـ QR"
+              title="صفحة المتابعة وقنوات التواصل"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/40 hover:bg-amber-500/25 transition-all"
             >
-              <QrCode className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden sm:inline">سوشيل ميديا & QR</span>
-              <span className="sm:hidden">QR</span>
+              <Share2 className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">سوشيال ميديا</span>
+              <span className="sm:hidden">تواصل</span>
             </a>
 
             {/* Smart Advisor Pill for Desktop / Tablet */}
