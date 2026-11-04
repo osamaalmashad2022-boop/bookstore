@@ -12,16 +12,17 @@
   <meta name="description"
     content="البوابة الرسمية لمقبرة الكتب المنسية. تابع حساباتنا الرسمية واحصل على خصم 10% فوري وهدايا ورقية حصرية." />
 
-  <!-- Favicon / Logo in Browser Tab -->
+  <!-- Favicon / Logo in Browser Tab - Matches Storefront 1:1 -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/jpeg" href="/logo.jpg" />
-  <link rel="shortcut icon" type="image/jpeg" href="/logo.jpg" />
+  <link rel="shortcut icon" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/logo.jpg" />
 
-  <!-- Fonts: Amiri for Royal Arabic Titles & IBM Plex Sans Arabic for Luxury Typography -->
+  <!-- Fonts: Amiri, Cairo, IBM Plex Sans Arabic & Readex Pro for Storefront Identity -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
   <style>
@@ -106,70 +107,107 @@
       align-items: center;
     }
 
-    /* Header & Identity */
+    /* Header & Identity - Matches Storefront Luxury Emblem 1:1 */
     .brand-header {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      margin-bottom: 22px;
+      margin-bottom: 24px;
       width: 100%;
     }
 
     .avatar-wrapper {
       position: relative;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .avatar-frame {
-      width: 88px;
-      height: 88px;
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
-      background: radial-gradient(circle, #251d2f 0%, #110e16 100%);
-      border: 2px solid var(--gold);
-      box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.8);
+      background: #120e17;
+      border: 2px solid rgba(245, 158, 11, 0.6);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.38), inset 0 0 14px rgba(0, 0, 0, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
+      overflow: hidden;
+      transition: all 0.35s ease;
     }
-    .avatar-badge {
+    .avatar-frame:hover {
+      transform: scale(1.05);
+      border-color: rgba(251, 191, 36, 0.9);
+      box-shadow: 0 0 35px rgba(212, 175, 55, 0.55), inset 0 0 16px rgba(0, 0, 0, 0.9);
+    }
+    .avatar-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.06);
+      border-radius: 50%;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .avatar-frame:hover img {
+      transform: scale(1.14);
+    }
+    .avatar-glow-overlay {
       position: absolute;
-      bottom: -3px;
-      left: -3px;
-      background: linear-gradient(135deg, #F6C860, #D4AF37);
-      color: #121015;
-      font-size: 0.68rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 2px solid var(--bg);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      inset: 0;
+      background: linear-gradient(to top, rgba(120, 53, 15, 0.65), transparent 60%);
+      pointer-events: none;
+      z-index: 2;
     }
-
-    .avatar-badge svg {
-      width: 11px;
-      height: 11px;
-      fill: currentColor;
+    .avatar-ring-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(253, 230, 138, 0.35);
+      pointer-events: none;
+      z-index: 3;
     }
 
     .brand-title {
-      font-family: var(--font-title);
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: var(--gold-light);
-      line-height: 1.15;
+      font-family: 'Readex Pro', 'Cairo', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #FFF4D0;
+      line-height: 1.2;
       margin-bottom: 6px;
-      letter-spacing: 0.02em;
-      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+      letter-spacing: -0.01em;
+      text-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .brand-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 10px #fbbf24;
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+    .brand-sub {
+      font-family: 'Readex Pro', 'Cairo', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #D4AF37;
+      margin-bottom: 8px;
+      letter-spacing: 0.01em;
     }
     .brand-tagline {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--ink-muted);
       line-height: 1.5;
-      max-width: 330px;
+      max-width: 340px;
       margin-bottom: 12px;
     }
     .brand-quote {
@@ -882,22 +920,21 @@
 
   <main class="mobile-app">
 
-    <!-- 1. Header & Identity (Pure Handcrafted Vectors) -->
+    <!-- 1. Header & Identity - Matches Storefront Branding 1:1 -->
     <header class="brand-header">
       <div class="avatar-wrapper">
-        <div class="avatar-frame" style="overflow: hidden; padding: 2px;">
-          <img src="/logo.jpg" alt="شعار مقبرة الكتب المنسية" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: drop-shadow(0 0 10px rgba(212,175,55,0.4));" />
-        </div>
-        <div class="avatar-badge">
-          <svg viewBox="0 0 24 24">
-            <path
-              d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-2 16l-4-4 1.41-1.41L10 15.17l6.59-6.59L18 10l-8 8z" />
-          </svg>
-          <span>موثق</span>
+        <div class="avatar-frame">
+          <div class="avatar-glow-overlay"></div>
+          <img src="/logo.jpg" alt="شعار مقبرة الكتب المنسية" />
+          <div class="avatar-ring-overlay"></div>
         </div>
       </div>
 
-      <h1 class="brand-title">مَقبرَةُ الكُتُب</h1>
+      <h1 class="brand-title">
+        <span>مقبرة الكتب المنسية</span>
+        <span class="brand-dot"></span>
+      </h1>
+      <p class="brand-sub">ملاذ الأرواح والكتب الناجية من النسيان</p>
       <p class="brand-tagline">
         المكان الذي لا يموت فيه كتابٌ أبداً... ملاذ عشاق الكتب الورقية النادرة والطبعات الأصلية
       </p>
