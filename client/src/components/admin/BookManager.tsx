@@ -292,9 +292,12 @@ export const BookManager: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setBooks(prev => prev.filter(b => b.id !== id));
+      } else {
+        alert(data.error || 'تعذر حذف هذا الكتاب من السجلات.');
       }
     } catch (err) {
       console.error(err);
+      alert('حدث خطأ أثناء محاولة حذف الكتاب.');
     }
   };
 

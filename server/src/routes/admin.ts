@@ -203,10 +203,17 @@ router.put('/books/:id', async (req: Request, res: Response) => {
 router.delete('/books/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    await execute(`UPDATE books SET recommended_next_book_id = NULL WHERE recommended_next_book_id = ?`, [id]);
     await execute(`DELETE FROM books WHERE id = ?`, [id]);
     res.json({ success: true, message: 'تم حذف الكتاب بنجاح' });
   } catch (error: any) {
     console.error('Admin delete book error:', error);
+    if (error.message?.includes('FOREIGN KEY')) {
+      return res.status(400).json({
+        success: false,
+        error: 'لا يمكن حذف هذا الكتاب مباشرة لأنه مرتبط بطلبات شراء مسجلة في سجلات المقبرة.'
+      });
+    }
     res.status(500).json({ success: false, error: 'حدث خطأ أثناء حذف الكتاب' });
   }
 });

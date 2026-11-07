@@ -62,8 +62,7 @@ CREATE TABLE IF NOT EXISTS order_items (
   title TEXT NOT NULL,
   price REAL NOT NULL,
   quantity INTEGER NOT NULL,
-  FOREIGN KEY (order_id) REFERENCES orders(id),
-  FOREIGN KEY (book_id) REFERENCES books(id)
+  FOREIGN KEY (order_id) REFERENCES orders(id)
 );
 
 CREATE TABLE IF NOT EXISTS recommendation_logs (

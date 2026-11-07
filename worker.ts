@@ -228,8 +228,19 @@ export default {
         // DELETE /api/admin/books/:id
         if (bookEditMatch && method === 'DELETE') {
           const id = bookEditMatch[1];
-          await execute(`DELETE FROM books WHERE id = ?`, [id]);
-          return json({ success: true, message: 'تم حذف الكتاب بنجاح' });
+          try {
+            await execute(`UPDATE books SET recommended_next_book_id = NULL WHERE recommended_next_book_id = ?`, [id]);
+            await execute(`DELETE FROM books WHERE id = ?`, [id]);
+            return json({ success: true, message: 'تم حذف الكتاب بنجاح' });
+          } catch (e: any) {
+            if (e.message?.includes('FOREIGN KEY')) {
+              return json({
+                success: false,
+                error: 'لا يمكن حذف هذا الكتاب مباشرة لأنه مرتبط بطلبات شراء مسجلة في سجلات المقبرة.'
+              }, 400);
+            }
+            throw e;
+          }
         }
 
         // GET /api/admin/orders
