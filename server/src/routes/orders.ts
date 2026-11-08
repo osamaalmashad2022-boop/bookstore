@@ -16,6 +16,7 @@ router.post('/', async (req: Request, res: Response) => {
       notes,
       items,
       is_bundle,
+      coupon_code,
     } = req.body;
 
     if (!customer_name || !customer_phone || !governorate_id || !street_address) {
@@ -76,8 +77,23 @@ router.post('/', async (req: Request, res: Response) => {
 
     // 4. Calculate discount & shipping
     let discountAmount = 0;
-    if (is_bundle) {
+    let discountReason = '';
+
+    const validCoupons: Record<string, number> = {
+      'MAQBARA10': 10,
+      'READ10': 10,
+      'WARAQ10': 10,
+    };
+
+    const cleanCoupon = typeof coupon_code === 'string' ? coupon_code.trim().toUpperCase() : '';
+    const couponPercent = validCoupons[cleanCoupon] || 0;
+
+    if (couponPercent > 0) {
+      discountAmount = Math.round((totalBooksPrice * couponPercent) / 100);
+      discountReason = `كود خصم (${cleanCoupon} - ${couponPercent}%)`;
+    } else if (is_bundle) {
       discountAmount = Math.round((totalBooksPrice * bundleDiscountPercent) / 100);
+      discountReason = `خصم باقة مسار القراءة (${bundleDiscountPercent}%)`;
     }
 
     const priceAfterDiscount = totalBooksPrice - discountAmount;
@@ -169,6 +185,7 @@ router.post('/', async (req: Request, res: Response) => {
         quantity: v.quantity,
       })),
       discountAmount,
+      discountReason,
       totalBooksPrice,
       shippingFee,
       finalTotal,

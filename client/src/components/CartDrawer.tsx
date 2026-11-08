@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Trash2, Plus, Minus, ArrowLeft, Sparkles, Truck } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Trash2, Plus, Minus, ArrowLeft, Sparkles, Truck, Tag, Check, AlertCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { Candle } from './Candle';
 
@@ -14,11 +14,25 @@ export const CartDrawer: React.FC = () => {
     discountAmount,
     totalPrice,
     freeShippingThreshold,
-    isBundleApplied,
+    couponCode,
+    couponError,
+    applyCoupon,
+    removeCoupon,
+    discountLabel,
     setIsCheckoutOpen,
   } = useCart();
 
+  const [couponInput, setCouponInput] = useState('');
+  const [isCouponOpen, setIsCouponOpen] = useState(false);
+
   if (!isCartOpen) return null;
+
+  const handleApplyCoupon = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!couponInput.trim()) return;
+    applyCoupon(couponInput);
+    setCouponInput('');
+  };
 
   const amountNeededForFreeShipping = Math.max(0, freeShippingThreshold - totalPrice);
   const freeShippingProgress = Math.min(100, Math.round((totalPrice / freeShippingThreshold) * 100));
@@ -173,17 +187,79 @@ export const CartDrawer: React.FC = () => {
           {/* Footer Totals & Checkout Button */}
           {items.length > 0 && (
             <div className="p-4 bg-[#16131d] border-t border-amber-900/30 space-y-3">
+              {/* Promo Coupon Area */}
+              <div className="bg-[#1a1622] rounded-xl p-2.5 border border-amber-900/30">
+                {couponCode ? (
+                  <div className="flex items-center justify-between text-xs font-readex text-emerald-300">
+                    <div className="flex items-center gap-1.5 font-bold">
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>كود مفعّل: <span className="text-amber-200 tracking-wider font-black">{couponCode}</span> (خصم 10%)</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeCoupon()}
+                      className="text-[10px] text-rose-400 hover:text-rose-300 font-semibold"
+                    >
+                      إلغاء
+                    </button>
+                  </div>
+                ) : !isCouponOpen ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsCouponOpen(true)}
+                    className="w-full text-right text-[11px] font-readex text-amber-400/90 hover:text-amber-300 font-semibold flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1">
+                      <Tag className="w-3 h-3" />
+                      هل لديك كود خصم؟
+                    </span>
+                    <span className="text-[10px] text-stone-500 underline">إدخال الكود</span>
+                  </button>
+                ) : (
+                  <div className="space-y-1.5">
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        placeholder="أدخل الكود (مثل: MAQBARA10)"
+                        value={couponInput}
+                        onChange={e => setCouponInput(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleApplyCoupon();
+                          }
+                        }}
+                        className="flex-1 px-2.5 py-1.5 rounded-lg border border-amber-900/40 bg-[#120f17] text-amber-100 text-xs uppercase placeholder:normal-case placeholder:text-stone-500 focus:outline-none focus:border-amber-500 font-semibold"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleApplyCoupon()}
+                        className="px-3 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 hover:bg-amber-500/30 text-amber-200 text-xs font-bold transition-all"
+                      >
+                        تطبيق
+                      </button>
+                    </div>
+                    {couponError && (
+                      <p className="text-[10px] text-rose-400 font-readex flex items-center gap-1">
+                        <AlertCircle className="w-2.5 h-2.5" />
+                        <span>{couponError}</span>
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <div className="space-y-1 text-xs text-stone-400 font-readex">
                 <div className="flex justify-between">
                   <span>مجموع الكتب:</span>
                   <span className="font-semibold text-amber-200 font-readex">{subtotal} ج.م</span>
                 </div>
 
-                {isBundleApplied && discountAmount > 0 && (
+                {discountAmount > 0 && (
                   <div className="flex justify-between text-amber-400 font-bold">
                     <span className="flex items-center gap-1">
-                      <Sparkles className="w-3 h-3" />
-                      خصم باقة مسار القراءة (10%):
+                      <Sparkles className="w-3 h-3 text-amber-400" />
+                      {discountLabel || 'خصم (10%):'}
                     </span>
                     <span className="font-readex">-{discountAmount} ج.م</span>
                   </div>

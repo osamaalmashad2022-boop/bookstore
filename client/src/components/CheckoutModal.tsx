@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, MessageCircle, Truck, AlertCircle, Loader2 } from 'lucide-react';
+import { X, Check, MessageCircle, Truck, AlertCircle, Loader2, Tag, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { Governorate } from '../types';
 
@@ -12,6 +12,11 @@ export const CheckoutModal: React.FC = () => {
     discountAmount,
     subtotal,
     isBundleApplied,
+    couponCode,
+    couponError,
+    applyCoupon,
+    removeCoupon,
+    discountLabel,
     clearCart,
   } = useCart();
 
@@ -23,6 +28,7 @@ export const CheckoutModal: React.FC = () => {
   const [sameAsPhone, setSameAsPhone] = useState<boolean>(true);
   const [streetAddress, setStreetAddress] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
+  const [couponInput, setCouponInput] = useState<string>('');
 
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,6 +67,13 @@ export const CheckoutModal: React.FC = () => {
   const shippingFee = isFreeShipping ? 0 : currentGov.fee;
   const finalTotal = totalPrice + shippingFee;
 
+  const handleApplyCoupon = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!couponInput.trim()) return;
+    applyCoupon(couponInput);
+    setCouponInput('');
+  };
+
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -81,6 +94,7 @@ export const CheckoutModal: React.FC = () => {
         street_address: streetAddress,
         notes,
         is_bundle: isBundleApplied,
+        coupon_code: couponCode || undefined,
         items: items.map(item => ({
           book_id: item.book.id,
           quantity: item.quantity,
@@ -106,6 +120,7 @@ export const CheckoutModal: React.FC = () => {
       });
 
       clearCart();
+      removeCoupon();
 
       if (data.whatsappUrl) {
         window.open(data.whatsappUrl, '_blank');
@@ -298,15 +313,79 @@ export const CheckoutModal: React.FC = () => {
                 />
               </div>
 
+              {/* Coupon Code Section */}
+              <div className="bg-[#181420] rounded-2xl p-3.5 border border-amber-900/40 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-amber-200 flex items-center gap-1.5 font-readex">
+                    <Tag className="w-3.5 h-3.5 text-amber-400" />
+                    <span>كود الخصم (Promo Code)</span>
+                  </label>
+                  {couponCode && (
+                    <button
+                      type="button"
+                      onClick={() => removeCoupon()}
+                      className="text-[11px] text-rose-400 hover:text-rose-300 font-semibold transition-colors"
+                    >
+                      إلغاء الكود
+                    </button>
+                  )}
+                </div>
+
+                {couponCode ? (
+                  <div className="flex items-center justify-between bg-emerald-950/40 border border-emerald-500/40 rounded-xl px-3 py-2 text-xs text-emerald-300 font-readex">
+                    <div className="flex items-center gap-1.5 font-bold">
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>تم تفعيل الكود: <span className="tracking-wider text-amber-200 font-black">{couponCode}</span> (خصم 10%)</span>
+                    </div>
+                    <span className="text-emerald-400 font-black font-readex">-{discountAmount} ج.م</span>
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="أدخل كود الخصم (مثل: MAQBARA10)"
+                        value={couponInput}
+                        onChange={e => setCouponInput(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleApplyCoupon();
+                          }
+                        }}
+                        className="flex-1 px-3 py-2 rounded-xl border border-amber-900/40 bg-[#120f17] text-amber-100 text-xs uppercase placeholder:normal-case placeholder:text-stone-500 focus:outline-none focus:border-amber-500 font-semibold"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleApplyCoupon()}
+                        className="px-4 py-2 rounded-xl bg-amber-500/20 border border-amber-500/40 hover:bg-amber-500/30 text-amber-200 text-xs font-bold transition-all"
+                      >
+                        تطبيق
+                      </button>
+                    </div>
+
+                    {couponError && (
+                      <p className="text-[11px] text-rose-400 font-readex flex items-center gap-1 pt-0.5">
+                        <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                        <span>{couponError}</span>
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
               {/* Invoice Breakdown Summary */}
               <div className="bg-[#181420] rounded-2xl p-4 border border-amber-900/30 space-y-1.5 text-xs font-readex">
                 <div className="flex justify-between text-stone-300">
                   <span>سعر الكتب بالصندوق:</span>
                   <span className="font-readex">{subtotal} ج.م</span>
                 </div>
-                {isBundleApplied && discountAmount > 0 && (
+                {discountAmount > 0 && (
                   <div className="flex justify-between text-amber-400 font-bold">
-                    <span>خصم باقة مسار القراءة (10%):</span>
+                    <span className="flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-amber-400" />
+                      {discountLabel || 'خصم (10%):'}
+                    </span>
                     <span className="font-readex">-{discountAmount} ج.م</span>
                   </div>
                 )}

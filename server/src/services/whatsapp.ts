@@ -14,6 +14,7 @@ export interface InvoiceDetails {
   notes?: string;
   items: InvoiceItem[];
   discountAmount: number;
+  discountReason?: string;
   totalBooksPrice: number;
   shippingFee: number;
   finalTotal: number;
@@ -27,7 +28,8 @@ export function generateWhatsAppMessage(details: InvoiceDetails): string {
 
   let discountLine = '';
   if (details.discountAmount > 0) {
-    discountLine = `\n🎁 *خصم باقة مسار القراءة (10%):* -${details.discountAmount} ج.م`;
+    const reason = details.discountReason || 'خصم باقة مسار القراءة (10%)';
+    discountLine = `\n🎁 *${reason}:* -${details.discountAmount} ج.م`;
   }
 
   const notesLine = details.notes ? `\n📝 *ملاحظات:* ${details.notes}` : '';
