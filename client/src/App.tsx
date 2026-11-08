@@ -9,7 +9,7 @@ import { CheckoutModal } from './components/CheckoutModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { CandleTorch } from './components/CandleTorch';
 import { Candle } from './components/Candle';
-import { Search, Truck, ShieldCheck, Flame, Lock, Phone, MessageCircle, Users } from 'lucide-react';
+import { Search, Truck, ShieldCheck, Flame, Lock, Phone, MessageCircle, Users, MapPin } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'catalog' | 'advisor' | 'admin'>('catalog');
@@ -344,6 +344,15 @@ export const App: React.FC = () => {
               <Phone className="w-3.5 h-3.5" />
               <span>إتصال (01025135734)</span>
             </a>
+
+            {/* Store Location */}
+            <div
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1a1523] border border-amber-500/30 text-amber-200/90 font-semibold"
+              title="موقع الفرع"
+            >
+              <MapPin className="w-3.5 h-3.5 text-amber-400" />
+              <span>الصعيدي القديم، خلف بيتزا بارتي</span>
+            </div>
           </div>
         </div>
 
