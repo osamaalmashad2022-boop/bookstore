@@ -191,6 +191,106 @@ const CURATED_ARABIC_BOOKS: Record<string, Partial<GoogleBookItem>> = {
     publishedDate: '1997',
     isbn: '9781612680194',
     categories: ['المال والأعمال']
+  },
+  'قضية ست الحسن': {
+    title: 'قضية ست الحسن',
+    author: 'ميرنا المهدي',
+    description: 'الجزء الأول من سلسلة تحقيقات نوح الألفي الشهيرة؛ جرائم متفرقة تبدو بلا رابط وألغاز مشوقة تكشف عن موهبة بوليسية استثنائية تحبس الأنفاس.',
+    pageCount: 320,
+    coverImage: '/covers/qadiyat-sitt-al-husn.jpg',
+    publishedDate: '2022',
+    isbn: '9789776743861',
+    categories: ['الروايات والأدب']
+  },
+  'قضية لوز مر': {
+    title: 'قضية لوز مر',
+    author: 'ميرنا المهدي',
+    description: 'الجزء الثاني من ملحمة نوح الألفي؛ خيوط جريمة جديدة تستند إلى سم السيانيد واللوز المر، وتأخذك إلى متاهة من الشكوك والانعطافات المفاجئة.',
+    pageCount: 310,
+    coverImage: '/covers/qadiyat-lawz-murr.jpg',
+    publishedDate: '2022',
+    isbn: '9789776743878',
+    categories: ['الروايات والأدب']
+  },
+  'قضية عنب الثعلب': {
+    title: 'قضية عنب الثعلب',
+    author: 'ميرنا المهدي',
+    description: 'الجزء الثالث من تحقيقات نوح الألفي؛ جريمة معقدة تتداخل فيها الدوافع النفسية مع أسرار النباتات السامة في حبكة بوليسية مشدودة الأعصاب.',
+    pageCount: 340,
+    coverImage: '/covers/qadiyat-inab-al-thalab.jpg',
+    publishedDate: '2023',
+    isbn: '9789778727326',
+    categories: ['الروايات والأدب']
+  },
+  'قضية ذيل القط': {
+    title: 'قضية ذيل القط',
+    author: 'ميرنا المهدي',
+    description: 'الجزء الرابع من السلسلة؛ تصاعد خطير في وتيرة الجرائم وألغاز متتابعة تضع بصيرة نوح الألفي الاستثنائية في أصعب اختباراتها.',
+    pageCount: 330,
+    coverImage: '/covers/qadiyat-dhayl-al-qitt.jpg',
+    publishedDate: '2023',
+    isbn: '9789779603452',
+    categories: ['الروايات والأدب']
+  },
+  'قضية مخالب القط': {
+    title: 'قضية مخالب القط',
+    author: 'ميرنا المهدي',
+    description: 'الجزء الخامس من السلسلة البوليسية الأشهر؛ مواجهة مباشرة مع مخالب قاتل محترف لا يترك وراءه أي أثر سوى الخوف والحيرة.',
+    pageCount: 360,
+    coverImage: '/covers/qadiyat-makhalib-al-qitt.jpg',
+    publishedDate: '2024',
+    isbn: '9789779603599',
+    categories: ['الروايات والأدب']
+  },
+  'قضية السنوات السبع': {
+    title: 'قضية السنوات السبع',
+    author: 'ميرنا المهدي',
+    description: 'الجزء السادس المشوق؛ رأس مقطوع يتدحرج في ليلة حظر التجوال ليعيد فتح ملفات سرية تعود لسبع سنوات مضت من الأسرار المدفونة.',
+    pageCount: 350,
+    coverImage: '/covers/qadiyat-al-sanawat-al-saba.jpg',
+    publishedDate: '2024',
+    isbn: '9786338594008',
+    categories: ['الروايات والأدب']
+  },
+  'جاز وروك': {
+    title: 'جاز وروك',
+    author: 'ميرنا المهدي',
+    description: 'الرواية الأولى من سلسلة "قائمة أغاني السفاح المثالي"؛ مزيج عبقري بين صخب الروك وشجن الجاز مع جريمة نفسية غير تقليدية.',
+    pageCount: 290,
+    coverImage: '/covers/jazz-wa-rock.jpg',
+    publishedDate: '2023',
+    isbn: '9789779603261',
+    categories: ['الروايات والأدب']
+  },
+  'قنبلة للاستخدام الشخصي': {
+    title: 'قنبلة للاستخدام الشخصي',
+    author: 'ميرنا المهدي',
+    description: 'رواية سياسية وجاسوسية ملحمية مستوحاة من وقائع حقيقية وتاريخ الصراع، تغوص في النفس الإنسانية ودوائر الانتقام والمقاومة.',
+    pageCount: 310,
+    coverImage: '/covers/qunbula-lil-istikhdam-al-shakhsi.jpg',
+    publishedDate: '2024',
+    isbn: '9789779603339',
+    categories: ['الروايات والأدب']
+  },
+  'المجوار': {
+    title: 'المجوار',
+    author: 'د. أحمد خالد توفيق',
+    description: 'عمل سردي مميز بقلم العراب أحمد خالد توفيق، يغوص في أعماق العوالم الغامضة بأسلوبه الساخر المشوق الذي يخاطب العقول والقلوب.',
+    pageCount: 280,
+    coverImage: '/covers/al-mijwar.jpg',
+    publishedDate: '2015',
+    isbn: '9789776467000',
+    categories: ['الروايات والأدب']
+  },
+  'الهول': {
+    title: 'الهول',
+    author: 'د. أحمد خالد توفيق',
+    description: 'ثماني حكايات كابوسية من أروع ما كتب د. أحمد خالد توفيق في أدب الرعب الماورائي والفانتازيا، تبحث في مخاوف الإنسان الأزلية مما وراء المألوف.',
+    pageCount: 224,
+    coverImage: '/covers/al-hawl.jpg',
+    publishedDate: '2014',
+    isbn: '9789776467064',
+    categories: ['الروايات والأدب']
   }
 };
 
