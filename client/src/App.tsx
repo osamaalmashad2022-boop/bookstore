@@ -351,7 +351,7 @@ export const App: React.FC = () => {
               title="موقع الفرع"
             >
               <MapPin className="w-3.5 h-3.5 text-amber-400" />
-              <span>الصعيدي القديم، خلف بيتزا بارتي</span>
+              <span>الصعيدي القديم، خلف بيتزا بارتي وأمام كوافير شريف موسى وبجانب شاتوه</span>
             </div>
           </div>
         </div>
