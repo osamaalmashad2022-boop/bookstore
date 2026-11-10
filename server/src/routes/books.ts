@@ -27,14 +27,20 @@ router.get('/', async (req: Request, res: Response) => {
       params.push(level);
     }
 
-    if (minPrice) {
-      sql += ` AND b.price >= ?`;
-      params.push(Number(minPrice));
+    if (minPrice !== undefined && minPrice !== '') {
+      const parsedMin = Number(minPrice);
+      if (!isNaN(parsedMin)) {
+        sql += ` AND b.price >= ?`;
+        params.push(parsedMin);
+      }
     }
 
-    if (maxPrice) {
-      sql += ` AND b.price <= ?`;
-      params.push(Number(maxPrice));
+    if (maxPrice !== undefined && maxPrice !== '') {
+      const parsedMax = Number(maxPrice);
+      if (!isNaN(parsedMax)) {
+        sql += ` AND b.price <= ?`;
+        params.push(parsedMax);
+      }
     }
 
     if (inStock === 'true' || inStock === '1') {
@@ -172,4 +178,3 @@ router.get('/:idOrSlug', async (req: Request, res: Response) => {
 });
 
 export default router;
-

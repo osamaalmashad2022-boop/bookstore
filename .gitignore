@@ -17,3 +17,7 @@ follow_final_*.png
 mobile_preview.png
 preview_animated_icons.png
 
+# Deployment config & credentials
+wrangler.jsonc
+client/wrangler.jsonc
+*.local.env

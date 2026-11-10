@@ -1,4 +1,4 @@
-import crypto from 'node:crypto';
+import * as crypto from 'node:crypto';
 import { queryAll, queryOne, execute, batch } from './server/src/db/database';
 import { getSmartRecommendation } from './server/src/services/recommender';
 import { searchBooksMetadata } from './server/src/services/googleBooks';
@@ -13,23 +13,100 @@ export interface Env {
   STORE_NAME?: string;
   FREE_SHIPPING_THRESHOLD?: string;
   BUNDLE_DISCOUNT_PERCENT?: string;
+  ALLOWED_ORIGINS?: string;
 }
 
-const CORS_HEADERS: Record<string, string> = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-admin-token',
-};
+function maskPhone(phone: string): string {
+  if (!phone) return '';
+  const clean = String(phone).trim();
+  if (clean.length <= 4) return '***';
+  return clean.slice(0, 3) + '*'.repeat(Math.max(3, clean.length - 6)) + clean.slice(-3);
+}
 
-function json(data: any, status = 200, extraHeaders: Record<string, string> = {}) {
+function maskAddress(addr: string): string {
+  if (!addr) return '';
+  const clean = String(addr).trim();
+  if (clean.length <= 5) return '***';
+  return clean.slice(0, 5) + '... (مخفي للخصوصية)';
+}
+
+function maskName(name: string): string {
+  if (!name) return '';
+  const parts = String(name).trim().split(/\s+/);
+  if (parts.length <= 1) return name;
+  return `${parts[0]} ${parts.slice(1).map(p => p[0] + '.').join(' ')}`;
+}
+
+function getCorsHeaders(request: Request, env?: Env): Record<string, string> {
+  const origin = request.headers.get('Origin');
+  const url = new URL(request.url);
+
+  let allowedOrigin = '';
+  if (origin) {
+    if (origin === url.origin) {
+      allowedOrigin = origin;
+    } else {
+      const devOrigins = [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:3000',
+      ];
+
+      const configuredOrigins = env?.ALLOWED_ORIGINS
+        ? env.ALLOWED_ORIGINS.split(',').map((s: string) => s.trim())
+        : [];
+
+      const isExplicitlyAllowed = devOrigins.includes(origin) || configuredOrigins.includes(origin);
+
+      // Restrict strictly to project-specific domains (never allow arbitrary Cloudflare tenants)
+      const isProjectDomain =
+        /^https:\/\/(?:[a-z0-9-]+\.)?dar-almaarefa\.com$/i.test(origin) ||
+        /^https:\/\/(?:[a-z0-9-]+\.)?maqbara-books\.com$/i.test(origin) ||
+        /^https:\/\/bookstore(?:-[a-z0-9-]+)?\.pages\.dev$/i.test(origin) ||
+        /^https:\/\/maqbara(?:-[a-z0-9-]+)?\.pages\.dev$/i.test(origin) ||
+        /^https:\/\/arabic-bookstore(?:-[a-z0-9-]+)?\.pages\.dev$/i.test(origin) ||
+        /^https:\/\/bookstore(?:-[a-z0-9-]+)?\.workers\.dev$/i.test(origin);
+
+      if (isExplicitlyAllowed || isProjectDomain) {
+        allowedOrigin = origin;
+      }
+    }
+  }
+
+  const headers: Record<string, string> = {
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-admin-token',
+    'Vary': 'Origin',
+  };
+
+  if (allowedOrigin) {
+    headers['Access-Control-Allow-Origin'] = allowedOrigin;
+    headers['Access-Control-Allow-Credentials'] = 'true';
+  }
+
+  return headers;
+}
+
+function json(data: any, status = 200, corsHeaders: Record<string, string> = {}, extraHeaders: Record<string, string> = {}) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
       'Content-Type': 'application/json',
-      ...CORS_HEADERS,
+      ...corsHeaders,
       ...extraHeaders,
     },
   });
+}
+
+function safeParseFloat(val: any, fallback = 0): number {
+  const n = typeof val === 'number' ? val : parseFloat(val);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function safeParseInt(val: any, fallback = 0): number {
+  const n = typeof val === 'number' ? Math.floor(val) : parseInt(val, 10);
+  return Number.isFinite(n) ? n : fallback;
 }
 
 function getHmacKey(secret: string): Buffer {
@@ -44,9 +121,8 @@ function generateAdminToken(secret: string): string {
   return `${Buffer.from(payload).toString('base64url')}.${hmac}`;
 }
 
-function verifyAdminToken(token: string, secret: string): boolean {
-  if (!token) return false;
-  if (token.trim() === secret.trim()) return true;
+function verifyAdminToken(token: string, secret?: string): boolean {
+  if (!token || !secret) return false;
 
   try {
     const parts = token.split('.');
@@ -76,18 +152,18 @@ function verifyAdminToken(token: string, secret: string): boolean {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    if (env.DATABASE_URL) process.env.DATABASE_URL = env.DATABASE_URL;
-    if (env.DATABASE_AUTH_TOKEN) process.env.DATABASE_AUTH_TOKEN = env.DATABASE_AUTH_TOKEN;
-
-    const url = new URL(request.url);
+    const corsHeaders = getCorsHeaders(request, env);
+    const reply = (data: any, status = 200, extra: Record<string, string> = {}) => json(data, status, corsHeaders, extra);
 
     // 1. Handle CORS Preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         status: 204,
-        headers: CORS_HEADERS,
+        headers: corsHeaders,
       });
     }
+
+    const url = new URL(request.url);
 
     // 2. Delegate Non-API Requests to Static Assets with SPA fallback
     if (!url.pathname.startsWith('/api')) {
@@ -96,12 +172,11 @@ export default {
 
     const path = url.pathname;
     const method = request.method;
-    const adminSecret = env.ADMIN_PASSWORD || '123456';
 
     try {
       // Health check
       if (path === '/api/health' || path === '/health') {
-        return json({
+        return reply({
           status: 'ok',
           timestamp: new Date().toISOString(),
           service: 'Dar Al-Maarefa Bookstore Platform (Cloudflare Worker + Turso)',
@@ -115,33 +190,43 @@ export default {
 
       // POST /api/admin/login
       if (path === '/api/admin/login' && method === 'POST') {
+        const adminSecret = env.ADMIN_PASSWORD;
+        if (!adminSecret) {
+          return reply({ success: false, error: 'كلمة مرور الإدارة غير مهيأة على خادم التطبيق' }, 500);
+        }
+
         const body = await request.json().catch(() => ({})) as any;
         const password = body?.password;
 
         if (password && String(password).trim() === adminSecret.trim()) {
           const token = generateAdminToken(adminSecret);
-          return json({ success: true, token });
+          return reply({ success: true, token });
         }
-        return json({ success: false, error: 'مفتاح الحارس غير صحيح' }, 401);
+        return reply({ success: false, error: 'مفتاح الحارس غير صحيح' }, 401);
       }
 
       // Admin authorization guard for all other /api/admin/* endpoints
       if (path.startsWith('/api/admin/')) {
+        const adminSecret = env.ADMIN_PASSWORD;
+        if (!adminSecret) {
+          return reply({ success: false, error: 'لوحة الإدارة غير مهيأة على خادم التطبيق' }, 500);
+        }
+
         const authHeader = request.headers.get('x-admin-token') ||
           (request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? '');
 
         if (!verifyAdminToken(authHeader, adminSecret)) {
-          return json({ success: false, error: 'غير مصرح بالوصول إلى لوحة الإدارة' }, 401);
+          return reply({ success: false, error: 'غير مصرح بالوصول إلى لوحة الإدارة' }, 401);
         }
 
         // GET /api/admin/google-books?q=...
         if (path === '/api/admin/google-books' && method === 'GET') {
           const q = url.searchParams.get('q') || '';
           if (!q.trim()) {
-            return json({ success: false, error: 'يرجى تقديم اسم الكتاب أو الـ ISBN' }, 400);
+            return reply({ success: false, error: 'يرجى تقديم اسم الكتاب أو الـ ISBN' }, 400);
           }
           const result = await searchBooksMetadata(q);
-          return json({
+          return reply({
             success: true,
             results: result.items,
             source: result.source,
@@ -157,25 +242,37 @@ export default {
             FROM books b
             JOIN categories c ON b.category_id = c.id
             ORDER BY b.created_at DESC
-          `);
-          return json({ success: true, books });
+          `, [], env);
+          return reply({ success: true, books });
         }
 
         // POST /api/admin/books
         if (path === '/api/admin/books' && method === 'POST') {
           const b = await request.json() as any;
           if (!b.title || !b.author || !b.price || !b.category_id) {
-            return json({ success: false, error: 'يرجى إدخال اسم الكتاب والمؤلف والسعر والتصنيف' }, 400);
+            return reply({ success: false, error: 'يرجى إدخال اسم الكتاب والمؤلف والسعر والتصنيف' }, 400);
           }
 
-          const id = 'bk_' + Date.now();
+          const price = safeParseFloat(b.price, 0);
+          if (price <= 0) {
+            return reply({ success: false, error: 'يرجى إدخال سعر صالح للكتاب' }, 400);
+          }
+
+          const originalPrice = (b.original_price != null && b.original_price !== '') ? safeParseFloat(b.original_price, 0) : null;
+          const stockQuantity = Math.max(0, safeParseInt(b.stock_quantity, 5));
+          const pageCount = Math.max(1, safeParseInt(b.page_count, 200));
+
+          const rawReadingTime = b.reading_time_hours != null && b.reading_time_hours !== ''
+            ? safeParseFloat(b.reading_time_hours, 0)
+            : safeParseFloat(pageCount / 50, 4);
+          const readingTimeHours = rawReadingTime > 0 ? Number(rawReadingTime.toFixed(1)) : 4;
+
+          const id = 'bk_' + crypto.randomUUID();
           const slug = b.title
             .toLowerCase()
             .trim()
             .replace(/[^\w\s\u0600-\u06FF]/gi, '')
             .replace(/\s+/g, '-') + '-' + Math.floor(Math.random() * 1000);
-
-          const calcReadingTime = b.reading_time_hours || (b.page_count ? (b.page_count / 50).toFixed(1) : 4);
 
           await execute(`
             INSERT INTO books (
@@ -184,19 +281,19 @@ export default {
               why_read, excerpt_text, cover_image, is_bestseller, is_featured, recommended_next_book_id
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           `, [
-            id, slug, b.title, b.author, parseFloat(b.price),
-            b.original_price ? parseFloat(b.original_price) : null,
-            parseInt(b.stock_quantity) || 5, b.category_id, b.sub_topics || '',
-            b.reader_level || 'beginner', parseInt(b.page_count) || 200,
-            parseFloat(calcReadingTime), b.why_read || 'كتاب قيم يثري حصيلتك المعرفية وتفكيرك.',
+            id, slug, b.title, b.author, price,
+            originalPrice,
+            stockQuantity, b.category_id, b.sub_topics || '',
+            b.reader_level || 'beginner', pageCount,
+            readingTimeHours, b.why_read || 'كتاب قيم يثري حصيلتك المعرفية وتفكيرك.',
             b.excerpt_text || '',
             b.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80',
             b.is_bestseller ? 1 : 0, b.is_featured ? 1 : 0,
             b.recommended_next_book_id || null,
-          ]);
+          ], env);
 
-          const createdBook = await queryOne(`SELECT * FROM books WHERE id = ?`, [id]);
-          return json({ success: true, book: createdBook });
+          const createdBook = await queryOne(`SELECT * FROM books WHERE id = ?`, [id], env);
+          return reply({ success: true, book: createdBook });
         }
 
         // PUT /api/admin/books/:id
@@ -204,6 +301,20 @@ export default {
         if (bookEditMatch && method === 'PUT') {
           const id = bookEditMatch[1];
           const b = await request.json() as any;
+
+          const price = safeParseFloat(b.price, 0);
+          if (price <= 0) {
+            return reply({ success: false, error: 'يرجى إدخال سعر صالح للكتاب' }, 400);
+          }
+
+          const originalPrice = (b.original_price != null && b.original_price !== '') ? safeParseFloat(b.original_price, 0) : null;
+          const stockQuantity = Math.max(0, safeParseInt(b.stock_quantity, 0));
+          const pageCount = Math.max(1, safeParseInt(b.page_count, 200));
+
+          const rawReadingTime = b.reading_time_hours != null && b.reading_time_hours !== ''
+            ? safeParseFloat(b.reading_time_hours, 0)
+            : safeParseFloat(pageCount / 50, 4);
+          const readingTimeHours = rawReadingTime > 0 ? Number(rawReadingTime.toFixed(1)) : 4;
 
           await execute(`
             UPDATE books SET
@@ -213,30 +324,30 @@ export default {
               is_bestseller = ?, is_featured = ?, recommended_next_book_id = ?
             WHERE id = ?
           `, [
-            b.title, b.author, parseFloat(b.price),
-            b.original_price ? parseFloat(b.original_price) : null,
-            parseInt(b.stock_quantity), b.category_id, b.sub_topics, b.reader_level,
-            parseInt(b.page_count), parseFloat(b.reading_time_hours), b.why_read,
-            b.excerpt_text, b.cover_image, b.is_bestseller ? 1 : 0, b.is_featured ? 1 : 0,
+            b.title, b.author, price,
+            originalPrice,
+            stockQuantity, b.category_id, b.sub_topics || '', b.reader_level || 'beginner',
+            pageCount, readingTimeHours, b.why_read || '',
+            b.excerpt_text || '', b.cover_image || '', b.is_bestseller ? 1 : 0, b.is_featured ? 1 : 0,
             b.recommended_next_book_id || null, id,
-          ]);
+          ], env);
 
-          const updated = await queryOne(`SELECT * FROM books WHERE id = ?`, [id]);
-          return json({ success: true, book: updated });
+          const updated = await queryOne(`SELECT * FROM books WHERE id = ?`, [id], env);
+          return reply({ success: true, book: updated });
         }
 
         // DELETE /api/admin/books/:id
         if (bookEditMatch && method === 'DELETE') {
           const id = bookEditMatch[1];
           try {
-            await execute(`UPDATE books SET recommended_next_book_id = NULL WHERE recommended_next_book_id = ?`, [id]);
-            await execute(`DELETE FROM books WHERE id = ?`, [id]);
-            return json({ success: true, message: 'تم حذف الكتاب بنجاح' });
+            await execute(`UPDATE books SET recommended_next_book_id = NULL WHERE recommended_next_book_id = ?`, [id], env);
+            await execute(`DELETE FROM books WHERE id = ?`, [id], env);
+            return reply({ success: true, message: 'تم حذف الكتاب بنجاح' });
           } catch (e: any) {
             if (e.message?.includes('FOREIGN KEY')) {
-              return json({
+              return reply({
                 success: false,
-                error: 'لا يمكن حذف هذا الكتاب مباشرة لأنه مرتبط بطلبات شراء مسجلة في سجلات المقبرة.'
+                error: 'لا يمكن حذف هذا الكتاب مباشرة لأنه مرتبط بطلبات شراء مسجلة في سجلات المتجر.'
               }, 400);
             }
             throw e;
@@ -250,15 +361,15 @@ export default {
             FROM orders o
             JOIN shipping_governorates g ON o.governorate_id = g.id
             ORDER BY o.created_at DESC
-          `);
+          `, [], env);
 
           if (orders.length === 0) {
-            return json({ success: true, orders: [] });
+            return reply({ success: true, orders: [] });
           }
 
           const orderIds = orders.map((o: any) => o.id);
           const placeholders = orderIds.map(() => '?').join(',');
-          const allItems = await queryAll(`SELECT * FROM order_items WHERE order_id IN (${placeholders})`, orderIds);
+          const allItems = await queryAll(`SELECT * FROM order_items WHERE order_id IN (${placeholders})`, orderIds, env);
 
           const itemsByOrderId: Record<string, any[]> = {};
           for (const item of allItems) {
@@ -271,7 +382,7 @@ export default {
             items: itemsByOrderId[order.id] || [],
           }));
 
-          return json({ success: true, orders: ordersWithItems });
+          return reply({ success: true, orders: ordersWithItems });
         }
 
         // PATCH /api/admin/orders/:id/status
@@ -281,16 +392,16 @@ export default {
           const { status } = await request.json() as any;
           const validStatuses = ['PENDING_WHATSAPP_CONFIRMATION', 'CONFIRMED_WHATSAPP', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
           if (!validStatuses.includes(status)) {
-            return json({ success: false, error: 'حالة الطلب غير صالحة' }, 400);
+            return reply({ success: false, error: 'حالة الطلب غير صالحة' }, 400);
           }
-          await execute(`UPDATE orders SET status = ? WHERE id = ?`, [status, id]);
-          return json({ success: true, message: 'تم تحديث حالة الطلب بنجاح' });
+          await execute(`UPDATE orders SET status = ? WHERE id = ?`, [status, id], env);
+          return reply({ success: true, message: 'تم تحديث حالة الطلب بنجاح' });
         }
 
         // GET /api/admin/shipping-rates
         if (path === '/api/admin/shipping-rates' && method === 'GET') {
-          const governorates = await queryAll(`SELECT * FROM shipping_governorates ORDER BY fee ASC, name ASC`);
-          return json({ success: true, governorates });
+          const governorates = await queryAll(`SELECT * FROM shipping_governorates ORDER BY fee ASC, name ASC`, [], env);
+          return reply({ success: true, governorates });
         }
 
         // PUT /api/admin/shipping-rates/:id
@@ -298,19 +409,20 @@ export default {
         if (shipMatch && method === 'PUT') {
           const id = shipMatch[1];
           const { fee, delivery_days } = await request.json() as any;
+          const feeNum = safeParseFloat(fee, 0);
           await execute(`UPDATE shipping_governorates SET fee = ?, delivery_days = ? WHERE id = ?`, [
-            parseFloat(fee), delivery_days, id,
-          ]);
-          return json({ success: true, message: 'تم تحديث سعر الشحن' });
+            feeNum, delivery_days, id,
+          ], env);
+          return reply({ success: true, message: 'تم تحديث سعر الشحن' });
         }
 
         // GET /api/admin/analytics
         if (path === '/api/admin/analytics' && method === 'GET') {
-          const logs = await queryAll(`SELECT * FROM recommendation_logs ORDER BY created_at DESC LIMIT 50`);
-          const totalOrders = await queryOne(`SELECT COUNT(*) as count, SUM(final_total) as revenue FROM orders`);
-          const lowStockBooks = await queryAll(`SELECT title, stock_quantity FROM books WHERE stock_quantity <= 3`);
+          const logs = await queryAll(`SELECT * FROM recommendation_logs ORDER BY created_at DESC LIMIT 50`, [], env);
+          const totalOrders = await queryOne(`SELECT COUNT(*) as count, SUM(final_total) as revenue FROM orders`, [], env);
+          const lowStockBooks = await queryAll(`SELECT title, stock_quantity FROM books WHERE stock_quantity <= 3`, [], env);
 
-          return json({
+          return reply({
             success: true,
             totalOrders: totalOrders?.count || 0,
             totalRevenue: totalOrders?.revenue || 0,
@@ -332,22 +444,22 @@ export default {
           LEFT JOIN books b ON c.id = b.category_id
           GROUP BY c.id
           ORDER BY c.name ASC
-        `);
-        return json({ success: true, categories });
+        `, [], env);
+        return reply({ success: true, categories });
       }
 
       // GET /api/books/shipping-governorates
       if ((path === '/api/books/shipping-governorates' || path === '/api/shipping-governorates') && method === 'GET') {
-        const governorates = await queryAll(`SELECT * FROM shipping_governorates ORDER BY fee ASC, name ASC`);
-        return json({ success: true, governorates });
+        const governorates = await queryAll(`SELECT * FROM shipping_governorates ORDER BY fee ASC, name ASC`, [], env);
+        return reply({ success: true, governorates });
       }
 
       // GET /api/settings
       if (path === '/api/settings' && method === 'GET') {
-        const rows = await queryAll(`SELECT key, value FROM site_settings`);
+        const rows = await queryAll(`SELECT key, value FROM site_settings`, [], env);
         const settings: Record<string, string> = {};
         rows.forEach((r: any) => { settings[r.key] = r.value; });
-        return json({ success: true, settings });
+        return reply({ success: true, settings });
       }
 
       // GET /api/books (Catalog Filter & Search)
@@ -377,13 +489,13 @@ export default {
           sql += ` AND b.reader_level = ?`;
           params.push(level);
         }
-        if (minPrice) {
+        if (minPrice && Number.isFinite(parseFloat(minPrice))) {
           sql += ` AND b.price >= ?`;
-          params.push(Number(minPrice));
+          params.push(parseFloat(minPrice));
         }
-        if (maxPrice) {
+        if (maxPrice && Number.isFinite(parseFloat(maxPrice))) {
           sql += ` AND b.price <= ?`;
-          params.push(Number(maxPrice));
+          params.push(parseFloat(maxPrice));
         }
         if (inStock === 'true' || inStock === '1') {
           sql += ` AND b.stock_quantity > 0`;
@@ -402,8 +514,8 @@ export default {
 
         sql += ` ORDER BY b.is_featured DESC, b.is_bestseller DESC, b.created_at DESC`;
 
-        const books = await queryAll(sql, params);
-        return json({ success: true, count: books.length, books });
+        const books = await queryAll(sql, params, env);
+        return reply({ success: true, count: books.length, books });
       }
 
       // GET /api/books/:idOrSlug
@@ -415,10 +527,10 @@ export default {
           FROM books b
           JOIN categories c ON b.category_id = c.id
           WHERE b.id = ? OR b.slug = ?
-        `, [idOrSlug, idOrSlug]);
+        `, [idOrSlug, idOrSlug], env);
 
         if (!book) {
-          return json({ success: false, error: 'الكتاب غير موجود' }, 404);
+          return reply({ success: false, error: 'الكتاب غير موجود' }, 404);
         }
 
         let nextBook = null;
@@ -426,7 +538,7 @@ export default {
           nextBook = await queryOne(`
             SELECT id, slug, title, author, price, cover_image, reader_level
             FROM books WHERE id = ?
-          `, [book.recommended_next_book_id]);
+          `, [book.recommended_next_book_id], env);
         }
 
         const relatedBooks = await queryAll(`
@@ -434,9 +546,9 @@ export default {
           FROM books
           WHERE category_id = ? AND id != ? AND stock_quantity > 0
           LIMIT 3
-        `, [book.category_id, book.id]);
+        `, [book.category_id, book.id], env);
 
-        return json({ success: true, book, nextBook, relatedBooks });
+        return reply({ success: true, book, nextBook, relatedBooks });
       }
 
       // POST /api/recommend (Smart Book Advisor)
@@ -445,14 +557,61 @@ export default {
         const { mode, quiz, query } = body || {};
 
         if (!mode || (mode !== 'quiz' && mode !== 'natural')) {
-          return json({ success: false, error: 'يجب تحديد وضع البحث (quiz أو natural)' }, 400);
+          return reply({ success: false, error: 'يجب تحديد وضع البحث (quiz أو natural)' }, 400);
         }
         if (mode === 'natural' && (!query || !query.trim())) {
-          return json({ success: false, error: 'يرجى كتابة استفسارك أو المجال المطلوب ترشيح كتب فيه' }, 400);
+          return reply({ success: false, error: 'يرجى كتابة استفسارك أو المجال المطلوب ترشيح كتب فيه' }, 400);
         }
 
-        const recommendation = await getSmartRecommendation({ mode, quiz, query });
-        return json({ success: true, ...recommendation });
+        const recommendation = await getSmartRecommendation({ mode, quiz, query }, env);
+        return reply({ success: true, ...recommendation });
+      }
+
+      // GET /api/orders/:orderRef (Track Order with PII privacy masking for public callers)
+      const orderTrackMatch = path.match(/^\/api\/orders\/([^\/]+)$/);
+      if (orderTrackMatch && method === 'GET') {
+        const orderRef = orderTrackMatch[1];
+        const order = await queryOne(`
+          SELECT o.*, g.name as governorate_name
+          FROM orders o
+          JOIN shipping_governorates g ON o.governorate_id = g.id
+          WHERE o.order_ref = ?
+        `, [orderRef], env);
+
+        if (!order) {
+          return reply({ success: false, error: 'الطلب غير موجود' }, 404);
+        }
+
+        const items = await queryAll(`
+          SELECT id, order_id, book_id, title, price, quantity FROM order_items WHERE order_id = ?
+        `, [order.id], env);
+
+        const authHeader = request.headers.get('x-admin-token') ||
+          (request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? '');
+        const isAdmin = verifyAdminToken(authHeader, env.ADMIN_PASSWORD);
+
+        if (isAdmin) {
+          return reply({ success: true, order, items });
+        }
+
+        // Mask sensitive PII for public tracking
+        const safeOrder = {
+          id: order.id,
+          order_ref: order.order_ref,
+          status: order.status,
+          created_at: order.created_at,
+          governorate_name: order.governorate_name,
+          total_books_price: order.total_books_price,
+          discount_amount: order.discount_amount,
+          shipping_fee: order.shipping_fee,
+          final_total: order.final_total,
+          customer_name: maskName(order.customer_name),
+          customer_phone: maskPhone(order.customer_phone),
+          customer_whatsapp: maskPhone(order.customer_whatsapp),
+          street_address: maskAddress(order.street_address),
+        };
+
+        return reply({ success: true, order: safeOrder, items });
       }
 
       // POST /api/orders (Place COD Order)
@@ -460,61 +619,89 @@ export default {
         const {
           customer_name, customer_phone, customer_whatsapp,
           governorate_id, street_address, notes, items, is_bundle,
+          coupon_code,
         } = await request.json() as any;
 
         if (!customer_name || !customer_phone || !governorate_id || !street_address) {
-          return json({ success: false, error: 'يرجى استكمال جميع بيانات العميل والعنوان والمحافظة' }, 400);
+          return reply({ success: false, error: 'يرجى استكمال جميع بيانات العميل والعنوان والمحافظة' }, 400);
         }
         if (!items || !Array.isArray(items) || items.length === 0) {
-          return json({ success: false, error: 'سلة المشتريات فارغة' }, 400);
+          return reply({ success: false, error: 'سلة المشتريات فارغة' }, 400);
         }
 
-        const governorate = await queryOne(`SELECT * FROM shipping_governorates WHERE id = ?`, [governorate_id]);
+        const governorate = await queryOne(`SELECT * FROM shipping_governorates WHERE id = ?`, [governorate_id], env);
         if (!governorate) {
-          return json({ success: false, error: 'المحافظة المختارة غير صحيحة' }, 400);
+          return reply({ success: false, error: 'المحافظة المختارة غير صحيحة' }, 400);
         }
 
-        const settingsRows = await queryAll(`SELECT key, value FROM site_settings`);
+        const settingsRows = await queryAll(`SELECT key, value FROM site_settings`, [], env);
         const settings: Record<string, string> = {};
         settingsRows.forEach((r: any) => { settings[r.key] = r.value; });
 
         const merchantPhone = env.MERCHANT_PHONE || settings['merchant_phone'] || '201555779084';
-        const freeShippingThreshold = parseFloat(env.FREE_SHIPPING_THRESHOLD || settings['free_shipping_threshold'] || '600');
-        const bundleDiscountPercent = parseFloat(env.BUNDLE_DISCOUNT_PERCENT || settings['bundle_discount_percent'] || '10');
+        const freeShippingThreshold = safeParseFloat(env.FREE_SHIPPING_THRESHOLD || settings['free_shipping_threshold'], 600);
+        const bundleDiscountPercent = safeParseFloat(env.BUNDLE_DISCOUNT_PERCENT || settings['bundle_discount_percent'], 10);
+
+        // 3. Validate stock and calculate items total (Batch-fetched: avoids N+1 queries)
+        const bookIds = Array.from(new Set(items.map((i: any) => i.book_id).filter(Boolean)));
+        if (bookIds.length === 0) {
+          return reply({ success: false, error: 'سلة المشتريات لا تحتوي على كتب صالحة' }, 400);
+        }
+
+        const placeholders = bookIds.map(() => '?').join(',');
+        const books = await queryAll(`SELECT * FROM books WHERE id IN (${placeholders})`, bookIds, env);
+        const booksMap = new Map<string, any>(books.map((b: any) => [b.id, b]));
 
         let totalBooksPrice = 0;
         const validatedItems: Array<{ book: any; quantity: number }> = [];
 
         for (const item of items) {
-          const book = await queryOne(`SELECT * FROM books WHERE id = ?`, [item.book_id]);
+          const book = booksMap.get(item.book_id);
           if (!book) {
-            return json({ success: false, error: `الكتاب المعرف بـ ${item.book_id} غير متوفر في المتجر` }, 400);
+            return reply({ success: false, error: `الكتاب المعرف بـ ${item.book_id} غير متوفر في المتجر` }, 400);
           }
-          const requestedQty = Math.max(1, parseInt(item.quantity) || 1);
+          const requestedQty = Math.max(1, safeParseInt(item.quantity, 1));
           if (book.stock_quantity < requestedQty) {
-            return json({ success: false, error: `الكمية المتاحة من كتاب "${book.title}" هي ${book.stock_quantity} فقط` }, 400);
+            return reply({ success: false, error: `الكمية المتاحة من كتاب "${book.title}" هي ${book.stock_quantity} فقط` }, 400);
           }
           totalBooksPrice += book.price * requestedQty;
           validatedItems.push({ book, quantity: requestedQty });
         }
 
+        // 4. Calculate discount & coupon handling
         let discountAmount = 0;
-        if (is_bundle) {
+        let discountReason = '';
+
+        const validCoupons: Record<string, number> = {
+          'MAQBARA10': 10,
+          'READ10': 10,
+          'WARAQ10': 10,
+        };
+
+        const cleanCoupon = typeof coupon_code === 'string' ? coupon_code.trim().toUpperCase() : '';
+        const couponPercent = validCoupons[cleanCoupon] || 0;
+
+        if (couponPercent > 0) {
+          discountAmount = Math.round((totalBooksPrice * couponPercent) / 100);
+          discountReason = `كود خصم (${cleanCoupon} - ${couponPercent}%)`;
+        } else if (is_bundle) {
           discountAmount = Math.round((totalBooksPrice * bundleDiscountPercent) / 100);
+          discountReason = `خصم باقة مسار القراءة (${bundleDiscountPercent}%)`;
         }
 
         const priceAfterDiscount = totalBooksPrice - discountAmount;
-        let shippingFee = governorate.fee;
+        let shippingFee = safeParseFloat(governorate.fee, 0);
         if (priceAfterDiscount >= freeShippingThreshold) {
           shippingFee = 0;
         }
 
         const finalTotal = priceAfterDiscount + shippingFee;
+        const uuid = crypto.randomUUID().replace(/-/g, '').toUpperCase();
         const timestampSuffix = Date.now().toString(36).toUpperCase();
-        const randomSuffix = Math.floor(100 + Math.random() * 900);
-        const orderRef = `ORD-${timestampSuffix}-${randomSuffix}`;
-        const orderId = `order_${Date.now()}_${randomSuffix}`;
+        const orderRef = `ORD-${timestampSuffix}-${uuid.slice(0, 6)}`;
+        const orderId = `order_${crypto.randomUUID()}`;
 
+        // 5. Build atomic transaction batch for order, items, and conditional stock decrements
         const batchStatements: Array<{ sql: string; args: any[] }> = [
           {
             sql: `
@@ -534,22 +721,42 @@ export default {
         ];
 
         for (const v of validatedItems) {
-          const itemId = `item_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+          const itemId = `item_${crypto.randomUUID()}`;
           batchStatements.push({
             sql: `INSERT INTO order_items (id, order_id, book_id, title, price, quantity) VALUES (?, ?, ?, ?, ?, ?)`,
             args: [itemId, orderId, v.book.id, v.book.title, v.book.price, v.quantity],
           });
+          // Conditional decrement: if stock is insufficient, triggers NOT NULL constraint failure which aborts and rolls back transaction
           batchStatements.push({
-            sql: `UPDATE books SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?`,
-            args: [v.quantity, v.book.id, v.quantity],
+            sql: `
+              UPDATE books
+              SET stock_quantity = CASE
+                WHEN stock_quantity >= ? THEN stock_quantity - ?
+                ELSE NULL
+              END
+              WHERE id = ?
+            `,
+            args: [v.quantity, v.quantity, v.book.id],
           });
         }
 
         try {
-          await batch(batchStatements, 'write');
+          const results = await batch(batchStatements, 'write', env);
+          // Verify rowsAffected for stock updates
+          for (let i = 0; i < validatedItems.length; i++) {
+            const updateResultIndex = 1 + (i * 2) + 1;
+            const res = results[updateResultIndex];
+            if (!res || res.rowsAffected !== 1) {
+              throw new Error('INSUFFICIENT_STOCK: Stock quantity changed during checkout');
+            }
+          }
         } catch (batchErr: any) {
-          if (batchErr.message && (batchErr.message.includes('INSUFFICIENT_STOCK') || batchErr.message.includes('CONSTRAINT'))) {
-            return json({ success: false, error: 'عذراً، نفدت كمية أحد الكتب المطلوبة أثناء تسجيل طلبك' }, 400);
+          if (batchErr.message && (
+            batchErr.message.includes('NOT NULL constraint failed') ||
+            batchErr.message.includes('INSUFFICIENT_STOCK') ||
+            batchErr.message.includes('CONSTRAINT')
+          )) {
+            return reply({ success: false, error: 'عذراً، نفدت كمية أحد الكتب المطلوبة أثناء تسجيل طلبك' }, 400);
           }
           throw batchErr;
         }
@@ -568,6 +775,7 @@ export default {
             quantity: v.quantity,
           })),
           discountAmount,
+          discountReason,
           totalBooksPrice,
           shippingFee,
           finalTotal,
@@ -576,7 +784,7 @@ export default {
 
         const whatsappUrl = generateWhatsAppUrl(merchantPhone, whatsappMessage);
 
-        return json({
+        return reply({
           success: true,
           orderRef,
           orderId,
@@ -588,11 +796,10 @@ export default {
         });
       }
 
-      return json({ success: false, error: 'المسار المطلوب غير موجود' }, 404);
+      return reply({ success: false, error: 'المسار المطلوب غير موجود' }, 404);
     } catch (err: any) {
       console.error('Worker API error:', err);
-      return json({ success: false, error: err.message || 'حدث خطأ في الخادم' }, 500);
+      return reply({ success: false, error: err.message || 'حدث خطأ في الخادم' }, 500);
     }
   },
 };
-

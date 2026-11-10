@@ -36,6 +36,15 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onSelect }) => {
   return (
     <div
       onClick={() => onSelect(book)}
+      role="button"
+      tabIndex={0}
+      aria-label={`عرض تفاصيل كتاب ${book.title}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect(book);
+        }
+      }}
       className="group relative bg-[#15121b] rounded-2xl border border-amber-900/40 hover:border-amber-500/60 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col cursor-pointer text-right"
     >
       {/* Top Cover Image Area */}

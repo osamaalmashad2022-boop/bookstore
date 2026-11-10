@@ -71,7 +71,7 @@ function normalizeArabicText(text: string): string {
     .trim();
 }
 
-export async function getSmartRecommendation(req: RecommendRequest): Promise<RecommendationResult> {
+export async function getSmartRecommendation(req: RecommendRequest, env?: any): Promise<RecommendationResult> {
   const cacheKey = JSON.stringify(req);
   const cached = memoryCache.get(cacheKey);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
@@ -84,7 +84,7 @@ export async function getSmartRecommendation(req: RecommendRequest): Promise<Rec
     FROM books b
     JOIN categories c ON b.category_id = c.id
     WHERE b.stock_quantity > 0
-  `);
+  `, [], env);
 
   if (!allBooks || allBooks.length === 0) {
     throw new Error('لا توجد كتب متوفرة حالياً في المخزون.');
@@ -274,7 +274,7 @@ export async function getSmartRecommendation(req: RecommendRequest): Promise<Rec
     const matchedBookIds = pathSteps.map(s => s.book_id).join(',');
     execute('INSERT INTO recommendation_logs (id, query_or_quiz, matched_books) VALUES (?, ?, ?)', [
       logId, logQuery, matchedBookIds
-    ]).catch(() => {});
+    ], env).catch(() => {});
   } catch (e) {
     // Non-blocking log
   }

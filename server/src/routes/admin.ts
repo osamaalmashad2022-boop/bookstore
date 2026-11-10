@@ -1,32 +1,60 @@
 import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
 import { queryAll, queryOne, execute } from '../db/database';
-import { searchGoogleBooks, searchBooksMetadata } from '../services/googleBooks';
+import { searchBooksMetadata } from '../services/googleBooks';
 
 const router = Router();
 
-const ADMIN_SECRET = process.env.ADMIN_PASSWORD || 'maqbara_gothic_sentinel_2026';
-const HMAC_KEY = crypto.createHash('sha256').update(ADMIN_SECRET + '_token_salt').digest();
+let ephemeralAdminSecret: string | null = null;
 
-function generateAdminToken(): string {
+export function getAdminSecret(): string {
+  if (process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.trim()) {
+    return process.env.ADMIN_PASSWORD.trim();
+  }
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'FATAL CONFIGURATION ERROR: ADMIN_PASSWORD environment variable must be set in production. ' +
+      'Ephemeral keys are not permitted in production as they break across multi-instance clusters.'
+    );
+  }
+  if (!ephemeralAdminSecret) {
+    ephemeralAdminSecret = crypto.randomBytes(32).toString('hex');
+    console.warn('⚠️ ADMIN_PASSWORD not set in environment. Generated random ephemeral admin secret.');
+  }
+  return ephemeralAdminSecret;
+}
+
+function safeCompareSecret(provided: string, actual: string): boolean {
+  if (typeof provided !== 'string' || typeof actual !== 'string') return false;
+  const hashProvided = crypto.createHash('sha256').update(provided.trim()).digest();
+  const hashActual = crypto.createHash('sha256').update(actual.trim()).digest();
+  return crypto.timingSafeEqual(hashProvided, hashActual);
+}
+
+function getHmacKey(): Buffer {
+  return crypto.createHash('sha256').update(getAdminSecret() + '_token_salt').digest();
+}
+
+export function generateAdminToken(): string {
   const timestamp = Date.now();
   const payload = `admin:${timestamp}`;
-  const hmac = crypto.createHmac('sha256', HMAC_KEY).update(payload).digest('hex');
+  const hmac = crypto.createHmac('sha256', getHmacKey()).update(payload).digest('hex');
   return `${Buffer.from(payload).toString('base64url')}.${hmac}`;
 }
 
-function verifyAdminToken(token: string): boolean {
+export function verifyAdminToken(token: string): boolean {
   if (!token) return false;
-
-  // Direct secret match for CLI scripts and development convenience
-  if (token.trim() === ADMIN_SECRET.trim()) return true;
 
   try {
     const parts = token.split('.');
     if (parts.length !== 2) return false;
     const [payloadB64, providedHmac] = parts;
+    if (!providedHmac || providedHmac.length !== 64 || !/^[0-9a-f]{64}$/i.test(providedHmac)) {
+      return false;
+    }
+
     const payload = Buffer.from(payloadB64, 'base64url').toString('utf8');
-    const expectedHmac = crypto.createHmac('sha256', HMAC_KEY).update(payload).digest('hex');
+    const expectedHmac = crypto.createHmac('sha256', getHmacKey()).update(payload).digest('hex');
 
     const providedBuf = Buffer.from(providedHmac, 'hex');
     const expectedBuf = Buffer.from(expectedHmac, 'hex');
@@ -37,6 +65,8 @@ function verifyAdminToken(token: string): boolean {
     const [role, timestampStr] = payload.split(':');
     if (role !== 'admin') return false;
     const timestamp = parseInt(timestampStr, 10);
+    if (isNaN(timestamp)) return false;
+
     const maxAge = 1000 * 60 * 60 * 24 * 7; // 7 days
     if (Date.now() - timestamp > maxAge) return false;
 
@@ -46,11 +76,12 @@ function verifyAdminToken(token: string): boolean {
   }
 }
 
-// POST /api/admin/login - Authenticate admin with secret key
+// POST /api/admin/login - Authenticate admin with secret key (Constant-time comparison)
 router.post('/login', (req: Request, res: Response) => {
   try {
     const { password } = req.body;
-    if (password && String(password).trim() === ADMIN_SECRET.trim()) {
+    const adminSecret = getAdminSecret();
+    if (password && safeCompareSecret(String(password), adminSecret)) {
       const token = generateAdminToken();
       return res.json({ success: true, token });
     }
@@ -118,18 +149,65 @@ router.post('/books', async (req: Request, res: Response) => {
       excerpt_text, cover_image, is_bestseller, is_featured, recommended_next_book_id
     } = req.body;
 
-    if (!title || !author || !price || !category_id) {
+    if (!title || !author || price === undefined || !category_id) {
       return res.status(400).json({ success: false, error: 'يرجى إدخال اسم الكتاب والمؤلف والسعر والتصنيف' });
     }
 
-    const id = 'bk_' + Date.now();
-    const slug = title
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s\u0600-\u06FF]/gi, '')
-      .replace(/\s+/g, '-') + '-' + Math.floor(Math.random() * 1000);
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice < 0) {
+      return res.status(400).json({ success: false, error: 'سعر الكتاب غير صالح' });
+    }
 
-    const calcReadingTime = reading_time_hours || (page_count ? (page_count / 50).toFixed(1) : 4);
+    let parsedOriginalPrice: number | null = null;
+    if (original_price !== undefined && original_price !== null && original_price !== '') {
+      const parsed = parseFloat(original_price);
+      if (isNaN(parsed) || parsed < 0) {
+        return res.status(400).json({ success: false, error: 'السعر الأصلي غير صالح' });
+      }
+      parsedOriginalPrice = parsed;
+    }
+
+    let parsedStock = 5;
+    if (stock_quantity !== undefined && stock_quantity !== null && stock_quantity !== '') {
+      const parsed = parseInt(stock_quantity, 10);
+      if (isNaN(parsed) || parsed < 0) {
+        return res.status(400).json({ success: false, error: 'كمية المخزون غير صالحة' });
+      }
+      parsedStock = parsed;
+    }
+
+    let parsedPageCount = 200;
+    if (page_count !== undefined && page_count !== null && page_count !== '') {
+      const parsed = parseInt(page_count, 10);
+      if (isNaN(parsed) || parsed <= 0) {
+        return res.status(400).json({ success: false, error: 'عدد الصفحات غير صالح' });
+      }
+      parsedPageCount = parsed;
+    }
+
+    let parsedReadingTime = 4;
+    if (reading_time_hours !== undefined && reading_time_hours !== null && reading_time_hours !== '') {
+      const parsed = parseFloat(reading_time_hours);
+      if (isNaN(parsed) || parsed <= 0) {
+        return res.status(400).json({ success: false, error: 'وقت القراءة غير صالح' });
+      }
+      parsedReadingTime = parsed;
+    } else {
+      parsedReadingTime = parseFloat((parsedPageCount / 50).toFixed(1));
+    }
+
+    const uuid = crypto.randomUUID().replace(/-/g, '');
+    const id = `bk_${uuid.slice(0, 12)}`;
+
+    const cleanTitle = String(title).trim();
+    const slugBase = cleanTitle
+      .toLowerCase()
+      .replace(/[^\w\s\u0600-\u06FF]/gi, '')
+      .replace(/\s+/g, '-') || 'book';
+    const slug = `${slugBase}-${uuid.slice(12, 18)}`;
+
+    const validLevels = ['beginner', 'intermediate', 'advanced'];
+    const finalReaderLevel = validLevels.includes(reader_level) ? reader_level : 'beginner';
 
     await execute(`
       INSERT INTO books (
@@ -140,16 +218,16 @@ router.post('/books', async (req: Request, res: Response) => {
     `, [
       id,
       slug,
-      title,
-      author,
-      parseFloat(price),
-      original_price ? parseFloat(original_price) : null,
-      parseInt(stock_quantity) || 5,
+      cleanTitle,
+      String(author).trim(),
+      parsedPrice,
+      parsedOriginalPrice,
+      parsedStock,
       category_id,
       sub_topics || '',
-      reader_level || 'beginner',
-      parseInt(page_count) || 200,
-      parseFloat(calcReadingTime),
+      finalReaderLevel,
+      parsedPageCount,
+      parsedReadingTime,
       why_read || 'كتاب قيم يثري حصيلتك المعرفية وتفكيرك.',
       excerpt_text || '',
       cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80',
@@ -170,26 +248,92 @@ router.post('/books', async (req: Request, res: Response) => {
 router.put('/books/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const existingBook = await queryOne(`SELECT * FROM books WHERE id = ?`, [id]);
+    if (!existingBook) {
+      return res.status(404).json({ success: false, error: 'الكتاب غير موجود' });
+    }
+
     const {
       title, author, price, original_price, stock_quantity, category_id,
       sub_topics, reader_level, page_count, reading_time_hours, why_read,
       excerpt_text, cover_image, is_bestseller, is_featured, recommended_next_book_id
     } = req.body;
 
-    await execute(`
-      UPDATE books SET
-        title = ?, author = ?, price = ?, original_price = ?, stock_quantity = ?,
-        category_id = ?, sub_topics = ?, reader_level = ?, page_count = ?,
-        reading_time_hours = ?, why_read = ?, excerpt_text = ?, cover_image = ?,
-        is_bestseller = ?, is_featured = ?, recommended_next_book_id = ?
-      WHERE id = ?
-    `, [
-      title, author, parseFloat(price), original_price ? parseFloat(original_price) : null,
-      parseInt(stock_quantity), category_id, sub_topics, reader_level,
-      parseInt(page_count), parseFloat(reading_time_hours), why_read,
-      excerpt_text, cover_image, is_bestseller ? 1 : 0, is_featured ? 1 : 0,
-      recommended_next_book_id || null, id
-    ]);
+    const updates: Record<string, any> = {};
+
+    if (title !== undefined) {
+      const cleanTitle = String(title).trim();
+      if (!cleanTitle) return res.status(400).json({ success: false, error: 'اسم الكتاب لا يمكن أن يكون فارغاً' });
+      updates.title = cleanTitle;
+    }
+
+    if (author !== undefined) {
+      const cleanAuthor = String(author).trim();
+      if (!cleanAuthor) return res.status(400).json({ success: false, error: 'اسم المؤلف لا يمكن أن يكون فارغاً' });
+      updates.author = cleanAuthor;
+    }
+
+    if (price !== undefined) {
+      const p = parseFloat(price);
+      if (isNaN(p) || p < 0) return res.status(400).json({ success: false, error: 'سعر الكتاب غير صالح' });
+      updates.price = p;
+    }
+
+    if (original_price !== undefined) {
+      if (original_price === null || original_price === '') {
+        updates.original_price = null;
+      } else {
+        const op = parseFloat(original_price);
+        if (isNaN(op) || op < 0) return res.status(400).json({ success: false, error: 'السعر الأصلي غير صالح' });
+        updates.original_price = op;
+      }
+    }
+
+    if (stock_quantity !== undefined) {
+      const sq = parseInt(stock_quantity, 10);
+      if (isNaN(sq) || sq < 0) return res.status(400).json({ success: false, error: 'كمية المخزون غير صالحة' });
+      updates.stock_quantity = sq;
+    }
+
+    if (category_id !== undefined) {
+      if (!category_id) return res.status(400).json({ success: false, error: 'التصنيف مطلوب' });
+      updates.category_id = category_id;
+    }
+
+    if (sub_topics !== undefined) updates.sub_topics = String(sub_topics);
+
+    if (reader_level !== undefined) {
+      const validLevels = ['beginner', 'intermediate', 'advanced'];
+      if (!validLevels.includes(reader_level)) {
+        return res.status(400).json({ success: false, error: 'مستوى القارئ غير صالح' });
+      }
+      updates.reader_level = reader_level;
+    }
+
+    if (page_count !== undefined) {
+      const pc = parseInt(page_count, 10);
+      if (isNaN(pc) || pc <= 0) return res.status(400).json({ success: false, error: 'عدد الصفحات غير صالح' });
+      updates.page_count = pc;
+    }
+
+    if (reading_time_hours !== undefined) {
+      const rt = parseFloat(reading_time_hours);
+      if (isNaN(rt) || rt < 0) return res.status(400).json({ success: false, error: 'وقت القراءة غير صالح' });
+      updates.reading_time_hours = rt;
+    }
+
+    if (why_read !== undefined) updates.why_read = String(why_read);
+    if (excerpt_text !== undefined) updates.excerpt_text = String(excerpt_text);
+    if (cover_image !== undefined) updates.cover_image = String(cover_image);
+    if (is_bestseller !== undefined) updates.is_bestseller = is_bestseller ? 1 : 0;
+    if (is_featured !== undefined) updates.is_featured = is_featured ? 1 : 0;
+    if (recommended_next_book_id !== undefined) updates.recommended_next_book_id = recommended_next_book_id || null;
+
+    if (Object.keys(updates).length > 0) {
+      const setClauses = Object.keys(updates).map(k => `${k} = ?`).join(', ');
+      const args = [...Object.values(updates), id];
+      await execute(`UPDATE books SET ${setClauses} WHERE id = ?`, args);
+    }
 
     const updated = await queryOne(`SELECT * FROM books WHERE id = ?`, [id]);
     res.json({ success: true, book: updated });
@@ -313,11 +457,15 @@ router.put('/shipping-rates/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { fee, delivery_days } = req.body;
+    const parsedFee = parseFloat(fee);
+    if (isNaN(parsedFee) || parsedFee < 0) {
+      return res.status(400).json({ success: false, error: 'قيمة الشحن غير صالحة' });
+    }
     await execute(`
       UPDATE shipping_governorates
       SET fee = ?, delivery_days = ?
       WHERE id = ?
-    `, [parseFloat(fee), delivery_days, id]);
+    `, [parsedFee, delivery_days || '', id]);
     res.json({ success: true, message: 'تم تحديث سعر الشحن' });
   } catch (error: any) {
     console.error('Admin shipping rate update error:', error);
@@ -326,4 +474,3 @@ router.put('/shipping-rates/:id', async (req: Request, res: Response) => {
 });
 
 export default router;
-

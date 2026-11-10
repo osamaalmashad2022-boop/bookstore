@@ -22,25 +22,41 @@ export const App: React.FC = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [onlyInStock, setOnlyInStock] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState<string>('');
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
-  const fetchBooks = () => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const fetchBooks = (query: string, signal?: AbortSignal) => {
     setLoading(true);
     let url = `/api/books?`;
     if (selectedCategory !== 'all') url += `&category=${selectedCategory}`;
     if (selectedLevel !== 'all') url += `&level=${selectedLevel}`;
     if (onlyInStock) url += `&inStock=true`;
-    if (searchQuery.trim()) url += `&search=${encodeURIComponent(searchQuery)}`;
+    if (query.trim()) url += `&search=${encodeURIComponent(query)}`;
 
-    fetch(url)
+    fetch(url, { signal })
       .then(res => res.json())
       .then(data => {
         if (data.success && data.books) {
           setBooks(data.books);
         }
       })
-      .catch(err => console.error('Fetch books error:', err))
-      .finally(() => setLoading(false));
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          console.error('Fetch books error:', err);
+        }
+      })
+      .finally(() => {
+        if (!signal?.aborted) {
+          setLoading(false);
+        }
+      });
   };
 
   useEffect(() => {
@@ -55,9 +71,11 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (currentTab === 'catalog') {
-      fetchBooks();
+      const controller = new AbortController();
+      fetchBooks(debouncedSearchQuery, controller.signal);
+      return () => controller.abort();
     }
-  }, [selectedCategory, selectedLevel, onlyInStock, searchQuery, currentTab]);
+  }, [selectedCategory, selectedLevel, onlyInStock, debouncedSearchQuery, currentTab]);
 
   // Discreet secret URL detection for store owner (#admin or ?admin)
   useEffect(() => {

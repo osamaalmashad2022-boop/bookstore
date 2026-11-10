@@ -1,5 +1,5 @@
 import { createClient, Client, InStatement, ResultSet } from '@libsql/client/web';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 
 try {
   dotenv.config();
@@ -7,42 +7,64 @@ try {
   // Edge runtime safe (e.g. Cloudflare Workers without local filesystem)
 }
 
-// Determine Turso / SQLite connection URL
-const defaultUrl = 'libsql://maqbara-books-osospiracy.aws-eu-central-1.turso.io';
-const defaultToken = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTM1NjIxMjksImlkIjoiMDFhMTk4YTEtZjkwMS03YWQwLWFlNGEtOWE0MWM5NjBmNWM0Iiwia2lkIjoiMUprejlIN0EyVk1IZmhhcFpzaHljT3pFY2paRnZ6cE14QzJCb1hGSmJOayIsInJpZCI6ImU2MTFkNTAyLTEwNGEtNDA4ZS05NGJiLWVmY2I2ZTMzODZiOSJ9.8b3G_ypD7kDpwpeSOFuJJNyHo03ZfO8ygW7-2z4BmbQ-L_GY4xrqy7cCrVF5bD68HpqRjcVKYGwizpQYpInkCQ';
+const clientCache = new Map<string, Client>();
 
 export function getClient(env?: any): Client {
-  const url = (env && env.DATABASE_URL) || process.env.DATABASE_URL || defaultUrl;
-  const authToken = (env && env.DATABASE_AUTH_TOKEN) || process.env.DATABASE_AUTH_TOKEN || defaultToken;
+  const url = (env && env.DATABASE_URL) || process.env.DATABASE_URL;
+  const authToken = (env && env.DATABASE_AUTH_TOKEN) || process.env.DATABASE_AUTH_TOKEN;
 
-  return createClient({
-    url,
-    authToken,
-  });
+  if (!url) {
+    throw new Error(
+      'Database connection failed: DATABASE_URL environment variable is missing. ' +
+      'Please configure DATABASE_URL and DATABASE_AUTH_TOKEN in your environment or .env file.'
+    );
+  }
+
+  const cacheKey = `${url}::${authToken || ''}`;
+  let client = clientCache.get(cacheKey);
+  if (!client) {
+    client = createClient({
+      url,
+      authToken,
+    });
+    clientCache.set(cacheKey, client);
+  }
+
+  return client;
 }
 
-export const db: Client = getClient();
+// Lazy proxy for db to avoid crashing at module-import time if env variables are loaded dynamically
+export const db: Client = new Proxy({} as Client, {
+  get(_target, prop) {
+    const client = getClient();
+    const value = (client as any)[prop];
+    if (typeof value === 'function') {
+      return value.bind(client);
+    }
+    return value;
+  },
+});
 
 export async function queryAll<T = any>(sql: string, args: any[] = [], env?: any): Promise<T[]> {
-  const client = env ? getClient(env) : db;
+  const client = getClient(env);
   const result = await client.execute({ sql, args });
   return result.rows as unknown as T[];
 }
 
 export async function queryOne<T = any>(sql: string, args: any[] = [], env?: any): Promise<T | null> {
-  const client = env ? getClient(env) : db;
+  const client = getClient(env);
   const result = await client.execute({ sql, args });
   if (!result.rows || result.rows.length === 0) return null;
   return result.rows[0] as unknown as T;
 }
 
 export async function execute(sql: string, args: any[] = [], env?: any): Promise<any> {
-  const client = env ? getClient(env) : db;
+  const client = getClient(env);
   return await client.execute({ sql, args });
 }
 
 export async function batch(statements: InStatement[], mode: 'write' | 'read' | 'deferred' = 'write', env?: any): Promise<ResultSet[]> {
-  const client = env ? getClient(env) : db;
+  const client = getClient(env);
   return await client.batch(statements, mode);
 }
 

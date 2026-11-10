@@ -9,10 +9,14 @@
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
   },
+  // Note: Sensitive credentials must NOT be stored in plaintext in vars.
+  // Set them securely in Cloudflare using:
+  //   npx wrangler secret put DATABASE_AUTH_TOKEN
+  //   npx wrangler secret put ADMIN_PASSWORD
   "vars": {
     "DATABASE_URL": "libsql://maqbara-books-osospiracy.aws-eu-central-1.turso.io",
-    "DATABASE_AUTH_TOKEN": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTM1NjIxMjksImlkIjoiMDFhMTk4YTEtZjkwMS03YWQwLWFlNGEtOWE0MWM5NjBmNWM0Iiwia2lkIjoiMUprejlIN0EyVk1IZmhhcFpzaHljT3pFY2paRnZ6cE14QzJCb1hGSmJOayIsInJpZCI6ImU2MTFkNTAyLTEwNGEtNDA4ZS05NGJiLWVmY2I2ZTMzODZiOSJ9.8b3G_ypD7kDpwpeSOFuJJNyHo03ZfO8ygW7-2z4BmbQ-L_GY4xrqy7cCrVF5bD68HpqRjcVKYGwizpQYpInkCQ",
-    "ADMIN_PASSWORD": "123456",
+    "DATABASE_AUTH_TOKEN": "your_turso_auth_token_here",
+    "ADMIN_PASSWORD": "your_admin_password_here",
     "MERCHANT_PHONE": "201555779084",
     "STORE_NAME": "مقبرة الكتب المنسية",
     "FREE_SHIPPING_THRESHOLD": "600",

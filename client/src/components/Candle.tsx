@@ -222,9 +222,9 @@ export const Candle: React.FC<CandleProps> = ({
               d="M 29.5,32 Q 26,24 32,18 T 28,8"
               fill="none"
               stroke="#9CA3AF"
-              stroke-width="1.2"
-              stroke-linecap="round"
-              stroke-dasharray="2 3"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeDasharray="2 3"
               className="animate-pulse"
             />
             <circle cx="29" cy="32" r="1.5" fill="#52525B" />

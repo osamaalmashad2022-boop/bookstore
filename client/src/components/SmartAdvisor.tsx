@@ -8,7 +8,7 @@ interface SmartAdvisorProps {
   onSelectBook?: (book: Book) => void;
 }
 
-export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
+export const SmartAdvisor: React.FC<SmartAdvisorProps> = ({ onSelectBook }) => {
   const { addBundleToCart, addToCart } = useCart();
   const [mode, setMode] = useState<'quiz' | 'natural'>('quiz');
 
@@ -76,25 +76,69 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
     }
   };
 
+  const stepToBook = (step: any): Book => ({
+    id: step.book_id,
+    slug: step.slug,
+    title: step.title,
+    author: step.author,
+    price: step.price,
+    cover_image: step.cover_image,
+    stock_quantity: step.stock_quantity ?? 5,
+    category_id: step.category_id ?? selectedCategory,
+    sub_topics: step.sub_topics ?? '',
+    reader_level: (step.reader_level as any) || selectedLevel,
+    page_count: step.page_count ?? 200,
+    reading_time_hours: step.reading_time_hours ?? 4,
+    why_read: step.why_read ?? '',
+    is_bestseller: step.is_bestseller ?? 0,
+    is_featured: step.is_featured ?? 0,
+  });
+
+  const getPrimaryBook = (): Book => {
+    if (!result || !result.primary_recommendation) {
+      return {
+        id: '',
+        slug: '',
+        title: '',
+        author: '',
+        price: 0,
+        cover_image: '',
+        stock_quantity: 0,
+        category_id: selectedCategory,
+        sub_topics: '',
+        reader_level: selectedLevel,
+        page_count: 0,
+        reading_time_hours: 0,
+        why_read: '',
+        is_bestseller: 0,
+        is_featured: 0,
+      };
+    }
+    const primary = result.primary_recommendation;
+    const stepMatch = result.reading_path_steps?.find(s => s.book_id === primary.book_id) || result.reading_path_steps?.[0];
+    return {
+      id: primary.book_id,
+      slug: primary.slug,
+      title: primary.title,
+      author: primary.author,
+      price: primary.price,
+      original_price: primary.original_price,
+      cover_image: primary.cover_image,
+      stock_quantity: stepMatch?.stock_quantity ?? (primary.in_stock ? 5 : 0),
+      category_id: stepMatch?.category_id ?? selectedCategory,
+      sub_topics: stepMatch?.sub_topics ?? '',
+      reader_level: (stepMatch?.reader_level || primary.reader_level || selectedLevel) as any,
+      page_count: primary.page_count ?? stepMatch?.page_count ?? 200,
+      reading_time_hours: primary.reading_time_hours ?? stepMatch?.reading_time_hours ?? 4,
+      why_read: primary.why_recommended || stepMatch?.why_read || '',
+      is_bestseller: stepMatch?.is_bestseller ?? 0,
+      is_featured: stepMatch?.is_featured ?? 0,
+    };
+  };
+
   const handleAddBundle = () => {
     if (!result || !result.reading_path_steps) return;
-    const booksToAdd: Book[] = result.reading_path_steps.map(step => ({
-      id: step.book_id,
-      slug: step.slug,
-      title: step.title,
-      author: step.author,
-      price: step.price,
-      cover_image: step.cover_image,
-      stock_quantity: step.stock_quantity ?? 5,
-      category_id: step.category_id ?? selectedCategory,
-      sub_topics: step.sub_topics ?? '',
-      reader_level: (step.reader_level as any) || selectedLevel,
-      page_count: step.page_count ?? 200,
-      reading_time_hours: step.reading_time_hours ?? 4,
-      why_read: step.why_read ?? '',
-      is_bestseller: step.is_bestseller ?? 0,
-      is_featured: step.is_featured ?? 0,
-    }));
+    const booksToAdd: Book[] = result.reading_path_steps.map(step => stepToBook(step));
 
     addBundleToCart(booksToAdd);
     setBundleAdded(true);
@@ -467,7 +511,21 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-5 pt-4">
-              <div className="w-32 aspect-[3/4] rounded-2xl overflow-hidden bg-stone-900 shadow-xl shrink-0 mx-auto sm:mx-0 border border-amber-900/40">
+              <div
+                onClick={() => onSelectBook && onSelectBook(getPrimaryBook())}
+                role={onSelectBook ? "button" : undefined}
+                tabIndex={onSelectBook ? 0 : undefined}
+                aria-label={onSelectBook ? `عرض تفاصيل كتاب ${result.primary_recommendation.title}` : undefined}
+                onKeyDown={e => {
+                  if (onSelectBook && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    onSelectBook(getPrimaryBook());
+                  }
+                }}
+                className={`w-32 aspect-[3/4] rounded-2xl overflow-hidden bg-stone-900 shadow-xl shrink-0 mx-auto sm:mx-0 border border-amber-900/40 ${
+                  onSelectBook ? 'cursor-pointer hover:border-amber-400 hover:scale-[1.02] transition-all' : ''
+                }`}
+              >
                 <img
                   src={result.primary_recommendation.cover_image}
                   alt={result.primary_recommendation.title}
@@ -477,7 +535,20 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
 
               <div className="flex-1 space-y-3 text-right">
                 <div>
-                  <h3 className="text-base sm:text-xl font-black font-readex text-amber-100 leading-snug mb-1">
+                  <h3
+                    onClick={() => onSelectBook && onSelectBook(getPrimaryBook())}
+                    role={onSelectBook ? "button" : undefined}
+                    tabIndex={onSelectBook ? 0 : undefined}
+                    onKeyDown={e => {
+                      if (onSelectBook && (e.key === 'Enter' || e.key === ' ')) {
+                        e.preventDefault();
+                        onSelectBook(getPrimaryBook());
+                      }
+                    }}
+                    className={`text-base sm:text-xl font-black font-readex text-amber-100 leading-snug mb-1 ${
+                      onSelectBook ? 'cursor-pointer hover:text-amber-400 transition-colors' : ''
+                    }`}
+                  >
                     {result.primary_recommendation.title}
                   </h3>
                   <p className="text-xs text-amber-400 font-medium leading-normal mb-1">
@@ -516,24 +587,9 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                     {result.primary_recommendation.price} ج.م
                   </span>
                   <button
-                    onClick={() => {
-                      addToCart({
-                        id: result.primary_recommendation.book_id,
-                        slug: result.primary_recommendation.slug,
-                        title: result.primary_recommendation.title,
-                        author: result.primary_recommendation.author,
-                        price: result.primary_recommendation.price,
-                        cover_image: result.primary_recommendation.cover_image,
-                        stock_quantity: 10,
-                        category_id: 'cat_psychology',
-                        sub_topics: '',
-                        reader_level: 'beginner',
-                        page_count: result.primary_recommendation.page_count,
-                        reading_time_hours: result.primary_recommendation.reading_time_hours,
-                        why_read: result.primary_recommendation.why_recommended,
-                        is_bestseller: 0,
-                        is_featured: 0,
-                      });
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToCart(getPrimaryBook());
                     }}
                     className="px-3.5 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-200 text-xs font-bold border border-amber-900/40 transition-colors"
                   >
@@ -570,7 +626,19 @@ export const SmartAdvisor: React.FC<SmartAdvisorProps> = () => {
                 {result.reading_path_steps.map((stepItem) => (
                   <div
                     key={stepItem.book_id}
-                    className="bg-[#181420] rounded-2xl p-3 border border-amber-900/40 flex items-center gap-3"
+                    onClick={() => onSelectBook && onSelectBook(stepToBook(stepItem))}
+                    role={onSelectBook ? "button" : undefined}
+                    tabIndex={onSelectBook ? 0 : undefined}
+                    aria-label={onSelectBook ? `عرض تفاصيل كتاب ${stepItem.title}` : undefined}
+                    onKeyDown={e => {
+                      if (onSelectBook && (e.key === 'Enter' || e.key === ' ')) {
+                        e.preventDefault();
+                        onSelectBook(stepToBook(stepItem));
+                      }
+                    }}
+                    className={`bg-[#181420] rounded-2xl p-3 border border-amber-900/40 flex items-center gap-3 transition-all ${
+                      onSelectBook ? 'cursor-pointer hover:border-amber-500/60 hover:bg-[#1d1828]' : ''
+                    }`}
                   >
                     <div className="w-14 aspect-[3/4] rounded-lg overflow-hidden bg-stone-900 shrink-0 border border-amber-900/40">
                       <img

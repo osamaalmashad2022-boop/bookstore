@@ -39,14 +39,36 @@ export const CheckoutModal: React.FC = () => {
     shippingFee: number;
   } | null>(null);
 
+  const isValidWhatsappUrl = (url?: string): boolean => {
+    if (!url || typeof url !== 'string') return false;
+    return url.startsWith('https://wa.me/') || url.startsWith('https://api.whatsapp.com/');
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsCheckoutOpen(false);
+    };
+    if (isCheckoutOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isCheckoutOpen, setIsCheckoutOpen]);
+
   useEffect(() => {
     fetch('/api/books/shipping-governorates')
       .then(res => res.json())
       .then(data => {
         if (data.success && data.governorates) {
           setGovernorates(data.governorates);
-          if (data.governorates.length > 0 && !selectedGovId) {
-            setSelectedGovId(data.governorates[0].id);
+          if (data.governorates.length > 0) {
+            setSelectedGovId(prev => {
+              const exists = data.governorates.some((g: Governorate) => g.id === prev);
+              return exists ? prev : data.governorates[0].id;
+            });
           }
         }
       })
@@ -122,8 +144,8 @@ export const CheckoutModal: React.FC = () => {
       clearCart();
       removeCoupon();
 
-      if (data.whatsappUrl) {
-        window.open(data.whatsappUrl, '_blank');
+      if (data.whatsappUrl && isValidWhatsappUrl(data.whatsappUrl)) {
+        window.open(data.whatsappUrl, '_blank', 'noopener,noreferrer');
       }
     } catch (err: any) {
       setError(err.message || 'حدث خطأ أثناء تأكيد الطلب');
@@ -133,7 +155,10 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in text-right">
+    <div
+      onClick={() => setIsCheckoutOpen(false)}
+      className="fixed inset-0 z-50 overflow-y-auto flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in text-right"
+    >
       <div
         className="relative my-auto bg-[#120f17] text-[#ede6d6] w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-amber-900/60 candle-glow"
         onClick={e => e.stopPropagation()}
@@ -187,15 +212,17 @@ export const CheckoutModal: React.FC = () => {
                 تم تجهيز رسالة الفاتورة المنسقة وفتح تطبيق واتساب المتجر. إذا لم تفتح نافذة المحادثة، اضغط على الزر الأخضر أدناه:
               </p>
 
-              <a
-                href={orderSuccess.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-lg transition-all"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span>تأكيد الفاتورة على واتساب المقبرة 💬</span>
-              </a>
+              {isValidWhatsappUrl(orderSuccess.whatsappUrl) && (
+                <a
+                  href={orderSuccess.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-lg transition-all"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  <span>تأكيد الفاتورة على واتساب المقبرة 💬</span>
+                </a>
+              )}
             </div>
           ) : (
             <form onSubmit={handleSubmitOrder} className="space-y-4">

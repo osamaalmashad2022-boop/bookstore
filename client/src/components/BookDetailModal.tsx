@@ -17,6 +17,25 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
   const [activeTab, setActiveTab] = useState<'overview' | 'excerpt'>('overview');
   const [added, setAdded] = useState(false);
 
+  React.useEffect(() => {
+    setActiveTab('overview');
+  }, [book?.id]);
+
+  // Close on Escape key press and prevent background scrolling
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (book) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [book, onClose]);
+
   if (!book) return null;
 
   const cartItem = items.find(i => i.book.id === book.id);
@@ -39,7 +58,10 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 overflow-y-auto flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in"
+    >
       {/* Modal / Bottom Sheet Box - Gothic Sanctuary */}
       <div
         className="relative my-auto bg-[#120f17] text-[#ede6d6] w-full sm:max-w-xl max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-amber-900/60 candle-glow text-right"

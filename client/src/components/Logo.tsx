@@ -39,6 +39,16 @@ export const Logo: React.FC<LogoProps> = ({
           onEmblemClick();
         }
       }}
+      role={onEmblemClick ? 'button' : undefined}
+      tabIndex={onEmblemClick ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (onEmblemClick && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          e.stopPropagation();
+          onEmblemClick();
+        }
+      }}
+      aria-label={onEmblemClick ? 'انقر لتكبير الشعار الملكي واستعراض تفاصيله' : undefined}
       title={onEmblemClick ? 'انقر لتكبير الشعار الملكي واستعراض تفاصيله' : undefined}
       className={`relative group rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center border-2 border-amber-500/50 bg-[#120e17] shadow-xl transition-all duration-300 ${
         onEmblemClick ? 'cursor-pointer hover:scale-105 hover:border-amber-400 active:scale-95' : ''

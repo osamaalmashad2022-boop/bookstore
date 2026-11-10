@@ -1,25 +1,49 @@
-import { db, initDb, execute } from './database';
+import { InStatement } from '@libsql/client/web';
+import { initDb, batch } from './database';
 
 export async function runSeed() {
-  console.log('🌱 Initializing tables and starting seed...');
+  const isProduction = process.env.NODE_ENV === 'production';
+  const forceProdSeed = process.argv.includes('--force-prod-seed') || process.env.ALLOW_REMOTE_SEED === 'true';
+
+  const currentUrl = process.env.DATABASE_URL || '';
+  const isRemoteDb = currentUrl.startsWith('libsql://') || currentUrl.startsWith('https://') || currentUrl.includes('turso.io');
+
+  if ((isProduction || isRemoteDb) && !forceProdSeed) {
+    const errorMsg = '⛔ SAFETY ABORT: Seed was invoked on a remote or production database without the --force-prod-seed flag. Aborting to protect live production data.';
+    console.error(errorMsg);
+    throw new Error(errorMsg);
+  }
+
+  console.log('🌱 Initializing tables and starting batch seed...');
   await initDb();
 
+  const statements: InStatement[] = [];
+
   // Clear existing
-  await execute('DELETE FROM order_items');
-  await execute('DELETE FROM orders');
-  await execute('DELETE FROM recommendation_logs');
-  await execute('DELETE FROM books');
-  await execute('DELETE FROM categories');
-  await execute('DELETE FROM shipping_governorates');
-  await execute('DELETE FROM site_settings');
+  statements.push('DELETE FROM order_items');
+  statements.push('DELETE FROM orders');
+  statements.push('DELETE FROM recommendation_logs');
+  statements.push('DELETE FROM books');
+  statements.push('DELETE FROM categories');
+  statements.push('DELETE FROM shipping_governorates');
+  statements.push('DELETE FROM site_settings');
 
   // 1. Site Settings
-  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['free_shipping_threshold', '600']);
-  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['bundle_discount_percent', '10']);
-  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['merchant_phone', '201555779084']);
-  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['merchant_email', 'store@dar-almaarefa.com']);
-  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['store_name', 'مقبرة الكتب المنسية']);
-  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['store_address', 'الصعيدي القديم، خلف اسكندراني بجوار بيتزا بارتي بجوار شاتوه أمام كوافير شريف موسى']);
+  const settings: [string, string][] = [
+    ['free_shipping_threshold', '600'],
+    ['bundle_discount_percent', '10'],
+    ['merchant_phone', '201555779084'],
+    ['merchant_email', 'store@dar-almaarefa.com'],
+    ['store_name', 'مقبرة الكتب المنسية'],
+    ['store_address', 'الصعيدي القديم، خلف اسكندراني بجوار بيتزا بارتي بجوار شاتوه أمام كوافير شريف موسى'],
+  ];
+
+  for (const [key, value] of settings) {
+    statements.push({
+      sql: 'INSERT INTO site_settings (key, value) VALUES (?, ?)',
+      args: [key, value],
+    });
+  }
 
   // 2. Categories
   const categories = [
@@ -31,9 +55,10 @@ export async function runSeed() {
   ];
 
   for (const cat of categories) {
-    await execute('INSERT INTO categories (id, name, slug, icon) VALUES (?, ?, ?, ?)', [
-      cat.id, cat.name, cat.slug, cat.icon
-    ]);
+    statements.push({
+      sql: 'INSERT INTO categories (id, name, slug, icon) VALUES (?, ?, ?, ?)',
+      args: [cat.id, cat.name, cat.slug, cat.icon],
+    });
   }
 
   // 3. Books
@@ -241,17 +266,20 @@ export async function runSeed() {
   ];
 
   for (const b of books) {
-    await execute(`
-      INSERT INTO books (
-        id, slug, title, author, price, original_price, stock_quantity,
-        category_id, sub_topics, reader_level, page_count, reading_time_hours,
-        why_read, excerpt_text, cover_image, is_bestseller, is_featured, recommended_next_book_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-      b.id, b.slug, b.title, b.author, b.price, b.original_price, b.stock_quantity,
-      b.category_id, b.sub_topics, b.reader_level, b.page_count, b.reading_time_hours,
-      b.why_read, b.excerpt_text, b.cover_image, b.is_bestseller, b.is_featured, b.recommended_next_book_id
-    ]);
+    statements.push({
+      sql: `
+        INSERT INTO books (
+          id, slug, title, author, price, original_price, stock_quantity,
+          category_id, sub_topics, reader_level, page_count, reading_time_hours,
+          why_read, excerpt_text, cover_image, is_bestseller, is_featured, recommended_next_book_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+      args: [
+        b.id, b.slug, b.title, b.author, b.price, b.original_price, b.stock_quantity,
+        b.category_id, b.sub_topics, b.reader_level, b.page_count, b.reading_time_hours,
+        b.why_read, b.excerpt_text, b.cover_image, b.is_bestseller, b.is_featured, b.recommended_next_book_id
+      ],
+    });
   }
 
   // 4. Egyptian Governorates Shipping Rates
@@ -284,12 +312,16 @@ export async function runSeed() {
   ];
 
   for (const g of governorates) {
-    await execute('INSERT INTO shipping_governorates (id, name, fee, delivery_days) VALUES (?, ?, ?, ?)', [
-      g.id, g.name, g.fee, g.delivery_days
-    ]);
+    statements.push({
+      sql: 'INSERT INTO shipping_governorates (id, name, fee, delivery_days) VALUES (?, ?, ?, ?)',
+      args: [g.id, g.name, g.fee, g.delivery_days],
+    });
   }
 
-  console.log(`✅ Seed completed successfully: ${books.length} books, ${governorates.length} governorates.`);
+  // Execute all inserts atomically in a single batch transaction
+  await batch(statements, 'write');
+
+  console.log(`✅ Batch seed completed successfully: ${books.length} books, ${categories.length} categories, ${governorates.length} governorates.`);
 }
 
 if (require.main === module || process.argv.includes('--run')) {

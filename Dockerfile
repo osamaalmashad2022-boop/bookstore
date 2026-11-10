@@ -39,8 +39,12 @@ COPY . .
 # Build backend (tsc) and frontend (vite build)
 RUN npm run build
 
-# Seed database with initial catalog
-RUN npm --prefix server run seed
+# Seed database with initial catalog (only for local SQLite file, never on remote database)
+RUN if [ -n "$DATABASE_URL" ] && ! echo "$DATABASE_URL" | grep -q "^file:"; then \
+      echo "Remote database detected in DATABASE_URL ($DATABASE_URL) - skipping seed to protect data."; \
+    else \
+      DATABASE_URL="file:/app/server/data/store.db" npm --prefix server run seed; \
+    fi
 
 # Prune development dependencies to keep final image clean
 RUN npm prune --omit=dev
