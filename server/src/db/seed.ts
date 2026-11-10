@@ -19,7 +19,7 @@ export async function runSeed() {
   await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['merchant_phone', '201555779084']);
   await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['merchant_email', 'store@dar-almaarefa.com']);
   await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['store_name', 'مقبرة الكتب المنسية']);
-  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['store_address', 'الصعيدي القديم، خلف بيتزا بارتي وأمام كوافير شريف موسى وبجانب شاتوه']);
+  await execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', ['store_address', 'الصعيدي القديم، خلف اسكندراني بجوار بيتزا بارتي بجوار شاتوه أمام كوافير شريف موسى']);
 
   // 2. Categories
   const categories = [
