@@ -9,14 +9,9 @@
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
   },
-  // Note: Sensitive credentials must NOT be stored in plaintext in vars.
-  // Set them securely in Cloudflare using:
-  //   npx wrangler secret put DATABASE_AUTH_TOKEN
-  //   npx wrangler secret put ADMIN_PASSWORD
+  // Non-sensitive environment variables
   "vars": {
     "DATABASE_URL": "libsql://maqbara-books-osospiracy.aws-eu-central-1.turso.io",
-    "DATABASE_AUTH_TOKEN": "your_turso_auth_token_here",
-    "ADMIN_PASSWORD": "your_admin_password_here",
     "MERCHANT_PHONE": "201555779084",
     "STORE_NAME": "مقبرة الكتب المنسية",
     "FREE_SHIPPING_THRESHOLD": "600",

@@ -20,4 +20,6 @@ preview_animated_icons.png
 # Deployment config & credentials
 wrangler.jsonc
 client/wrangler.jsonc
+.dev.vars
+*.dev.vars
 *.local.env
